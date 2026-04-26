@@ -2169,7 +2169,7 @@ async function deleteCEU(id){
 
 // ---- TRAINING VIDEOS ----
 async function renderTrainingVideos(){
-  const{data}=await SB.from('training_videos').select('*').order('created_at',{ascending:false}).catch(()=>({data:[]}));
+  let {data} = await SB.from('training_videos').select('*').order('created_at',{ascending:false}).then(r=>r);
   const el=document.getElementById('training-list');if(!el)return;
   if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No training videos yet. Click + Add video to get started.</div>';return;}
   const staff=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
@@ -2195,7 +2195,7 @@ async function renderTrainingVideos(){
 }
 async function renderTherapistTraining(){
   const el=document.getElementById('t-training-list');if(!el)return;
-  const{data}=await SB.from('training_videos').select('*').order('created_at',{ascending:false}).catch(()=>({data:[]}));
+  let {data} = await SB.from('training_videos').select('*').order('created_at',{ascending:false}).then(r=>r);
   if(!data){el.innerHTML='';return;}
   const myVideos=data.filter(v=>(v.assigned_to||[]).includes(CP.id));
   if(!myVideos.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No training videos assigned to you yet.</div>';return;}
@@ -2268,7 +2268,7 @@ function closeTVModal(){document.getElementById('tv-modal').classList.remove('ac
     CU=session.user;
     await loadGlobalData();
     CP=allProfiles.find(p=>p.id===CU.id)||null;
-    if(CP) { await showDashboard(); return; }
+    if(CP) { await showMgr(); return; }
   }
 })();
 </script>
