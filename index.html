@@ -309,13 +309,51 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         <div class="stitle" style="margin-bottom:0;">Supervision &amp; Professional Development</div>
         <button class="btn-primary" style="padding:7px 14px;font-size:12px;" onclick="openTherapistSupModal()">+ Log supervision</button>
       </div>
-      <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1rem;gap:0;">
+      <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1rem;gap:0;overflow-x:auto;">
         <button class="hr-tab active" onclick="switchCPDTab('supervision',this)">📋 Supervision</button>
+        <button class="hr-tab" onclick="switchCPDTab('competency',this)">🎯 Competency</button>
+        <button class="hr-tab" onclick="switchCPDTab('goals',this)">🎯 Staff Goals</button>
         <button class="hr-tab" onclick="switchCPDTab('ceu',this)">📚 CEU Courses</button>
       </div>
       <div id="cpd-tab-supervision">
         <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Your supervision history. Entries submitted by you are marked as pending until approved by a manager.</div>
         <div id="t-sup-list"></div>
+      </div>
+      <div id="cpd-tab-competency" style="display:none;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:1rem;">Upload your completed competency assessment forms here.</div>
+        <div id="competency-list"></div>
+        <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-top:.5rem;">
+          <div class="card" style="padding:.85rem;">
+            <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 IBAT Competency Assessment</div>
+            <div id="comp-ibat-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
+              Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'IBAT')"/>
+            </label>
+          </div>
+          <div class="card" style="padding:.85rem;">
+            <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 RBT Competency Assessment</div>
+            <div id="comp-rbt-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
+              Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'RBT')"/>
+            </label>
+          </div>
+          <div class="card" style="padding:.85rem;">
+            <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 Inspire Therapy Competency Assessment</div>
+            <div id="comp-inspire-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
+              Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'Inspire')"/>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="cpd-tab-goals" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:8px;">
+          <div style="font-size:12px;color:var(--text2);">Upload your staff goal documents. Multiple goals can be added across the year.</div>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
+            + Add goal <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadStaffGoal(event)"/>
+          </label>
+        </div>
+        <div id="t-goals-list"></div>
       </div>
       <div id="cpd-tab-ceu" style="display:none;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:8px;">
@@ -362,7 +400,8 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div class="back" onclick="goBack()">← Back</div>
     <div id="d-init" style="width:38px;height:38px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;"></div>
     <div class="chi"><h2 id="d-name"></h2><p id="d-meta"></p></div>
-    <button class="btn-outline" style="margin-left:auto;padding:7px 12px;font-size:12px;" onclick="openReportModal()" id="gen-report-btn">Generate report</button>
+    <button class="btn-outline" style="margin-left:auto;padding:7px 12px;font-size:12px;" onclick="openAssignModal()" id="assign-btn">Assign therapists</button>
+    <button class="btn-outline" style="padding:7px 12px;font-size:12px;" onclick="openReportModal()" id="gen-report-btn">Generate report</button>
   </div>
   <div class="body">
     <div id="ro-banner" class="ron" style="display:none;"></div>
@@ -478,6 +517,33 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <div class="stitle">Saved reports</div>
       <div id="saved-reports-list"></div>
     </div>
+    <!-- THERAPY PLAN TAB -->
+    <div id="tab-therapy-plan" class="tc">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
+        <div class="stitle" style="margin-bottom:0;">Therapy Plan &amp; Assessments</div>
+        <label class="btn-primary" style="padding:7px 14px;font-size:12px;cursor:pointer;display:inline-block;">
+          + Upload document
+          <input type="file" id="tp-file-input" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" style="display:none;" onchange="uploadTherapyPlan(event)"/>
+        </label>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:1rem;">Upload therapy plans, assessments and related documents for this client.</div>
+      <div id="therapy-plan-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGN THERAPISTS MODAL -->
+<div id="assign-modal" class="mo">
+  <div class="md" style="max-width:480px;">
+    <h3>Assign therapists</h3>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;">Select which therapists work with this client. They will see this client on their dashboard.</div>
+    <div id="assign-therapist-list" style="max-height:300px;overflow-y:auto;"></div>
+    <div class="rbtns">
+      <button class="btn-primary" onclick="saveTherapistAssignments()">Save</button>
+      <button class="btn-outline" onclick="document.getElementById('assign-modal').classList.remove('active')">Cancel</button>
+      <span class="ok-msg" id="assign-ok">Saved!</span>
+    </div>
+    <div class="err" id="assign-err"></div>
   </div>
 </div>
 
@@ -587,8 +653,14 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div class="field"><label>Client / Programme (optional)</label>
       <select id="sup-client"><option value="">Not client-specific</option></select>
     </div>
-    <div class="field"><label>Notes</label>
-      <textarea id="sup-notes" style="height:70px;" placeholder="Topics covered, actions agreed…"></textarea>
+    <div class="field"><label>Notes / Topics covered</label>
+      <textarea id="sup-notes" style="height:70px;" placeholder="Topics covered in this session…"></textarea>
+    </div>
+    <div class="field"><label>Actions agreed</label>
+      <textarea id="sup-actions" style="height:60px;" placeholder="Actions to be completed before next session…"></textarea>
+    </div>
+    <div class="field"><label>Next supervision date (optional)</label>
+      <input type="date" id="sup-next-date"/>
     </div>
     <div class="rbtns">
       <button class="btn-primary" onclick="saveSupervision(false)">Save &amp; approve</button>
@@ -689,6 +761,17 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         <option value="clinic_manager">Clinic Manager</option>
         <option value="parent">Parent</option>
         <option value="teacher">Teacher</option>
+      </select>
+    </div>
+    <div class="field"><label>Staff Group</label>
+      <select id="u-group">
+        <option value="">No group</option>
+        <option value="ABA Therapist">ABA Therapist</option>
+        <option value="LSA">LSA</option>
+        <option value="Speech Therapist">Speech Therapist</option>
+        <option value="Occupational Therapist">Occupational Therapist</option>
+        <option value="Manager">Manager</option>
+        <option value="Other">Other</option>
       </select>
     </div>
     <div class="field"><label>Initials (therapists/managers)</label><input id="u-initials" placeholder="e.g. SA" maxlength="4"/></div>
@@ -1086,7 +1169,23 @@ function renderUserList(){
   const el=document.getElementById('user-list');if(!el)return;
   const managed=allProfiles.filter(p=>p.id!==CP.id);
   if(!managed.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);">No other users yet. Add your first team member above.</div>';return;}
-  el.innerHTML=managed.map(p=>'<div class="user-item"><div class="user-info"><div class="uname">'+p.full_name+'</div><div class="uemail">'+p.email+'</div><span class="urole role-'+p.role+'">'+p.role.replace('_',' ')+'</span></div><button class="btn-danger" onclick="deleteUser(\''+p.id+'\')">Remove</button></div>').join('');
+  // Group by staff_group
+  const groups={};
+  managed.forEach(p=>{
+    const g=p.staff_group||'No group';
+    if(!groups[g])groups[g]=[];
+    groups[g].push(p);
+  });
+  let html='';
+  Object.entries(groups).sort().forEach(([group,members])=>{
+    html+=`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin:1rem 0 .4rem;">${group}</div>`;
+    html+=members.map(p=>`<div class="user-item"><div class="user-info">
+      <div class="uname">${p.full_name}${p.initials?` <span style="font-size:11px;color:var(--text3);">(${p.initials})</span>`:''}</div>
+      <div class="uemail">${p.email}</div>
+      <span class="urole role-${p.role}">${p.role.replace('_',' ')}</span>
+    </div><button class="btn-danger" onclick="deleteUser('${p.id}')">Remove</button></div>`).join('');
+  });
+  el.innerHTML=html;
 }
 function openUserModal(){
   ['u-name','u-email','u-pass','u-initials'].forEach(id=>document.getElementById(id).value='');
@@ -1100,13 +1199,14 @@ async function saveUser(){
   const pass=document.getElementById('u-pass').value;
   const role=document.getElementById('u-role').value;
   const initials=document.getElementById('u-initials').value.trim().toUpperCase();
+  const staff_group=document.getElementById('u-group').value;
   if(!name||!email||!pass){showErr('user-err','Please fill in name, email and password.');return;}
   showLoad('Creating account…');
   const {data,error}=await SB.auth.admin?SB.auth.admin.createUser({email,password:pass,email_confirm:true}):await SB.auth.signUp({email,password:pass});
   if(error){hideLoad();showErr('user-err',error.message);return;}
   const uid=data?.user?.id;
   if(uid){
-    await SB.from('profiles').upsert({id:uid,email,full_name:name,role,initials});
+    await SB.from('profiles').upsert({id:uid,email,full_name:name,role,initials,staff_group});
     await loadGlobalData();
     renderUserList();
     flash('user-ok');
@@ -1195,7 +1295,7 @@ function openCS(mode){
   // Build tabs based on role
   const tabs=document.getElementById('client-tabs');
   const tabDefs=isExternal?[['chart','Progress'],['media','Media']]:
-    [['chart','Progress'],['sessions','Session data'],['programmes','Programmes'],['media','Media'],['notes','Notes'],['reports','Reports']];
+    [['chart','Progress'],['sessions','Session data'],['programmes','Programmes'],['media','Media'],['notes','Notes'],['therapy-plan','Therapy Plan'],['reports','Reports']];
   tabs.innerHTML=tabDefs.map(([id,label])=>'<div class="tab" onclick="ST(\''+id+'\')">'+label+'</div>').join('');
   if(!isRO){
     document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
@@ -1296,6 +1396,7 @@ async function ST(name){
   else if(name==='sessions'){await rPS();pSS();await renderST();}
   else if(name==='programmes')await renderPL();
   else if(name==='media')await renderMedia();
+  else if(name==='therapy-plan')await renderTherapyPlan();
   else if(name==='reports')await renderSavedReports();
 }
 
@@ -1874,14 +1975,263 @@ async function openMyHRFolder(){
   await loadHRSlots(CP.id);
 }
 
+// ---- THERAPY PLAN & ASSESSMENTS ----
+async function renderTherapyPlan(){
+  const el=document.getElementById('therapy-plan-list');if(!el||!CC)return;
+  el.innerHTML='<div style="font-size:13px;color:var(--text2);">Loading…</div>';
+  const{data,error}=await SB.storage.from('therapy-plans').list(CC.id+'/');
+  if(error||!data||!data.length){
+    el.innerHTML='<div style="font-size:13px;color:var(--text2);">No documents uploaded yet. Click + Upload document to add a therapy plan or assessment.</div>';
+    return;
+  }
+  const files=data.filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
+  el.innerHTML=files.map(f=>{
+    const ext=(f.name.split('.').pop()||'').toUpperCase();
+    const icon=ext==='PDF'?'📄':(ext==='DOCX'||ext==='DOC')?'📝':'🖼';
+    const displayName=f.name.replace(/^\d+_/,'');
+    const size=f.metadata?.size?`${Math.round(f.metadata.size/1024)}KB`:'';
+    return `<div class="card" style="padding:.85rem;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:22px;">${icon}</span>
+        <div>
+          <div style="font-size:13px;font-weight:500;">${displayName}</div>
+          ${size?`<div style="font-size:11px;color:var(--text2);">${size}</div>`:''}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button class="btn-outline" style="padding:5px 10px;font-size:11px;" onclick="downloadTherapyPlan('${f.name}')">Download</button>
+        <button class="btn-danger" style="padding:5px 10px;font-size:11px;" onclick="deleteTherapyPlan('${f.name}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function uploadTherapyPlan(e){
+  const file=e.target.files[0];if(!file||!CC)return;
+  showLoad('Uploading…');
+  const path=`${CC.id}/${Date.now()}_${file.name}`;
+  const{error}=await SB.storage.from('therapy-plans').upload(path,file);
+  hideLoad();
+  if(error){alert('Upload failed: '+error.message);return;}
+  e.target.value='';
+  await renderTherapyPlan();
+}
+
+function downloadTherapyPlan(filename){
+  const{data}=SB.storage.from('therapy-plans').getPublicUrl(CC.id+'/'+filename);
+  window.open(data.publicUrl,'_blank');
+}
+
+async function deleteTherapyPlan(filename){
+  if(!confirm('Delete '+filename.replace(/^\d+_/,'')+'?'))return;
+  showLoad('Deleting…');
+  await SB.storage.from('therapy-plans').remove([CC.id+'/'+filename]);
+  hideLoad();
+  await renderTherapyPlan();
+}
+
+// ---- ASSIGN THERAPISTS TO CLIENT ----
+async function openAssignModal(){
+  if(!CC)return;
+  document.getElementById('assign-modal').classList.add('active');
+  const therapists=allProfiles.filter(p=>p.role==='therapist');
+  // Get current assignments
+  const{data:current}=await SB.from('client_therapists').select('therapist_id').eq('client_id',CC.id);
+  const assigned=new Set((current||[]).map(x=>x.therapist_id));
+  // Group by staff_group
+  const groups={};
+  therapists.forEach(t=>{
+    const g=t.staff_group||'No group';
+    if(!groups[g])groups[g]=[];
+    groups[g].push(t);
+  });
+  let html='';
+  Object.entries(groups).sort().forEach(([group,members])=>{
+    html+=`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin:.75rem 0 .3rem;">${group}</div>`;
+    html+=members.map(t=>`
+      <div class="att-row">
+        <input type="checkbox" class="assign-cb" data-uid="${t.id}" ${assigned.has(t.id)?'checked':''} style="width:16px;height:16px;accent-color:var(--brand);">
+        <span>${t.full_name}${t.initials?` (${t.initials})`:''}</span>
+      </div>`).join('');
+  });
+  if(!therapists.length) html='<div style="font-size:13px;color:var(--text2);">No therapists added yet.</div>';
+  document.getElementById('assign-therapist-list').innerHTML=html;
+}
+
+async function saveTherapistAssignments(){
+  if(!CC)return;
+  showLoad('Saving…');
+  const selected=[...document.querySelectorAll('.assign-cb:checked')].map(cb=>cb.dataset.uid);
+  // Delete all current assignments
+  await SB.from('client_therapists').delete().eq('client_id',CC.id);
+  // Insert new ones
+  if(selected.length){
+    await SB.from('client_therapists').insert(selected.map(tid=>({client_id:CC.id,therapist_id:tid})));
+  }
+  hideLoad();
+  flash('assign-ok');
+  setTimeout(()=>document.getElementById('assign-modal').classList.remove('active'),1000);
+}
+
+// ---- SUPERVISION SESSION VIEW (clickable dated documents) ----
+let currentSupSession=null;
+
+async function openSupervisionSession(id){
+  const{data}=await SB.from('supervision_logs').select('*').eq('id',id).single();
+  if(!data)return;
+  currentSupSession=data;
+  const therapist=allProfiles.find(p=>p.id===data.therapist_id);
+  const client=allClients.find(c=>c.id===data.client_id);
+  const fmtTime=m=>m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
+  const modal=document.createElement('div');
+  modal.className='mo active';
+  modal.id='sup-session-view';
+  modal.innerHTML=`<div class="md" style="max-width:560px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <h3 style="margin:0;">Supervision Record</h3>
+      <span style="font-size:11px;padding:3px 10px;border-radius:20px;background:${data.approved?'var(--teal-light)':'var(--warn-light)'};color:${data.approved?'var(--teal)':'var(--warn)'};font-weight:600;">${data.approved?'✓ Approved':'⏳ Pending'}</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;">
+      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">DATE</div><div style="font-size:14px;">${data.date}</div></div>
+      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">DURATION</div><div style="font-size:14px;">${fmtTime(data.duration_mins)}</div></div>
+      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">THERAPIST</div><div style="font-size:14px;">${therapist?therapist.full_name:'Unknown'}</div></div>
+      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">TYPE</div><div style="font-size:14px;">${data.supervision_type||'—'}</div></div>
+      ${client?`<div style="grid-column:1/-1;"><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">CLIENT</div><div style="font-size:14px;">${client.full_name}</div></div>`:''}
+    </div>
+    <div class="field"><label>Notes / Topics covered</label>
+      <textarea id="sup-view-notes" style="height:100px;">${data.notes||''}</textarea>
+    </div>
+    <div class="field"><label>Actions agreed</label>
+      <textarea id="sup-view-actions" style="height:70px;">${data.actions_agreed||''}</textarea>
+    </div>
+    <div class="field"><label>Next supervision date</label>
+      <input type="date" id="sup-view-next" value="${data.next_supervision_date||''}"/>
+    </div>
+    <div class="field" style="display:flex;align-items:center;gap:8px;">
+      <input type="checkbox" id="sup-view-complete" ${data.actions_completed?'checked':''} style="width:16px;height:16px;accent-color:var(--brand);">
+      <label for="sup-view-complete" style="font-size:13px;cursor:pointer;">Actions completed</label>
+    </div>
+    <div class="rbtns">
+      <button class="btn-primary" onclick="saveSupervisionSession('${id}')">Save changes</button>
+      <button class="btn-outline" onclick="document.getElementById('sup-session-view').remove()">Close</button>
+      <span class="ok-msg" id="sup-view-ok">Saved!</span>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+async function saveSupervisionSession(id){
+  showLoad('Saving…');
+  await SB.from('supervision_logs').update({
+    notes:document.getElementById('sup-view-notes').value,
+    actions_agreed:document.getElementById('sup-view-actions').value,
+    next_supervision_date:document.getElementById('sup-view-next').value||null,
+    actions_completed:document.getElementById('sup-view-complete').checked
+  }).eq('id',id);
+  hideLoad();
+  flash('sup-view-ok');
+  setTimeout(()=>{
+    document.getElementById('sup-session-view').remove();
+    loadRecentSupervision();
+    loadTherapistSupervision();
+  },900);
+}
+
 // ---- SUPERVISION & CPD ----
 function switchCPDTab(tab,btn){
-  document.querySelectorAll('#cpd-tab-supervision,#cpd-tab-ceu').forEach(el=>el.style.display='none');
+  document.querySelectorAll('#cpd-tab-supervision,#cpd-tab-ceu,#cpd-tab-competency,#cpd-tab-goals').forEach(el=>el.style.display='none');
   document.querySelectorAll('.hr-tab').forEach(t=>t.classList.remove('active'));
   if(btn) btn.classList.add('active');
   document.getElementById('cpd-tab-'+tab).style.display='block';
   if(tab==='ceu') loadTherapistCEU();
   if(tab==='supervision') loadTherapistSupervision();
+  if(tab==='competency') loadCompetencyAssessments();
+  if(tab==='goals') loadStaffGoals();
+}
+
+// ---- COMPETENCY ASSESSMENTS ----
+async function loadCompetencyAssessments(){
+  const types=['IBAT','RBT','Inspire'];
+  const{data}=await SB.from('competency_assessments').select('*').eq('therapist_id',CP.id);
+  types.forEach(type=>{
+    const el=document.getElementById('comp-'+type.toLowerCase()+'-status');
+    if(!el)return;
+    const found=data&&data.find(x=>x.assessment_type===type);
+    if(found){
+      el.innerHTML=`<span style="color:var(--success);font-weight:600;">✅ Uploaded</span>
+        <button class="btn-outline" style="padding:3px 8px;font-size:11px;margin-left:8px;" onclick="downloadCompetency('${found.file_path}')">Download</button>
+        <button class="btn-danger" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="deleteCompetency('${found.id}')">Replace</button>`;
+    } else {
+      el.textContent='Not uploaded';
+    }
+  });
+}
+
+async function uploadCompetency(e, type){
+  const file=e.target.files[0];if(!file)return;
+  showLoad('Uploading…');
+  const path=`${CP.id}/competency_${type}_${Date.now()}_${file.name}`;
+  const{error}=await SB.storage.from('hr-documents').upload(path,file);
+  if(error){hideLoad();alert('Upload failed: '+error.message);return;}
+  // Delete old record if exists
+  await SB.from('competency_assessments').delete().eq('therapist_id',CP.id).eq('assessment_type',type);
+  await SB.from('competency_assessments').insert({therapist_id:CP.id,assessment_type:type,file_path:path,uploaded_by:CU.id});
+  hideLoad();
+  e.target.value='';
+  loadCompetencyAssessments();
+}
+
+function downloadCompetency(path){
+  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
+  window.open(data.publicUrl,'_blank');
+}
+
+async function deleteCompetency(id){
+  if(!confirm('Remove this assessment? You can upload a new one.'))return;
+  await SB.from('competency_assessments').delete().eq('id',id);
+  loadCompetencyAssessments();
+}
+
+// ---- STAFF GOALS ----
+async function loadStaffGoals(){
+  const el=document.getElementById('t-goals-list');if(!el)return;
+  const{data}=await SB.from('staff_goals').select('*').eq('therapist_id',CP.id).order('goal_date',{ascending:false});
+  if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No goal documents uploaded yet.</div>';return;}
+  el.innerHTML=data.map(g=>`
+    <div class="card" style="padding:.85rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:13px;font-weight:500;">🎯 ${g.title}</div>
+        <div style="font-size:11px;color:var(--text2);">${g.goal_date}</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        ${g.file_path?`<button class="btn-outline" style="padding:4px 8px;font-size:11px;" onclick="downloadGoal('${g.file_path}')">Download</button>`:''}
+        <button class="btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteGoal('${g.id}')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function uploadStaffGoal(e){
+  const file=e.target.files[0];if(!file)return;
+  const title=file.name.replace(/\.[^.]+$/,'');
+  showLoad('Uploading goal…');
+  const path=`${CP.id}/goal_${Date.now()}_${file.name}`;
+  const{error}=await SB.storage.from('hr-documents').upload(path,file);
+  if(error){hideLoad();alert('Upload failed: '+error.message);return;}
+  await SB.from('staff_goals').insert({therapist_id:CP.id,title,file_path:path,goal_date:new Date().toISOString().split('T')[0],uploaded_by:CU.id});
+  hideLoad();
+  e.target.value='';
+  loadStaffGoals();
+}
+
+function downloadGoal(path){
+  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
+  window.open(data.publicUrl,'_blank');
+}
+
+async function deleteGoal(id){
+  if(!confirm('Delete this goal document?'))return;
+  await SB.from('staff_goals').delete().eq('id',id);
+  loadStaffGoals();
 }
 
 function openSupervisionModal(){
@@ -1925,6 +2275,8 @@ async function saveSupervision(isPending){
   const duration=parseInt(isTherapist?document.getElementById(durEl).value:document.getElementById(durEl).value);
   const type=document.getElementById(typeEl).value;
   const notes=document.getElementById(notesEl).value.trim();
+  const actions_agreed=isTherapist?'':(document.getElementById('sup-actions').value.trim());
+  const next_supervision_date=isTherapist?null:(document.getElementById('sup-next-date').value||null);
 
   showLoad('Saving…');
   const{error}=await SB.from('supervision_logs').insert({
@@ -1934,6 +2286,8 @@ async function saveSupervision(isPending){
     duration_mins:duration,
     supervision_type:type,
     notes,
+    actions_agreed,
+    next_supervision_date,
     logged_by:CU.id,
     approved:!isPending,
     pending:isPending
@@ -2024,19 +2378,26 @@ async function renderSupervisionReport(){
 
 async function loadRecentSupervision(){
   const el=document.getElementById('sup-recent-list');if(!el)return;
-  const{data}=await SB.from('supervision_logs').select('*').eq('approved',true).order('date',{ascending:false}).limit(10);
+  const{data}=await SB.from('supervision_logs').select('*').eq('approved',true).order('date',{ascending:false}).limit(20);
   if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No approved supervision sessions yet.</div>';return;}
   const fmtTime=m=>m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
   el.innerHTML=data.map(s=>{
     const t=allProfiles.find(p=>p.id===s.therapist_id);
     const c=allClients.find(x=>x.id===s.client_id);
-    return `<div class="card" style="padding:.75rem;margin-bottom:6px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-      <div>
-        <div style="font-size:13px;font-weight:500;">${t?t.full_name:'Unknown'} — ${fmtTime(s.duration_mins)} ${s.supervision_type?'('+s.supervision_type+')':''}</div>
-        <div style="font-size:11px;color:var(--text2);margin-top:2px;">${s.date}${c?' · '+c.full_name:''}</div>
-        ${s.notes?`<div style="font-size:11px;color:var(--text2);margin-top:3px;">${s.notes}</div>`:''}
+    const hasActions=s.actions_agreed&&s.actions_agreed.trim();
+    return `<div class="card" style="padding:.85rem;margin-bottom:6px;cursor:pointer;transition:border-color .15s;" onclick="openSupervisionSession('${s.id}')" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='var(--border3)'">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">${s.date} — ${t?t.full_name:'Unknown'}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">${fmtTime(s.duration_mins)} ${s.supervision_type?'· '+s.supervision_type:''}${c?' · '+c.full_name:''}</div>
+          ${s.notes?`<div style="font-size:12px;color:var(--text2);margin-top:4px;">${s.notes.substring(0,80)}${s.notes.length>80?'…':''}</div>`:''}
+          ${hasActions?`<div style="font-size:11px;margin-top:4px;color:${s.actions_completed?'var(--success)':'var(--warn)'};">${s.actions_completed?'✓ Actions completed':'⏳ Actions pending'}</div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+          <span style="font-size:11px;color:var(--brand);font-weight:600;">View →</span>
+          <button class="btn-danger" style="padding:3px 8px;font-size:11px;" onclick="event.stopPropagation();deleteSupervision('${s.id}')">Delete</button>
+        </div>
       </div>
-      <button class="btn-danger" style="padding:3px 8px;font-size:11px;flex-shrink:0;" onclick="deleteSupervision('${s.id}')">Delete</button>
     </div>`;
   }).join('');
 }
