@@ -879,15 +879,27 @@ async function doLogout(){
   CU=null;CP=null;CC=null;hideLoad();showScr('login-screen');
 }
 async function loadUserAndRoute(){
-  const {data:{user}}=await SB.auth.getUser();
-  if(!user){showScr('login-screen');return;}
-  const {data:profile}=await SB.from('profiles').select('*').eq('id',user.id).single();
-  if(!profile){showErr('l-err','Profile not found. Contact your clinic manager.');return;}
-  CU=user;CP=profile;
-  await loadGlobalData();
-  if(CP.role==='therapist')await showDash();
-  else if(CP.role==='parent'||CP.role==='teacher')await showExternal();
-  else await showMgr();
+  try {
+    const {data:{user}}=await SB.auth.getUser();
+    if(!user){showScr('login-screen');return;}
+    CU=user;
+    const {data:profile, error:profErr}=await SB.from('profiles').select('*').eq('id',user.id).single();
+    if(profErr||!profile){
+      showErr('l-err','Profile not found ('+( profErr?profErr.message:'no data')+')');
+      const btn=document.querySelector('.btn-brand');
+      if(btn){btn.textContent='Sign in →';btn.disabled=false;}
+      return;
+    }
+    CP=profile;
+    await loadGlobalData();
+    if(CP.role==='therapist') await showDash();
+    else if(CP.role==='parent'||CP.role==='teacher') await showExternal();
+    else await showMgr();
+  } catch(err) {
+    showErr('l-err','Error: '+err.message);
+    const btn=document.querySelector('.btn-brand');
+    if(btn){btn.textContent='Sign in →';btn.disabled=false;}
+  }
 }
 async function loadGlobalData(){
   const [{data:profiles},{data:clients}]=await Promise.all([
