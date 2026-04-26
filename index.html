@@ -835,7 +835,21 @@ function ini(n){return(n||'').split(' ').map(x=>x[0]).join('').toUpperCase();}
 function showLoad(msg='Loading…'){const o=document.getElementById('loading-overlay');o.style.display='flex';document.getElementById('loading-text').textContent=msg;}
 function hideLoad(){document.getElementById('loading-overlay').style.display='none';}
 function flash(id){const e=document.getElementById(id);if(e){e.style.display='inline';setTimeout(()=>e.style.display='none',2500);}}
-function showScr(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showScr(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+    s.style.display='';
+  });
+  if(id==='login-screen'){
+    const ls=document.getElementById('login-screen');
+    ls.style.display='flex';
+    ls.style.alignItems='center';
+    ls.style.justifyContent='center';
+    ls.style.minHeight='100vh';
+  } else {
+    document.getElementById(id).classList.add('active');
+  }
+}
 function showErr(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.style.display='block';setTimeout(()=>e.style.display='none',4000);}}
 
 // ---- TAGS ----
