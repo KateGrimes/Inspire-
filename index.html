@@ -269,6 +269,26 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <!-- Recent supervision log -->
       <div style="font-size:13px;font-weight:600;margin-bottom:.5rem;">Recent supervision sessions</div>
       <div id="sup-recent-list"></div>
+      <!-- STAFF COMPETENCY ASSESSMENTS (manager view) -->
+      <div style="margin-top:2rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
+          <div class="stitle" style="margin-bottom:0;">Staff Competency Assessments</div>
+          <select id="mgr-comp-filter" onchange="renderMgrCompetency()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
+            <option value="all">All staff</option>
+          </select>
+        </div>
+        <div id="mgr-competency-list"></div>
+      </div>
+      <!-- STAFF GOALS (manager view) -->
+      <div style="margin-top:2rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
+          <div class="stitle" style="margin-bottom:0;">Staff Goals</div>
+          <select id="mgr-goals-filter" onchange="renderMgrGoals()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
+            <option value="all">All staff</option>
+          </select>
+        </div>
+        <div id="mgr-goals-list"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1026,6 +1046,13 @@ async function showMgr(){
     loadRecentSupervision();
     loadPendingSupervision();
     renderSupervisionReport();
+    // Populate staff filters
+    const therapists=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
+    const staffOpts='<option value="all">All staff</option>'+therapists.map(t=>`<option value="${t.id}">${t.full_name}</option>`).join('');
+    document.getElementById('mgr-comp-filter').innerHTML=staffOpts;
+    document.getElementById('mgr-goals-filter').innerHTML=staffOpts;
+    renderMgrCompetency();
+    renderMgrGoals();
   }
   renderMgrMetrics();
   renderMgrTable();
@@ -2234,7 +2261,79 @@ async function deleteGoal(id){
   loadStaffGoals();
 }
 
-function openSupervisionModal(){
+// ---- MANAGER COMPETENCY VIEW ----
+async function renderMgrCompetency(){
+  const el=document.getElementById('mgr-competency-list');if(!el)return;
+  const filterVal=document.getElementById('mgr-comp-filter').value;
+  const therapists=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
+  const staff=filterVal==='all'?therapists:therapists.filter(t=>t.id===filterVal);
+  if(!staff.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No staff accounts yet.</div>';return;}
+  const{data:allComps}=await SB.from('competency_assessments').select('*');
+  const types=['IBAT','RBT','Inspire'];
+  el.innerHTML=staff.map(s=>{
+    const comps=allComps?allComps.filter(c=>c.therapist_id===s.id):[];
+    const slots=types.map(type=>{
+      const found=comps.find(c=>c.assessment_type===type);
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:12px;">${type} Competency Assessment</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          ${found
+            ?`<span style="color:var(--success);font-size:12px;font-weight:600;">✅ Uploaded</span>
+               <button class="btn-outline" style="padding:3px 8px;font-size:11px;" onclick="downloadCompetencyMgr('${found.file_path}')">Download</button>`
+            :`<span style="color:var(--text3);font-size:12px;">⬜ Not uploaded</span>`
+          }
+        </div>
+      </div>`;
+    }).join('');
+    const uploaded=comps.length;
+    return `<div class="card" style="padding:1rem;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+        <div style="font-size:13px;font-weight:600;">${s.full_name}</div>
+        <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${uploaded===3?'var(--teal-light)':'var(--warn-light)'};color:${uploaded===3?'var(--teal)':'var(--warn)'};">${uploaded}/3 uploaded</span>
+      </div>
+      ${slots}
+    </div>`;
+  }).join('');
+}
+
+function downloadCompetencyMgr(path){
+  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
+  window.open(data.publicUrl,'_blank');
+}
+
+// ---- MANAGER GOALS VIEW ----
+async function renderMgrGoals(){
+  const el=document.getElementById('mgr-goals-list');if(!el)return;
+  const filterVal=document.getElementById('mgr-goals-filter').value;
+  const therapists=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
+  const staff=filterVal==='all'?therapists:therapists.filter(t=>t.id===filterVal);
+  if(!staff.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No staff accounts yet.</div>';return;}
+  const{data:allGoals}=await SB.from('staff_goals').select('*').order('goal_date',{ascending:false});
+  el.innerHTML=staff.map(s=>{
+    const goals=allGoals?allGoals.filter(g=>g.therapist_id===s.id):[];
+    if(!goals.length){
+      return `<div class="card" style="padding:.85rem;margin-bottom:8px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:.4rem;">${s.full_name}</div>
+        <div style="font-size:12px;color:var(--text2);">No goals uploaded yet.</div>
+      </div>`;
+    }
+    return `<div class="card" style="padding:.85rem;margin-bottom:8px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:.6rem;">${s.full_name} <span style="font-size:11px;font-weight:400;color:var(--text2);">(${goals.length} goal${goals.length!==1?'s':''})</span></div>
+      ${goals.map(g=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);">
+        <div>
+          <div style="font-size:12px;font-weight:500;">🎯 ${g.title}</div>
+          <div style="font-size:11px;color:var(--text2);">${g.goal_date}</div>
+        </div>
+        ${g.file_path?`<button class="btn-outline" style="padding:3px 8px;font-size:11px;" onclick="downloadGoalMgr('${g.file_path}')">Download</button>`:''}
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+function downloadGoalMgr(path){
+  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
+  window.open(data.publicUrl,'_blank');
+}
   // Populate therapist dropdown
   const sel=document.getElementById('sup-therapist');
   const therapists=allProfiles.filter(p=>p.role==='therapist');
