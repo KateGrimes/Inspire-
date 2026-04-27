@@ -2334,6 +2334,8 @@ function downloadGoalMgr(path){
   const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
   window.open(data.publicUrl,'_blank');
 }
+
+function openSupervisionModal(){
   // Populate therapist dropdown
   const sel=document.getElementById('sup-therapist');
   const therapists=allProfiles.filter(p=>p.role==='therapist');
