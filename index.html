@@ -1229,7 +1229,7 @@ async function saveUser(){
   const staff_group=document.getElementById('u-group').value;
   if(!name||!email||!pass){showErr('user-err','Please fill in name, email and password.');return;}
   showLoad('Creating account…');
-  const {data,error}=await SB.auth.admin?SB.auth.admin.createUser({email,password:pass,email_confirm:true}):await SB.auth.signUp({email,password:pass});
+  const {data,error}=await const {data,error}=await SB.auth.signUp({email,password:pass,options:{data:{full_name:name}}});({email,password:pass,email_confirm:true}):await SB.auth.signUp({email,password:pass});
   if(error){hideLoad();showErr('user-err',error.message);return;}
   const uid=data?.user?.id;
   if(uid){
