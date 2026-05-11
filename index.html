@@ -186,7 +186,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         </select>
       </div>
     </div>
-    <!-- NOTIFICATIONS BANNER -->
     <div id="notif-banner" style="display:none;background:var(--teal-light);border:1px solid var(--teal);border-radius:var(--r);padding:.85rem 1.1rem;margin-bottom:1.25rem;font-size:13px;color:#0a4a4d;">
       <div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-weight:600;">📊 Recent graph updates</div><span style="font-size:11px;cursor:pointer;color:var(--teal);" onclick="document.getElementById('notif-banner').style.display='none'">Dismiss</span></div>
       <div id="notif-list" style="font-size:12px;line-height:1.8;margin-top:4px;"></div>
@@ -195,7 +194,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <table class="tbl"><thead><tr><th>Client</th><th>Therapist</th><th>Last session</th><th>Status</th><th>Entries</th><th></th></tr></thead>
       <tbody id="mgr-tbody"></tbody></table>
     </div>
-    <!-- MEETINGS -->
     <div style="margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Meetings</div>
@@ -203,20 +201,16 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="mgr-meetings-list"></div>
     </div>
-    <!-- ATTENDANCE (clinic manager only) -->
     <div id="att-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Staff attendance</div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <select id="att-staff-filter" onchange="renderAttendance()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
-            <option value="all">All staff</option>
-          </select>
+          <select id="att-staff-filter" onchange="renderAttendance()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);"><option value="all">All staff</option></select>
           <select id="att-month-filter" onchange="renderAttendance()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);"></select>
         </div>
       </div>
       <div id="att-table-wrap" style="overflow-x:auto;"></div>
     </div>
-    <!-- ADMIN (clinic manager only) -->
     <div id="admin-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">User management</div>
@@ -227,7 +221,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="user-list"></div>
     </div>
-    <!-- HR FOLDERS (clinic manager only) -->
     <div id="hr-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">HR Folders</div>
@@ -235,7 +228,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="hr-staff-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;"></div>
     </div>
-    <!-- TRAINING VIDEOS (clinic manager only) -->
     <div id="training-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Training Videos</div>
@@ -243,13 +235,11 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="training-list"></div>
     </div>
-    <!-- SUPERVISION & CPD -->
     <div id="supervision-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Supervision &amp; Professional Development</div>
         <button class="btn-primary" style="padding:7px 14px;font-size:12px;" onclick="openSupervisionModal()">+ Log supervision</button>
       </div>
-      <!-- Supervision summary with date filter -->
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1rem;">
         <div style="font-size:13px;font-weight:600;margin-bottom:.75rem;">Supervision hours report</div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:.75rem;">
@@ -261,31 +251,23 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         </div>
         <div id="sup-report" style="font-size:13px;"></div>
       </div>
-      <!-- Pending approvals -->
       <div id="sup-pending-section" style="display:none;margin-bottom:1rem;">
         <div style="font-size:13px;font-weight:600;color:var(--warn);margin-bottom:.5rem;">⏳ Pending therapist entries — awaiting approval</div>
         <div id="sup-pending-list"></div>
       </div>
-      <!-- Recent supervision log -->
       <div style="font-size:13px;font-weight:600;margin-bottom:.5rem;">Recent supervision sessions</div>
       <div id="sup-recent-list"></div>
-      <!-- STAFF COMPETENCY ASSESSMENTS (manager view) -->
       <div style="margin-top:2rem;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
           <div class="stitle" style="margin-bottom:0;">Staff Competency Assessments</div>
-          <select id="mgr-comp-filter" onchange="renderMgrCompetency()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
-            <option value="all">All staff</option>
-          </select>
+          <select id="mgr-comp-filter" onchange="renderMgrCompetency()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);"><option value="all">All staff</option></select>
         </div>
         <div id="mgr-competency-list"></div>
       </div>
-      <!-- STAFF GOALS (manager view) -->
       <div style="margin-top:2rem;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
           <div class="stitle" style="margin-bottom:0;">Staff Goals</div>
-          <select id="mgr-goals-filter" onchange="renderMgrGoals()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
-            <option value="all">All staff</option>
-          </select>
+          <select id="mgr-goals-filter" onchange="renderMgrGoals()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);"><option value="all">All staff</option></select>
         </div>
         <div id="mgr-goals-list"></div>
       </div>
@@ -323,7 +305,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <div class="stitle">Training videos</div>
       <div id="t-training-list" style="margin-top:.5rem;"></div>
     </div>
-    <!-- THERAPIST CPD & SUPERVISION -->
     <div style="margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Supervision &amp; Professional Development</div>
@@ -346,32 +327,24 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
           <div class="card" style="padding:.85rem;">
             <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 IBAT Competency Assessment</div>
             <div id="comp-ibat-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
-            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
-              Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'IBAT')"/>
-            </label>
+            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'IBAT')"/></label>
           </div>
           <div class="card" style="padding:.85rem;">
             <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 RBT Competency Assessment</div>
             <div id="comp-rbt-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
-            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
-              Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'RBT')"/>
-            </label>
+            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'RBT')"/></label>
           </div>
           <div class="card" style="padding:.85rem;">
             <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 Inspire Therapy Competency Assessment</div>
             <div id="comp-inspire-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
-            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
-              Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'Inspire')"/>
-            </label>
+            <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadCompetency(event,'Inspire')"/></label>
           </div>
         </div>
       </div>
       <div id="cpd-tab-goals" style="display:none;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:8px;">
           <div style="font-size:12px;color:var(--text2);">Upload your staff goal documents. Multiple goals can be added across the year.</div>
-          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">
-            + Add goal <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadStaffGoal(event)"/>
-          </label>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">+ Add goal <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadStaffGoal(event)"/></label>
         </div>
         <div id="t-goals-list"></div>
       </div>
@@ -426,7 +399,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
   <div class="body">
     <div id="ro-banner" class="ron" style="display:none;"></div>
     <div class="tabs" id="client-tabs"></div>
-    <!-- CHART TAB -->
     <div id="tab-chart" class="tc">
       <div class="cctrls">
         <label>Programme:</label><select id="cps" onchange="onCPC()"></select>
@@ -446,7 +418,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div class="cw"><canvas id="prog-chart" role="img" aria-label="Progress chart">Data in session tab.</canvas></div>
     </div>
-    <!-- SESSIONS TAB -->
     <div id="tab-sessions" class="tc">
       <div id="sef">
         <div class="card">
@@ -489,12 +460,10 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         </table>
       </div>
     </div>
-    <!-- PROGRAMMES TAB -->
     <div id="tab-programmes" class="tc">
       <div class="stitle" id="pcl">Programmes</div>
       <div class="plist" id="prog-list"></div>
     </div>
-    <!-- MEDIA TAB -->
     <div id="tab-media" class="tc">
       <div id="media-upload-section">
         <div class="card">
@@ -522,7 +491,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <div class="stitle">Media library</div>
       <div class="media-grid" id="media-grid"></div>
     </div>
-    <!-- NOTES TAB -->
     <div id="tab-notes" class="tc">
       <div class="card"><div class="ctitle">Session notes</div>
         <div class="field"><label>Observations / plan</label><textarea id="notes-area" style="height:130px;"></textarea></div>
@@ -532,12 +500,10 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         </div>
       </div>
     </div>
-    <!-- REPORTS TAB -->
     <div id="tab-reports" class="tc">
       <div class="stitle">Saved reports</div>
       <div id="saved-reports-list"></div>
     </div>
-    <!-- THERAPY PLAN TAB -->
     <div id="tab-therapy-plan" class="tc">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Therapy Plan &amp; Assessments</div>
@@ -610,20 +576,14 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <h3 id="hr-modal-title">HR Folder</h3>
       <div id="hr-completeness" style="font-size:12px;color:var(--text2);"></div>
     </div>
-
-    <!-- TABS -->
     <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1rem;overflow-x:auto;gap:0;">
       <button class="hr-tab active" onclick="switchHRTab('documents',this)">📋 Documents</button>
       <button class="hr-tab" onclick="switchHRTab('payslips',this)">💰 Payslips</button>
     </div>
-
-    <!-- DOCUMENTS TAB -->
     <div id="hr-tab-documents">
       <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Required documents — upload each one below. ✅ = uploaded, ⬜ = missing.</div>
       <div id="hr-slots-list"></div>
     </div>
-
-    <!-- PAYSLIPS TAB -->
     <div id="hr-tab-payslips" style="display:none;">
       <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Upload monthly payslips here. All payslips are stored and accessible to both manager and therapist.</div>
       <div id="hr-payslips-list" style="margin-bottom:1rem;"></div>
@@ -636,7 +596,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         </label>
       </div>
     </div>
-
     <div class="rbtns" style="margin-top:1rem;">
       <button class="btn-outline" onclick="closeHRModal()">Close</button>
     </div>
@@ -649,39 +608,23 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
   <div class="md" style="max-width:520px;">
     <h3 id="sup-modal-title">Log supervision session</h3>
     <div class="field"><label>Date</label><input type="date" id="sup-date"/></div>
-    <div class="field"><label>Therapist</label>
-      <select id="sup-therapist"><option value="">Select therapist…</option></select>
-    </div>
+    <div class="field"><label>Therapist</label><select id="sup-therapist"><option value="">Select therapist…</option></select></div>
     <div class="field"><label>Duration</label>
       <select id="sup-duration">
-        <option value="15">15 minutes</option>
-        <option value="30">30 minutes</option>
-        <option value="45">45 minutes</option>
-        <option value="60">60 minutes</option>
-        <option value="90">90 minutes</option>
-        <option value="120">2 hours</option>
+        <option value="15">15 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option>
+        <option value="60">60 minutes</option><option value="90">90 minutes</option><option value="120">2 hours</option>
       </select>
     </div>
     <div class="field"><label>Type</label>
       <select id="sup-type">
-        <option value="individual">Individual supervision</option>
-        <option value="group">Group supervision</option>
-        <option value="peer">Peer supervision</option>
-        <option value="client">Client-specific supervision</option>
+        <option value="individual">Individual supervision</option><option value="group">Group supervision</option>
+        <option value="peer">Peer supervision</option><option value="client">Client-specific supervision</option>
       </select>
     </div>
-    <div class="field"><label>Client / Programme (optional)</label>
-      <select id="sup-client"><option value="">Not client-specific</option></select>
-    </div>
-    <div class="field"><label>Notes / Topics covered</label>
-      <textarea id="sup-notes" style="height:70px;" placeholder="Topics covered in this session…"></textarea>
-    </div>
-    <div class="field"><label>Actions agreed</label>
-      <textarea id="sup-actions" style="height:60px;" placeholder="Actions to be completed before next session…"></textarea>
-    </div>
-    <div class="field"><label>Next supervision date (optional)</label>
-      <input type="date" id="sup-next-date"/>
-    </div>
+    <div class="field"><label>Client / Programme (optional)</label><select id="sup-client"><option value="">Not client-specific</option></select></div>
+    <div class="field"><label>Notes / Topics covered</label><textarea id="sup-notes" style="height:70px;" placeholder="Topics covered in this session…"></textarea></div>
+    <div class="field"><label>Actions agreed</label><textarea id="sup-actions" style="height:60px;" placeholder="Actions to be completed before next session…"></textarea></div>
+    <div class="field"><label>Next supervision date (optional)</label><input type="date" id="sup-next-date"/></div>
     <div class="rbtns">
       <button class="btn-primary" onclick="saveSupervision(false)">Save &amp; approve</button>
       <button class="btn-outline" onclick="closeSupModal()">Cancel</button>
@@ -691,7 +634,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
   </div>
 </div>
 
-<!-- SUPERVISION LOG MODAL (therapist — pending approval) -->
+<!-- SUPERVISION LOG MODAL (therapist) -->
 <div id="sup-t-modal" class="mo">
   <div class="md" style="max-width:520px;">
     <h3>Log my supervision</h3>
@@ -699,25 +642,17 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div class="field"><label>Date</label><input type="date" id="sup-t-date"/></div>
     <div class="field"><label>Duration</label>
       <select id="sup-t-duration">
-        <option value="15">15 minutes</option>
-        <option value="30">30 minutes</option>
-        <option value="45">45 minutes</option>
-        <option value="60">60 minutes</option>
-        <option value="90">90 minutes</option>
-        <option value="120">2 hours</option>
+        <option value="15">15 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option>
+        <option value="60">60 minutes</option><option value="90">90 minutes</option><option value="120">2 hours</option>
       </select>
     </div>
     <div class="field"><label>Type</label>
       <select id="sup-t-type">
-        <option value="individual">Individual supervision</option>
-        <option value="group">Group supervision</option>
-        <option value="peer">Peer supervision</option>
-        <option value="client">Client-specific supervision</option>
+        <option value="individual">Individual supervision</option><option value="group">Group supervision</option>
+        <option value="peer">Peer supervision</option><option value="client">Client-specific supervision</option>
       </select>
     </div>
-    <div class="field"><label>Notes</label>
-      <textarea id="sup-t-notes" style="height:70px;" placeholder="Topics covered, actions agreed…"></textarea>
-    </div>
+    <div class="field"><label>Notes</label><textarea id="sup-t-notes" style="height:70px;" placeholder="Topics covered, actions agreed…"></textarea></div>
     <div class="rbtns">
       <button class="btn-primary" onclick="saveSupervision(true)">Submit for approval</button>
       <button class="btn-outline" onclick="document.getElementById('sup-t-modal').classList.remove('active')">Cancel</button>
@@ -736,8 +671,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div class="field"><label>Hours / CEUs</label><input type="number" id="ceu-hours" min="0" step="0.5" placeholder="e.g. 3"/></div>
     <div class="field"><label>Certificate (optional)</label>
       <label class="btn-outline" style="padding:6px 12px;font-size:12px;cursor:pointer;display:inline-block;margin-top:4px;">
-        Choose file
-        <input type="file" id="ceu-cert-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="document.getElementById('ceu-cert-name').textContent=this.files[0]?this.files[0].name:'No file chosen'"/>
+        Choose file <input type="file" id="ceu-cert-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="document.getElementById('ceu-cert-name').textContent=this.files[0]?this.files[0].name:'No file chosen'"/>
       </label>
       <span id="ceu-cert-name" style="font-size:12px;color:var(--text2);margin-left:8px;">No file chosen</span>
     </div>
@@ -768,6 +702,8 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div class="err" id="tv-err"></div>
   </div>
 </div>
+
+<!-- ADD USER MODAL -->
 <div id="um" class="mo">
   <div class="md">
     <h3>Add user account</h3>
@@ -776,22 +712,15 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div class="field"><label>Password</label><input type="password" id="u-pass" placeholder="Minimum 6 characters"/></div>
     <div class="field"><label>Role</label>
       <select id="u-role">
-        <option value="therapist">Therapist</option>
-        <option value="manager">Manager</option>
-        <option value="clinic_manager">Clinic Manager</option>
-        <option value="parent">Parent</option>
-        <option value="teacher">Teacher</option>
+        <option value="therapist">Therapist</option><option value="manager">Manager</option>
+        <option value="clinic_manager">Clinic Manager</option><option value="parent">Parent</option><option value="teacher">Teacher</option>
       </select>
     </div>
     <div class="field"><label>Staff Group</label>
       <select id="u-group">
-        <option value="">No group</option>
-        <option value="ABA Therapist">ABA Therapist</option>
-        <option value="LSA">LSA</option>
-        <option value="Speech Therapist">Speech Therapist</option>
-        <option value="Occupational Therapist">Occupational Therapist</option>
-        <option value="Manager">Manager</option>
-        <option value="Other">Other</option>
+        <option value="">No group</option><option value="ABA Therapist">ABA Therapist</option><option value="LSA">LSA</option>
+        <option value="Speech Therapist">Speech Therapist</option><option value="Occupational Therapist">Occupational Therapist</option>
+        <option value="Manager">Manager</option><option value="Other">Other</option>
       </select>
     </div>
     <div class="field"><label>Initials (therapists/managers)</label><input id="u-initials" placeholder="e.g. SA" maxlength="4"/></div>
@@ -804,7 +733,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
   </div>
 </div>
 
-<!-- CLIENT MODAL (add/edit client) -->
+<!-- CLIENT MODAL -->
 <div id="cm-modal" class="mo">
   <div class="md">
     <h3 id="cm-title">Add client</h3>
@@ -822,7 +751,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
 
 <div id="rpt-out" style="display:none;"></div>
 
-<!-- ═══ IMPORT SCREEN ═══════════════════════════════════════════ -->
+<!-- IMPORT SCREEN -->
 <div id="import-screen" class="screen">
   <div class="topbar">
     <div class="topbar-l">
@@ -839,8 +768,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <div style="font-size:20px;font-weight:500;margin-bottom:.4rem;">Import existing client data</div>
       <div style="font-size:13px;color:var(--text2);line-height:1.7;">Upload your existing Google Sheets data using CSV files. Import in order: <strong>1. Clients</strong> → <strong>2. Programmes</strong> → <strong>3. Sessions</strong>. Each step depends on the previous one.</div>
     </div>
-
-    <!-- ORDER GUIDE -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1.5rem;">
       <div class="card" style="border-top:3px solid var(--brand);padding:.85rem;">
         <div style="font-size:22px;font-weight:700;color:var(--brand);margin-bottom:4px;">1</div>
@@ -861,49 +788,33 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         <div id="imp-sess-status" style="font-size:11px;margin-top:6px;color:var(--text3);">Not yet imported</div>
       </div>
     </div>
-
-    <!-- STEP 1: CLIENTS -->
     <div class="card" id="imp-step1">
       <div class="ctitle" style="color:var(--brand);">Step 1 — Upload clients.csv</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.7;">Your CSV must have these columns: <code style="background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;">client_id, full_name, dob, therapist_email</code><br/>Download the template for the exact format required.</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.7;">Your CSV must have these columns: <code style="background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;">client_id, full_name, dob, therapist_email</code></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;">
         <button class="btn-outline" onclick="dlTemplate('clients')" style="font-size:12px;padding:7px 12px;">⬇ Download template</button>
-        <label class="btn-primary" style="padding:9px 16px;font-size:13px;cursor:pointer;">
-          Choose clients.csv
-          <input type="file" accept=".csv" style="display:none;" onchange="handleCSV(event,'clients')"/>
-        </label>
+        <label class="btn-primary" style="padding:9px 16px;font-size:13px;cursor:pointer;">Choose clients.csv<input type="file" accept=".csv" style="display:none;" onchange="handleCSV(event,'clients')"/></label>
       </div>
       <div id="imp-clients-preview"></div>
     </div>
-
-    <!-- STEP 2: PROGRAMMES -->
     <div class="card" id="imp-step2" style="opacity:.5;pointer-events:none;">
       <div class="ctitle" style="color:var(--teal);">Step 2 — Upload programmes.csv</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.7;">Your CSV must have these columns: <code style="background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;">programme_id, client_id, programme_name, description, mastery_criteria, target_sd, stos</code><br/>For STOs: list all in one cell, separated by <strong>|</strong> e.g. <code style="background:var(--bg2);padding:2px 5px;border-radius:4px;font-size:12px;">STO 1 — Sit down|STO 2 — Fold arms</code></div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.7;">Your CSV must have these columns: <code style="background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;">programme_id, client_id, programme_name, description, mastery_criteria, target_sd, stos</code></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;">
         <button class="btn-outline" onclick="dlTemplate('programmes')" style="font-size:12px;padding:7px 12px;">⬇ Download template</button>
-        <label class="btn-primary" style="padding:9px 16px;font-size:13px;cursor:pointer;">
-          Choose programmes.csv
-          <input type="file" accept=".csv" style="display:none;" onchange="handleCSV(event,'programmes')"/>
-        </label>
+        <label class="btn-primary" style="padding:9px 16px;font-size:13px;cursor:pointer;">Choose programmes.csv<input type="file" accept=".csv" style="display:none;" onchange="handleCSV(event,'programmes')"/></label>
       </div>
       <div id="imp-progs-preview"></div>
     </div>
-
-    <!-- STEP 3: SESSIONS -->
     <div class="card" id="imp-step3" style="opacity:.5;pointer-events:none;">
       <div class="ctitle" style="color:var(--success);">Step 3 — Upload sessions.csv</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.7;">Your CSV must have these columns: <code style="background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;">programme_id, client_id, session_date, sto, pct_correct, phase, mastered, therapist_initials, target_sd, sd_description</code><br/><strong>pct_correct</strong> must be a number 0–100 (no % sign). <strong>mastered</strong>: type yes or no. <strong>session_date</strong>: YYYY-MM-DD format.</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.7;">Your CSV must have these columns: <code style="background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;">programme_id, client_id, session_date, sto, pct_correct, phase, mastered, therapist_initials, target_sd, sd_description</code></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;">
         <button class="btn-outline" onclick="dlTemplate('sessions')" style="font-size:12px;padding:7px 12px;">⬇ Download template</button>
-        <label class="btn-primary" style="padding:9px 16px;font-size:13px;cursor:pointer;">
-          Choose sessions.csv
-          <input type="file" accept=".csv" style="display:none;" onchange="handleCSV(event,'sessions')"/>
-        </label>
+        <label class="btn-primary" style="padding:9px 16px;font-size:13px;cursor:pointer;">Choose sessions.csv<input type="file" accept=".csv" style="display:none;" onchange="handleCSV(event,'sessions')"/></label>
       </div>
       <div id="imp-sess-preview"></div>
     </div>
-
   </div>
 </div>
 
@@ -933,36 +844,27 @@ let CU=null,CP=null,CC=null,CI=null,epid=null,prevScr='dash-screen';
 let stags=[],ptags=[],pendingFile=null;
 let allProfiles=[],allClients=[],allMeetings=[];
 
-// ---- UTILS ----
 function ini(n){return(n||'').split(' ').map(x=>x[0]).join('').toUpperCase();}
 function showLoad(msg='Loading…'){const o=document.getElementById('loading-overlay');o.style.display='flex';document.getElementById('loading-text').textContent=msg;}
 function hideLoad(){document.getElementById('loading-overlay').style.display='none';}
 function flash(id){const e=document.getElementById(id);if(e){e.style.display='inline';setTimeout(()=>e.style.display='none',2500);}}
 function showScr(id){
-  document.querySelectorAll('.screen').forEach(s=>{
-    s.classList.remove('active');
-    s.style.display='';
-  });
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='';});
   if(id==='login-screen'){
     const ls=document.getElementById('login-screen');
-    ls.style.display='flex';
-    ls.style.alignItems='center';
-    ls.style.justifyContent='center';
-    ls.style.minHeight='100vh';
+    ls.style.display='flex';ls.style.alignItems='center';ls.style.justifyContent='center';ls.style.minHeight='100vh';
   } else {
     document.getElementById(id).classList.add('active');
   }
 }
 function showErr(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.style.display='block';setTimeout(()=>e.style.display='none',4000);}}
 
-// ---- TAGS ----
 function hTI(e){const i=document.getElementById('tti');if((e.key==='Enter'||e.key===',')&&i.value.trim()){e.preventDefault();const t=i.value.trim().toUpperCase();if(!stags.includes(t))stags.push(t);i.value='';rTB('ttb','tti',stags,'rST');}else if(e.key==='Backspace'&&!i.value&&stags.length){stags.pop();rTB('ttb','tti',stags,'rST');}}
 function rST(t){stags=stags.filter(x=>x!==t);rTB('ttb','tti',stags,'rST');}
 function hPTI(e){const i=document.getElementById('pti');if((e.key==='Enter'||e.key===',')&&i.value.trim()){e.preventDefault();const t=i.value.trim().toUpperCase();if(!ptags.includes(t))ptags.push(t);i.value='';rTB('ptb','pti',ptags,'rPT');}else if(e.key==='Backspace'&&!i.value&&ptags.length){ptags.pop();rTB('ptb','pti',ptags,'rPT');}}
 function rPT(t){ptags=ptags.filter(x=>x!==t);rTB('ptb','pti',ptags,'rPT');}
 function rTB(bId,iId,tags,fn){const b=document.getElementById(bId);b.querySelectorAll('.ttag').forEach(e=>e.remove());const inp=document.getElementById(iId);tags.forEach(t=>{const tag=document.createElement('span');tag.className='ttag';tag.innerHTML=t+'<span class="ttag-x" onclick="'+fn+'(\''+t+'\')">×</span>';b.insertBefore(tag,inp);});}
 
-// ---- AUTH ----
 async function doLogin(){
   const email=document.getElementById('l-email').value.trim().toLowerCase();
   const pass=document.getElementById('l-pass').value;
@@ -986,9 +888,9 @@ async function loadUserAndRoute(){
     const {data:{user}}=await SB.auth.getUser();
     if(!user){showScr('login-screen');return;}
     CU=user;
-    const {data:profile, error:profErr}=await SB.from('profiles').select('*').eq('id',user.id).single();
+    const {data:profile,error:profErr}=await SB.from('profiles').select('*').eq('id',user.id).single();
     if(profErr||!profile){
-      showErr('l-err','Profile not found ('+( profErr?profErr.message:'no data')+')');
+      showErr('l-err','Profile not found ('+(profErr?profErr.message:'no data')+')');
       const btn=document.querySelector('.btn-brand');
       if(btn){btn.textContent='Sign in →';btn.disabled=false;}
       return;
@@ -1013,7 +915,6 @@ async function loadGlobalData(){
   allClients=clients||[];
 }
 
-// ---- MANAGER SCREEN ----
 async function showMgr(){
   showScr('mgr-screen');
   const isCM=CP.role==='clinic_manager';
@@ -1038,7 +939,6 @@ async function showMgr(){
     renderHRStaffList();
     renderTrainingVideos();
     document.getElementById('supervision-section').style.display='block';
-    // Set default date range (last 3 months)
     const today=new Date();
     const threeMonthsAgo=new Date(today);threeMonthsAgo.setMonth(today.getMonth()-3);
     document.getElementById('sup-to').value=today.toISOString().split('T')[0];
@@ -1046,9 +946,8 @@ async function showMgr(){
     loadRecentSupervision();
     loadPendingSupervision();
     renderSupervisionReport();
-    // Populate staff filters
     const therapists=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
-    const staffOpts='<option value="all">All staff</option>'+therapists.map(t=>`<option value="${t.id}">${t.full_name}</option>`).join('');
+    const staffOpts='<option value="all">All staff</option>'+therapists.map(t=>'<option value="'+t.id+'">'+t.full_name+'</option>').join('');
     document.getElementById('mgr-comp-filter').innerHTML=staffOpts;
     document.getElementById('mgr-goals-filter').innerHTML=staffOpts;
     renderMgrCompetency();
@@ -1094,7 +993,6 @@ async function renderMgrTable(){
   tbody.innerHTML='<tr><td colspan="6" style="color:var(--text3);padding:1.5rem 10px;">Loading…</td></tr>';
   const rows=await Promise.all(clients.map(async c=>{
     const therapist=allProfiles.find(p=>p.id===c.therapist_id);
-    const manager=allProfiles.find(p=>p.id===c.manager_id);
     const last=await getLastSessionDate(c.id);
     const total=await getTotalEntries(c.id);
     const days=last?Math.floor((Date.now()-new Date(last))/864e5):null;
@@ -1111,7 +1009,6 @@ async function renderMgrTable(){
 
 function mgrOC(cid){prevScr='mgr-screen';CC=allClients.find(c=>c.id===cid);openCS(true);}
 
-// ---- MEETINGS ----
 async function loadMeetings(){
   const {data}=await SB.from('meetings').select('*, meeting_attendance(user_id,present)').order('meeting_date',{ascending:false});
   allMeetings=data||[];
@@ -1172,11 +1069,10 @@ async function saveMeeting(){
   closeMM();await loadMeetings();
 }
 
-// ---- ATTENDANCE ----
 async function renderAttendance(){
   const staffId=document.getElementById('att-staff-filter').value;
   const monthVal=document.getElementById('att-month-filter').value;
-  const[yr,mo]=monthVal.split('-').map(Number);
+  const [yr,mo]=monthVal.split('-').map(Number);
   const staff=staffId==='all'?allProfiles.filter(p=>p.role==='therapist'||p.role==='manager'):[allProfiles.find(p=>p.id===staffId)].filter(Boolean);
   const monthMeets=allMeetings.filter(m=>{if(!m.meeting_date)return false;const d=new Date(m.meeting_date);return d.getFullYear()===yr&&(d.getMonth()+1)===mo;});
   const wrap=document.getElementById('att-table-wrap');
@@ -1191,23 +1087,17 @@ async function renderAttendance(){
   wrap.innerHTML=html;
 }
 
-// ---- USER MANAGEMENT ----
 function renderUserList(){
   const el=document.getElementById('user-list');if(!el)return;
   const managed=allProfiles.filter(p=>p.id!==CP.id);
-  if(!managed.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);">No other users yet. Add your first team member above.</div>';return;}
-  // Group by staff_group
+  if(!managed.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);">No other users yet.</div>';return;}
   const groups={};
-  managed.forEach(p=>{
-    const g=p.staff_group||'No group';
-    if(!groups[g])groups[g]=[];
-    groups[g].push(p);
-  });
+  managed.forEach(p=>{const g=p.staff_group||'No group';if(!groups[g])groups[g]=[];groups[g].push(p);});
   let html='';
   Object.entries(groups).sort().forEach(([group,members])=>{
     html+=`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin:1rem 0 .4rem;">${group}</div>`;
     html+=members.map(p=>`<div class="user-item"><div class="user-info">
-      <div class="uname">${p.full_name}${p.initials?` <span style="font-size:11px;color:var(--text3);">(${p.initials})</span>`:''}</div>
+      <div class="uname">${p.full_name}${p.initials?' <span style="font-size:11px;color:var(--text3);">('+p.initials+')</span>':''}</div>
       <div class="uemail">${p.email}</div>
       <span class="urole role-${p.role}">${p.role.replace('_',' ')}</span>
     </div><button class="btn-danger" onclick="deleteUser('${p.id}')">Remove</button></div>`).join('');
@@ -1229,9 +1119,9 @@ async function saveUser(){
   const staff_group=document.getElementById('u-group').value;
   if(!name||!email||!pass){showErr('user-err','Please fill in name, email and password.');return;}
   showLoad('Creating account…');
-  const {data,error}=await const {data,error}=await SB.auth.signUp({email,password:pass,options:{data:{full_name:name}}});({email,password:pass,email_confirm:true}):await SB.auth.signUp({email,password:pass});
+  const {data,error}=await SB.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
   if(error){hideLoad();showErr('user-err',error.message);return;}
-  const uid=data?.user?.id;
+  const uid=data&&data.user&&data.user.id;
   if(uid){
     await SB.from('profiles').upsert({id:uid,email,full_name:name,role,initials,staff_group});
     await loadGlobalData();
@@ -1246,7 +1136,6 @@ async function deleteUser(id){
   await loadGlobalData();renderUserList();
 }
 
-// ---- ADD CLIENT ----
 function openAddClientModal(){
   document.getElementById('cm-name').value='';document.getElementById('cm-dob').value='';
   const therapists=allProfiles.filter(p=>p.role==='therapist');
@@ -1260,13 +1149,12 @@ async function saveClient(){
   const name=document.getElementById('cm-name').value.trim();
   if(!name){showErr('cm-err','Please enter the client name.');return;}
   showLoad('Saving…');
-  const{data,error}=await SB.from('clients').insert({full_name:name,dob:document.getElementById('cm-dob').value||null,therapist_id:document.getElementById('cm-therapist').value||null,manager_id:document.getElementById('cm-manager').value||null}).select().single();
+  const {data,error}=await SB.from('clients').insert({full_name:name,dob:document.getElementById('cm-dob').value||null,therapist_id:document.getElementById('cm-therapist').value||null,manager_id:document.getElementById('cm-manager').value||null}).select().single();
   if(error){hideLoad();showErr('cm-err',error.message);return;}
   await loadGlobalData();closeCM();hideLoad();
   if(CP.role==='therapist')showDash();else showMgr();
 }
 
-// ---- THERAPIST DASH ----
 async function showDash(){
   showScr('dash-screen');
   document.getElementById('t-name-badge').textContent=CP.full_name;
@@ -1288,28 +1176,24 @@ async function showDash(){
 }
 function tOC(cid){prevScr='dash-screen';CC=allClients.find(c=>c.id===cid);openCS(false);}
 
-// ---- EXTERNAL (PARENT/TEACHER) ----
 async function showExternal(){
   showScr('external-screen');
   document.getElementById('ext-name-badge').textContent=CP.full_name;
   document.getElementById('ext-role-badge').textContent=CP.role==='parent'?'Parent':'Teacher';
   document.getElementById('ext-label').textContent=CP.role==='parent'?'My children':'My students';
-  const{data:access}=await SB.from('client_access').select('client_id').eq('user_id',CP.id);
+  const {data:access}=await SB.from('client_access').select('client_id').eq('user_id',CP.id);
   const ids=(access||[]).map(a=>a.client_id);
   const myClients=allClients.filter(c=>ids.includes(c.id));
   document.getElementById('ext-client-grid').innerHTML=myClients.map(c=>'<div class="cc" onclick="extOC(\''+c.id+'\')"><div class="cini">'+ini(c.full_name)+'</div><div class="cna">'+c.full_name+'</div><div class="cme">DOB: '+(c.dob||'—')+'</div></div>').join('')||'<div style="font-size:13px;color:var(--text3);">No access yet. Contact your clinic.</div>';
 }
 function extOC(cid){prevScr='external-screen';CC=allClients.find(c=>c.id===cid);openCS('external');}
 
-// ---- CLIENT SCREEN ----
 function openCS(mode){
   showScr('client-screen');
   document.getElementById('d-init').textContent=ini(CC.full_name);
   document.getElementById('d-name').textContent=CC.full_name;
   document.getElementById('d-meta').textContent='DOB: '+(CC.dob||'—');
   const isExternal=mode==='external';
-  const isMgr=CP.role==='clinic_manager'||CP.role==='manager';
-  const isRO=isExternal; // managers can now edit programmes
   const badge=document.getElementById('cs-badge');
   badge.textContent=CP.role==='clinic_manager'?'Clinic Manager':CP.role==='manager'?'Manager':CP.role==='parent'?'Parent':CP.role==='teacher'?'Teacher':'Therapist';
   document.getElementById('cs-name').textContent=CP.full_name;
@@ -1319,12 +1203,11 @@ function openCS(mode){
   document.getElementById('sef').style.display=canEnterData?'block':'none';
   document.getElementById('notes-btns').style.display=canEnterData?'flex':'none';
   document.getElementById('gen-report-btn').style.display=isExternal?'none':'block';
-  // Build tabs based on role
   const tabs=document.getElementById('client-tabs');
   const tabDefs=isExternal?[['chart','Progress'],['media','Media']]:
     [['chart','Progress'],['sessions','Session data'],['programmes','Programmes'],['media','Media'],['notes','Notes'],['therapy-plan','Therapy Plan'],['reports','Reports']];
   tabs.innerHTML=tabDefs.map(([id,label])=>'<div class="tab" onclick="ST(\''+id+'\')">'+label+'</div>').join('');
-  if(!isRO){
+  if(!isExternal){
     document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
     stags=CP.initials?[CP.initials]:[];
     rTB('ttb','tti',stags,'rST');
@@ -1339,9 +1222,8 @@ function goBack(){
   else showDash();
 }
 
-// ---- PROGRAMME SELECTS ----
 async function rPS(){
-  const{data:progs}=await SB.from('programmes').select('*').eq('client_id',CC.id).order('sort_order');
+  const {data:progs}=await SB.from('programmes').select('*').eq('client_id',CC.id).order('sort_order');
   window._progs=progs||[];
   const opts=progs&&progs.length?progs.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join(''):'<option value="">No programmes</option>';
   document.getElementById('cps').innerHTML=opts;
@@ -1362,7 +1244,6 @@ function pSS(){
   document.getElementById('f-sto').innerHTML=stos.map(s=>'<option value="'+s+'">'+s+'</option>').join('');
 }
 
-// ---- INLINE STO ----
 function toggleStoPanel(){
   const p=document.getElementById('sto-inline-panel');
   if(p.style.display!=='none'){p.style.display='none';return;}
@@ -1388,7 +1269,6 @@ async function iSaveStos(){
   pSS();flash('sto-ok');
 }
 
-// ---- CHART ----
 function bAnno(sessions,mv){
   const a={mastery:{type:'line',yMin:mv,yMax:mv,borderColor:'#3B6D11',borderWidth:1.5,borderDash:[6,4]}};
   sessions.forEach((s,i)=>{if(i>0&&s.sto!==sessions[i-1].sto)a['s'+i]={type:'line',xMin:i-0.5,xMax:i-0.5,borderColor:'#BA7517',borderWidth:1.5,borderDash:[4,3],label:{content:(s.sto||'').split('—')[0].trim(),display:true,position:'start',font:{size:9},color:'#BA7517',backgroundColor:'rgba(255,255,255,0.85)',padding:{x:3,y:2}}};});
@@ -1405,7 +1285,7 @@ async function renderChart(){
   document.getElementById('cmn').textContent=prog?'Mastery: '+(prog.mastery_criteria||'Not set')+(prog.therapists&&prog.therapists.length?' · Therapists: '+prog.therapists.join(', '):''):'';
   if(CI){CI.destroy();CI=null;}
   if(!pid)return;
-  let{data:sessions}=await SB.from('sessions').select('*').eq('programme_id',pid).order('session_date');
+  let {data:sessions}=await SB.from('sessions').select('*').eq('programme_id',pid).order('session_date');
   sessions=sessions||[];
   if(stoF!=='all')sessions=sessions.filter(s=>s.sto===stoF);
   if(!sessions.length)return;
@@ -1414,8 +1294,6 @@ async function renderChart(){
 }
 
 async function ST(name){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.textContent===(['chart','Progress'],name==='chart'?'Progress':name==='sessions'?'Session data':name==='programmes'?'Programmes':name==='media'?'Media':name==='notes'?'Notes':'Reports')));
-  // simpler: match by onclick
   document.querySelectorAll('.tab').forEach(t=>{const oc=t.getAttribute('onclick');t.classList.toggle('active',oc&&oc.includes("'"+name+"'"));});
   document.querySelectorAll('.tc').forEach(tc=>tc.classList.remove('active'));
   const el=document.getElementById('tab-'+name);if(el)el.classList.add('active');
@@ -1427,7 +1305,6 @@ async function ST(name){
   else if(name==='reports')await renderSavedReports();
 }
 
-// ---- SESSIONS ----
 async function saveSession(){
   const pid=document.getElementById('sps').value;if(!pid)return;
   const ti=document.getElementById('tti');
@@ -1451,20 +1328,19 @@ async function renderST(){
   const tb=document.getElementById('sess-tbody');
   const isRO=CP.role==='parent'||CP.role==='teacher';
   if(!pid){tb.innerHTML='<tr><td colspan="9" style="color:var(--text3);padding:1.5rem 8px;">Select a programme above.</td></tr>';return;}
-  const{data:sessions}=await SB.from('sessions').select('*').eq('programme_id',pid).order('session_date');
+  const {data:sessions}=await SB.from('sessions').select('*').eq('programme_id',pid).order('session_date');
   if(!sessions||!sessions.length){tb.innerHTML='<tr><td colspan="9" style="color:var(--text3);padding:1.5rem 8px;">No entries yet.</td></tr>';return;}
   tb.innerHTML=sessions.map(s=>'<tr><td title="'+s.sto+'">'+s.sto+'</td><td>'+s.session_date+'</td><td>'+s.pct_correct+'%</td><td>'+(s.phase||'')+'</td><td>'+(s.mastered?'<span class="mbadge">Mastered</span>':'')+'</td><td>'+(Array.isArray(s.therapist_initials)?s.therapist_initials.join(','):'')+'</td><td>'+(s.target_sd||'')+'</td><td title="'+(s.sd_description||'')+'">'+(s.sd_description||'')+'</td><td>'+(isRO?'':'<span class="del" onclick="delSess(\''+s.id+'\')">✕</span>')+'</td></tr>').join('');
 }
 async function exportCSV(){
   const pid=document.getElementById('sps').value;if(!pid)return;
   const prog=(window._progs||[]).find(p=>p.id===pid);
-  const{data:sessions}=await SB.from('sessions').select('*').eq('programme_id',pid).order('session_date');
+  const {data:sessions}=await SB.from('sessions').select('*').eq('programme_id',pid).order('session_date');
   if(!sessions||!sessions.length){alert('No data.');return;}
   const csv='STO,Date,% Correct,Phase,Mastered,Therapists,Target,SD\n'+sessions.map(s=>[s.sto,s.session_date,s.pct_correct,s.phase,s.mastered?'Yes':'No',(s.therapist_initials||[]).join('+'),s.target_sd,s.sd_description].map(v=>'"'+(v||'')+'"').join(',')).join('\n');
   Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:CC.full_name+'_'+(prog?prog.name:'sessions')+'.csv'}).click();
 }
 
-// ---- PROGRAMMES ----
 async function renderPL(){
   const progs=window._progs||(await SB.from('programmes').select('*').eq('client_id',CC.id).order('sort_order').then(r=>r.data||[]));
   window._progs=progs;
@@ -1491,25 +1367,19 @@ async function saveProg(){
   showLoad('Saving…');
   if(epid)await SB.from('programmes').update(data).eq('id',epid);
   else await SB.from('programmes').insert(data);
-  const{data:progs}=await SB.from('programmes').select('*').eq('client_id',CC.id).order('sort_order');
+  const {data:progs}=await SB.from('programmes').select('*').eq('client_id',CC.id).order('sort_order');
   window._progs=progs||[];
   closePM();hideLoad();renderPL();
 }
 
-// ---- MEDIA ----
-function handleMediaUpload(e){
-  const file=e.target.files[0];if(!file)return;
-  pendingFile=file;
-  document.getElementById('media-upload-preview').style.display='block';
-  document.querySelector('.upload-zone').style.opacity='.5';
-}
+function handleMediaUpload(e){const file=e.target.files[0];if(!file)return;pendingFile=file;document.getElementById('media-upload-preview').style.display='block';document.querySelector('.upload-zone').style.opacity='.5';}
 function cancelMediaUpload(){pendingFile=null;document.getElementById('media-upload-preview').style.display='none';document.querySelector('.upload-zone').style.opacity='1';document.getElementById('media-file-input').value='';}
 async function confirmMediaUpload(){
   if(!pendingFile)return;
   showLoad('Uploading…');
   const ext=pendingFile.name.split('.').pop();
   const path=CC.id+'/'+Date.now()+'.'+ext;
-  const{error:upErr}=await SB.storage.from('client-media').upload(path,pendingFile);
+  const {error:upErr}=await SB.storage.from('client-media').upload(path,pendingFile);
   if(upErr){hideLoad();alert('Upload failed: '+upErr.message);return;}
   const isVideo=pendingFile.type.startsWith('video');
   await SB.from('media').insert({client_id:CC.id,file_name:pendingFile.name,file_path:path,file_type:isVideo?'video':'photo',comment:document.getElementById('media-comment').value.trim(),shared_with_parents:document.getElementById('media-share-parents').value==='yes',shared_with_teachers:document.getElementById('media-share-teachers').value==='yes',uploaded_by:CU.id});
@@ -1520,12 +1390,12 @@ async function renderMedia(){
   let query=SB.from('media').select('*').eq('client_id',CC.id).order('created_at',{ascending:false});
   if(CP.role==='parent')query=query.eq('shared_with_parents',true);
   if(CP.role==='teacher')query=query.eq('shared_with_teachers',true);
-  const{data:mediaItems}=await query;
+  const {data:mediaItems}=await query;
   const grid=document.getElementById('media-grid');
   if(!mediaItems||!mediaItems.length){grid.innerHTML='<div style="font-size:13px;color:var(--text3);grid-column:1/-1;">No media uploaded yet.</div>';return;}
   const items=await Promise.all((mediaItems||[]).map(async m=>{
-    const{data:urlData}=SB.storage.from('client-media').getPublicUrl(m.file_path);
-    const url=urlData?.publicUrl;
+    const {data:urlData}=SB.storage.from('client-media').getPublicUrl(m.file_path);
+    const url=urlData&&urlData.publicUrl;
     const thumb=m.file_type==='video'?'<div class="media-video-thumb">▶</div>':'<img class="media-thumb" src="'+url+'" alt="'+m.file_name+'" loading="lazy"/>';
     const badges=(m.shared_with_parents?'<span class="media-badge badge-parent">Parents</span>':'')+(m.shared_with_teachers?'<span class="media-badge badge-teacher">Teachers</span>':'');
     return '<div class="media-item"><a href="'+url+'" target="_blank">'+thumb+'</a><div class="media-info"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+m.file_name+'</div>'+(m.comment?'<div class="media-comment">'+m.comment+'</div>':'')+'<div class="media-badges">'+badges+'</div></div></div>';
@@ -1534,18 +1404,12 @@ async function renderMedia(){
   document.getElementById('media-upload-section').style.display=isExternal?'none':'block';
 }
 
-// ---- NOTES ----
 async function saveNotes(){
   const content=document.getElementById('notes-area').value;
   await SB.from('notes').upsert({client_id:CC.id,content,updated_by:CU.id,updated_at:new Date().toISOString()},{onConflict:'client_id'});
   flash('notes-ok');
 }
-async function loadNotes(){
-  const{data}=await SB.from('notes').select('content').eq('client_id',CC.id).single();
-  document.getElementById('notes-area').value=data?data.content:'';
-}
 
-// ---- REPORTS ----
 function openReportModal(){
   const progs=window._progs||[];
   document.getElementById('rfields').innerHTML=progs.map(p=>'<div style="margin-bottom:1.25rem;"><div style="font-size:13px;font-weight:600;margin-bottom:6px;color:var(--brand);">'+p.name+'</div><div class="field"><label>Comment</label><textarea id="rc_'+p.id+'" style="height:65px;width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;background:var(--bg);color:var(--text);resize:vertical;"></textarea></div></div>').join('');
@@ -1577,20 +1441,19 @@ async function genReport(){
     html+='<div class="rb"><div class="rbt">'+p.name+'</div><div class="rbm">Mastery: '+(p.mastery_criteria||'Not set')+' · Therapists: '+tl+'</div>'+(p.description?'<div class="rbdesc">'+p.description+'</div>':'')+'<div class="rbs">STOs: '+sl+'</div><div class="cl">Therapist comment</div><div class="cb">'+((comments[p.id]||'').trim()||'No comment entered.')+'</div>'+(canvases[i]?'<img class="ci" src="'+canvases[i]+'"/>':'<div class="nd">No session data</div>')+'</div>';
   });
   html+='</div>';
-  // save to Supabase
   await SB.from('reports').insert({client_id:CC.id,generated_by:CU.id,report_date:new Date().toISOString().split('T')[0],html_snapshot:html,programme_count:progs.length,comments});
   hideLoad();
   const out=document.getElementById('rpt-out');out.innerHTML=html;out.style.display='block';
   setTimeout(()=>{window.print();out.style.display='none';},400);
 }
 async function renderSavedReports(){
-  const{data:reps}=await SB.from('reports').select('*').eq('client_id',CC.id).order('created_at',{ascending:false});
+  const {data:reps}=await SB.from('reports').select('*').eq('client_id',CC.id).order('created_at',{ascending:false});
   const el=document.getElementById('saved-reports-list');
   if(!reps||!reps.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);">No reports generated yet.</div>';return;}
   el.innerHTML=reps.map(r=>'<div class="rep-item"><div><div class="rep-date">Report — '+r.report_date+'</div><div class="rep-meta">'+r.programme_count+' programme'+(r.programme_count!==1?'s':'')+'</div></div><div style="display:flex;align-items:center;gap:10px;"><span class="vbtn" onclick="viewReport(\''+r.id+'\')">View →</span><span class="del" onclick="delReport(\''+r.id+'\')">Delete</span></div></div>').join('');
 }
 async function viewReport(id){
-  const{data}=await SB.from('reports').select('html_snapshot').eq('id',id).single();
+  const {data}=await SB.from('reports').select('html_snapshot').eq('id',id).single();
   if(!data)return;
   const out=document.getElementById('rpt-out');out.innerHTML=data.html_snapshot;out.style.display='block';
   setTimeout(()=>{window.print();out.style.display='none';},400);
@@ -1601,41 +1464,24 @@ async function delReport(id){
   await renderSavedReports();
 }
 
-// ---- MODAL CLOSE ----
 ['pm','rm','mm','um','cm-modal'].forEach(id=>{
   const el=document.getElementById(id);
   if(el)el.addEventListener('click',function(e){if(e.target===this){if(id==='pm')closePM();else if(id==='rm')closeRM();else if(id==='mm')closeMM();else if(id==='um')closeUM();else if(id==='cm-modal')closeCM();}});
 });
 
-// ---- IMPORT DATA ----
 let impData={type:null,parsed:[],clientMap:{},progMap:{}};
-
 function openImportScreen(){showScr('import-screen');}
-
-// CSV templates for download
 const csvTemplates={
-  clients:{
-    headers:['client_id','full_name','dob','therapist_email'],
-    rows:[['AH001','Ahmed Hassan','2017-03-14','therapist@inspiretherapy.ae'],['SA002','Sara Al Mansoori','2016-09-22','therapist@inspiretherapy.ae']]
-  },
-  programmes:{
-    headers:['programme_id','client_id','programme_name','description','mastery_criteria','target_sd','stos'],
-    rows:[['AH001-P1','AH001','Stop Program','Teaching to stop on instruction','80% for 2 consecutive sessions','Stop when instructed STOP','STO 1 — Freeze immediately|STO 2 — Hands by sides|STO 3 — Eyes on therapist']]
-  },
-  sessions:{
-    headers:['programme_id','client_id','session_date','sto','pct_correct','phase','mastered','therapist_initials','target_sd','sd_description'],
-    rows:[['AH001-P1','AH001','2024-09-03','STO 1 — Freeze immediately','60','Stage 1','no','MD','STOP','Stop when told STOP'],['AH001-P1','AH001','2024-09-05','STO 1 — Freeze immediately','75','Stage 1','no','MD','STOP','Stop when told STOP']]
-  }
+  clients:{headers:['client_id','full_name','dob','therapist_email'],rows:[['AH001','Ahmed Hassan','2017-03-14','therapist@inspiretherapy.ae']]},
+  programmes:{headers:['programme_id','client_id','programme_name','description','mastery_criteria','target_sd','stos'],rows:[['AH001-P1','AH001','Stop Program','Teaching to stop on instruction','80% for 2 consecutive sessions','Stop when instructed STOP','STO 1 — Freeze immediately|STO 2 — Hands by sides']]},
+  sessions:{headers:['programme_id','client_id','session_date','sto','pct_correct','phase','mastered','therapist_initials','target_sd','sd_description'],rows:[['AH001-P1','AH001','2024-09-03','STO 1 — Freeze immediately','60','Stage 1','no','MD','STOP','Stop when told STOP']]}
 };
-
 function dlTemplate(type){
   const t=csvTemplates[type];
   const rows=[t.headers,...t.rows];
   const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:type+'_template.csv'});
-  a.click();
+  Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:type+'_template.csv'}).click();
 }
-
 function parseCSV(text){
   const lines=text.split(/\r?\n/).filter(l=>l.trim());
   const headers=lines[0].split(',').map(h=>h.replace(/^"|"$/g,'').trim());
@@ -1649,177 +1495,114 @@ function parseCSV(text){
       else cur+=ch;
     }
     vals.push(cur.trim());
-    if(vals.some(v=>v)){
-      const obj={};
-      headers.forEach((h,i)=>obj[h]=vals[i]||'');
-      rows.push(obj);
-    }
+    if(vals.some(v=>v)){const obj={};headers.forEach((h,i)=>obj[h]=vals[i]||'');rows.push(obj);}
   }
   return{headers,rows};
 }
-
 function handleCSV(e,type){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=ev=>{
-    const{headers,rows}=parseCSV(ev.target.result);
-    // Validate required columns
+    const {headers,rows}=parseCSV(ev.target.result);
     const required={clients:['client_id','full_name'],programmes:['programme_id','client_id','programme_name'],sessions:['programme_id','client_id','session_date','pct_correct']};
     const missing=required[type].filter(c=>!headers.includes(c));
-    if(missing.length){showErr('imp-err','Missing required columns: '+missing.join(', '));document.getElementById('imp-modal').classList.add('active');document.getElementById('imp-modal-title').textContent='Column error';document.getElementById('imp-modal-summary').textContent='Please check your CSV has these columns: '+required[type].join(', ');document.getElementById('imp-confirm-btn').style.display='none';return;}
+    if(missing.length){showErr('imp-err','Missing columns: '+missing.join(', '));return;}
     showImportPreview(type,rows);
   };
   reader.readAsText(file);
   e.target.value='';
 }
-
 function showImportPreview(type,rows){
   impData={type,parsed:rows,clientMap:impData.clientMap,progMap:impData.progMap};
-  const modal=document.getElementById('imp-modal');
   const titles={clients:'Preview — Clients',programmes:'Preview — Programmes',sessions:'Preview — Session data'};
   document.getElementById('imp-modal-title').textContent=titles[type];
-  document.getElementById('imp-modal-summary').textContent='Found '+rows.length+' row'+(rows.length!==1?'s':'')+' ready to import. Review below then click Confirm.';
+  document.getElementById('imp-modal-summary').textContent='Found '+rows.length+' row'+(rows.length!==1?'s':'')+' ready to import.';
   document.getElementById('imp-confirm-btn').style.display='';
   document.getElementById('imp-ok').style.display='none';
   document.getElementById('imp-err').style.display='none';
-
-  // Build preview table (first 8 rows)
   const preview=rows.slice(0,8);
   const cols=Object.keys(preview[0]||{});
   let tbl='<table style="width:100%;border-collapse:collapse;font-size:11px;">';
-  tbl+='<tr>'+cols.map(c=>'<th style="background:var(--brand-light);color:var(--brand);padding:5px 7px;border:1px solid var(--border);text-align:left;font-size:10px;white-space:nowrap;">'+c+'</th>').join('')+'</tr>';
-  preview.forEach(row=>{tbl+='<tr>'+cols.map(c=>'<td style="padding:5px 7px;border:1px solid var(--border);white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;" title="'+(row[c]||'')+'">'+((row[c]||'').substring(0,30))+'</td>').join('')+'</tr>';});
+  tbl+='<tr>'+cols.map(c=>'<th style="background:var(--brand-light);color:var(--brand);padding:5px 7px;border:1px solid var(--border);text-align:left;font-size:10px;">'+c+'</th>').join('')+'</tr>';
+  preview.forEach(row=>{tbl+='<tr>'+cols.map(c=>'<td style="padding:5px 7px;border:1px solid var(--border);white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">'+((row[c]||'').substring(0,30))+'</td>').join('')+'</tr>';});
   if(rows.length>8)tbl+='<tr><td colspan="'+cols.length+'" style="padding:5px 7px;color:var(--text3);font-style:italic;border:1px solid var(--border);">...and '+(rows.length-8)+' more rows</td></tr>';
   tbl+='</table>';
   document.getElementById('imp-modal-table').innerHTML=tbl;
-
-  // Warnings
-  const warnEl=document.getElementById('imp-modal-warn');
-  const warns=[];
-  if(type==='sessions'){
-    const badPct=rows.filter(r=>isNaN(parseInt(r.pct_correct))||parseInt(r.pct_correct)<0||parseInt(r.pct_correct)>100);
-    if(badPct.length)warns.push(badPct.length+' row(s) have invalid pct_correct values (must be 0–100). These rows will be skipped.');
-    const badDate=rows.filter(r=>!r.session_date||!/^\d{4}-\d{2}-\d{2}$/.test(r.session_date));
-    if(badDate.length)warns.push(badDate.length+' row(s) have invalid dates (must be YYYY-MM-DD). These rows will be skipped.');
-  }
-  if(warns.length){warnEl.style.display='block';warnEl.innerHTML='⚠️ <strong>Warnings:</strong><br>'+warns.join('<br>');}
-  else warnEl.style.display='none';
-
+  document.getElementById('imp-modal-warn').style.display='none';
   document.getElementById('imp-confirm-btn').onclick=()=>confirmImport(type,rows);
-  modal.classList.add('active');
+  document.getElementById('imp-modal').classList.add('active');
 }
-
 function closeImpModal(){document.getElementById('imp-modal').classList.remove('active');}
-
 async function confirmImport(type,rows){
-  showLoad('Importing '+rows.length+' rows…');
+  showLoad('Importing…');
   document.getElementById('imp-confirm-btn').disabled=true;
   try{
-    if(type==='clients') await importClients(rows);
-    else if(type==='programmes') await importProgrammes(rows);
-    else if(type==='sessions') await importSessions(rows);
-    hideLoad();
-    flash('imp-ok');
-    setTimeout(()=>{closeImpModal();},1800);
+    if(type==='clients')await importClients(rows);
+    else if(type==='programmes')await importProgrammes(rows);
+    else if(type==='sessions')await importSessions(rows);
+    hideLoad();flash('imp-ok');
+    setTimeout(()=>closeImpModal(),1800);
   }catch(err){
     hideLoad();
     document.getElementById('imp-confirm-btn').disabled=false;
     showErr('imp-err','Import failed: '+err.message);
   }
 }
-
 async function importClients(rows){
   let imported=0,skipped=0;
   for(const row of rows){
     const name=(row.full_name||'').trim();if(!name)continue;
-    // Find therapist by email
     let therapistId=null;
-    if(row.therapist_email){
-      const prof=allProfiles.find(p=>p.email&&p.email.toLowerCase()===row.therapist_email.toLowerCase());
-      if(prof)therapistId=prof.id;
-    }
-    // Check if client already exists
+    if(row.therapist_email){const prof=allProfiles.find(p=>p.email&&p.email.toLowerCase()===row.therapist_email.toLowerCase());if(prof)therapistId=prof.id;}
     const exists=allClients.find(c=>c.full_name.toLowerCase()===name.toLowerCase());
     if(exists){impData.clientMap[row.client_id]=exists.id;skipped++;continue;}
-    const{data,error}=await SB.from('clients').insert({full_name:name,dob:row.dob||null,therapist_id:therapistId}).select().single();
+    const {data,error}=await SB.from('clients').insert({full_name:name,dob:row.dob||null,therapist_id:therapistId}).select().single();
     if(data){impData.clientMap[row.client_id]=data.id;imported++;}
-    else if(error)console.warn('Client insert error:',error.message);
   }
   await loadGlobalData();
   document.getElementById('imp-clients-status').textContent='✓ '+imported+' imported, '+skipped+' skipped';
   document.getElementById('imp-clients-status').style.color='var(--success)';
   document.getElementById('imp-step2').style.opacity='1';
   document.getElementById('imp-step2').style.pointerEvents='auto';
-  document.getElementById('imp-clients-status').parentElement.parentElement.style.borderTopColor='var(--success)';
 }
-
 async function importProgrammes(rows){
   let imported=0,skipped=0;
-  // Always rebuild clientMap fresh from DB — client code is stored as full_name
   await loadGlobalData();
-  allClients.forEach(c=>{
-    const code=(c.full_name||'').trim();
-    if(code) impData.clientMap[code]=c.id;
-  });
+  allClients.forEach(c=>{const code=(c.full_name||'').trim();if(code)impData.clientMap[code]=c.id;});
   for(const row of rows){
     const pname=(row.programme_name||'').trim();if(!pname)continue;
     let clientId=impData.clientMap[row.client_id];
-    if(!clientId){skipped++;console.warn('No client found for code:',row.client_id);continue;}
+    if(!clientId){skipped++;continue;}
     const stos=(row.stos||'').split('|').map(s=>s.trim()).filter(Boolean);
-    const{data,error}=await SB.from('programmes').insert({
-      client_id:clientId,name:pname,description:row.description||'',
-      mastery_criteria:row.mastery_criteria||'',target_sd:row.target_sd||'',
-      stos,therapists:[]
-    }).select().single();
+    const {data,error}=await SB.from('programmes').insert({client_id:clientId,name:pname,description:row.description||'',mastery_criteria:row.mastery_criteria||'',target_sd:row.target_sd||'',stos,therapists:[]}).select().single();
     if(data){impData.progMap[row.programme_id]=data.id;imported++;}
-    else if(error){console.warn('Programme insert error:',error.message,row);skipped++;}
+    else skipped++;
   }
   document.getElementById('imp-progs-status').textContent='✓ '+imported+' imported, '+skipped+' skipped';
   document.getElementById('imp-progs-status').style.color='var(--success)';
   document.getElementById('imp-step3').style.opacity='1';
   document.getElementById('imp-step3').style.pointerEvents='auto';
 }
-
 async function importSessions(rows){
   let imported=0,skipped=0;
   const BATCH=50;
-
-  // Rebuild both maps fresh from DB
   await loadGlobalData();
-  allClients.forEach(c=>{
-    const code=(c.full_name||'').trim();
-    if(code) impData.clientMap[code]=c.id;
-  });
-  // Rebuild progMap: programme name + client_id → programme DB id
-  const{data:allProgs}=await SB.from('programmes').select('id,name,client_id');
+  allClients.forEach(c=>{const code=(c.full_name||'').trim();if(code)impData.clientMap[code]=c.id;});
+  const {data:allProgs}=await SB.from('programmes').select('id,name,client_id');
   if(allProgs){
-    // Map by programme_id key from CSV (code-P1, code-P2 etc)
-    // We match by client_id code + programme index
     const clientProgs={};
-    allProgs.forEach(p=>{
-      if(!clientProgs[p.client_id]) clientProgs[p.client_id]=[];
-      clientProgs[p.client_id].push(p);
-    });
-    // For each unique programme_id in rows, find the matching DB programme
+    allProgs.forEach(p=>{if(!clientProgs[p.client_id])clientProgs[p.client_id]=[];clientProgs[p.client_id].push(p);});
     const uniqueProgIds=[...new Set(rows.map(r=>r.programme_id))];
     uniqueProgIds.forEach(pid=>{
-      if(impData.progMap[pid]) return; // already mapped
-      // pid format: CODE-P1, CODE-P2 etc
-      const match=pid.match(/^(.+)-P(\d+)$/);
-      if(!match) return;
-      const code=match[1];
-      const idx=parseInt(match[2])-1;
-      const clientId=impData.clientMap[code];
-      if(!clientId) return;
+      if(impData.progMap[pid])return;
+      const match=pid.match(/^(.+)-P(\d+)$/);if(!match)return;
+      const code=match[1];const idx=parseInt(match[2])-1;
+      const clientId=impData.clientMap[code];if(!clientId)return;
       const progs=clientProgs[clientId];
-      if(progs&&progs[idx]) impData.progMap[pid]=progs[idx].id;
+      if(progs&&progs[idx])impData.progMap[pid]=progs[idx].id;
     });
   }
-
-  const validRows=rows.filter(r=>{
-    const pct=parseInt(r.pct_correct);
-    return r.session_date&&/^\d{4}-\d{2}-\d{2}$/.test(r.session_date)&&!isNaN(pct)&&pct>=0&&pct<=100;
-  });
+  const validRows=rows.filter(r=>{const pct=parseInt(r.pct_correct);return r.session_date&&/^\d{4}-\d{2}-\d{2}$/.test(r.session_date)&&!isNaN(pct)&&pct>=0&&pct<=100;});
   for(let i=0;i<validRows.length;i+=BATCH){
     const batch=validRows.slice(i,i+BATCH);
     const toInsert=[];
@@ -1828,31 +1611,18 @@ async function importSessions(rows){
       const clientId=impData.clientMap[row.client_id];
       if(!progId||!clientId){skipped++;continue;}
       const initials=(row.therapist_initials||'').split('+').map(s=>s.trim()).filter(Boolean);
-      toInsert.push({
-        programme_id:progId,client_id:clientId,
-        session_date:row.session_date,sto:row.sto||'',
-        pct_correct:parseInt(row.pct_correct),phase:row.phase||'',
-        mastered:row.mastered&&row.mastered.toLowerCase()==='yes',
-        therapist_initials:initials,target_sd:row.target_sd||'',
-        sd_description:row.sd_description||'',created_by:CU.id
-      });
+      toInsert.push({programme_id:progId,client_id:clientId,session_date:row.session_date,sto:row.sto||'',pct_correct:parseInt(row.pct_correct),phase:row.phase||'',mastered:row.mastered&&row.mastered.toLowerCase()==='yes',therapist_initials:initials,target_sd:row.target_sd||'',sd_description:row.sd_description||'',created_by:CU.id});
     }
-    if(toInsert.length){
-      const{error}=await SB.from('sessions').insert(toInsert);
-      if(!error)imported+=toInsert.length;
-      else{console.warn('Session batch error:',error.message);skipped+=toInsert.length;}
-    }
+    if(toInsert.length){const {error}=await SB.from('sessions').insert(toInsert);if(!error)imported+=toInsert.length;else skipped+=toInsert.length;}
     showLoad('Importing sessions… '+(Math.min(i+BATCH,validRows.length))+' of '+validRows.length);
   }
-  skipped+=rows.length-validRows.length;
   document.getElementById('imp-sess-status').textContent='✓ '+imported+' sessions imported, '+skipped+' skipped';
   document.getElementById('imp-sess-status').style.color='var(--success)';
 }
 
-// ---- NOTIFICATIONS — recent graph updates ----
 async function loadNotifications(){
   const since=new Date();since.setDate(since.getDate()-7);
-  const{data}=await SB.from('sessions').select('client_id,session_date,created_at').gte('created_at',since.toISOString()).order('created_at',{ascending:false});
+  const {data}=await SB.from('sessions').select('client_id,session_date,created_at').gte('created_at',since.toISOString()).order('created_at',{ascending:false});
   if(!data||!data.length)return;
   const byClient={};
   data.forEach(s=>{if(!byClient[s.client_id])byClient[s.client_id]=[];byClient[s.client_id].push(s.session_date);});
@@ -1860,42 +1630,29 @@ async function loadNotifications(){
     const client=allClients.find(c=>c.id===cid);
     const name=client?client.full_name:cid;
     const latest=[...dates].sort().reverse()[0];
-    return `<b>${name}</b> — ${dates.length} new session${dates.length!==1?'s':''} (latest: ${latest})`;
+    return '<b>'+name+'</b> — '+dates.length+' new session'+(dates.length!==1?'s':'')+' (latest: '+latest+')';
   });
-  if(lines.length){
-    document.getElementById('notif-banner').style.display='block';
-    document.getElementById('notif-list').innerHTML=lines.join('<br>');
-  }
+  if(lines.length){document.getElementById('notif-banner').style.display='block';document.getElementById('notif-list').innerHTML=lines.join('<br>');}
 }
 
-// ---- HR FOLDERS ----
 let hrCurrentProfile=null;
 const HR_SLOTS=[
-  {key:'reference1',     label:'Reference 1',                               required:true},
-  {key:'reference2',     label:'Reference 2',                               required:true},
-  {key:'reference3',     label:'Reference 3',                               required:false},
-  {key:'eid',            label:'EID',                                       required:true},
-  {key:'passport',       label:'Passport',                                  required:true},
-  {key:'visa',           label:'Visa',                                      required:true},
-  {key:'passport_photo', label:'Passport Photo',                            required:true},
-  {key:'police_uae',     label:'Police Clearance Certificate UAE (3 months)',required:true},
-  {key:'police_other',   label:'Other Police Clearance',                    required:false},
-  {key:'contract',       label:'Contract Signed',                           required:true},
-  {key:'other',          label:'Other Documents',                           required:false},
+  {key:'reference1',label:'Reference 1',required:true},{key:'reference2',label:'Reference 2',required:true},
+  {key:'reference3',label:'Reference 3',required:false},{key:'eid',label:'EID',required:true},
+  {key:'passport',label:'Passport',required:true},{key:'visa',label:'Visa',required:true},
+  {key:'passport_photo',label:'Passport Photo',required:true},
+  {key:'police_uae',label:'Police Clearance Certificate UAE (3 months)',required:true},
+  {key:'police_other',label:'Other Police Clearance',required:false},
+  {key:'contract',label:'Contract Signed',required:true},{key:'other',label:'Other Documents',required:false},
 ];
 function renderHRStaffList(){
   const staff=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
   const el=document.getElementById('hr-staff-list');if(!el)return;
-  if(!staff.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No staff accounts yet. Add therapists first using + Add user.</div>';return;}
+  if(!staff.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No staff accounts yet.</div>';return;}
   el.innerHTML=staff.map(s=>{
     const safeName=(s.full_name||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     const initials=(s.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2);
-    return `<div class="card" onclick="openHRFolder('${s.id}','${safeName}')" style="cursor:pointer;padding:.85rem;text-align:center;">
-      <div style="width:40px;height:40px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;margin:0 auto .5rem;">${initials}</div>
-      <div style="font-size:13px;font-weight:500;">${s.full_name}</div>
-      <div style="font-size:11px;color:var(--text2);margin-top:2px;">${s.role}</div>
-      <div style="font-size:11px;color:var(--teal);margin-top:4px;">📁 HR Folder</div>
-    </div>`;
+    return '<div class="card" onclick="openHRFolder(\''+s.id+'\',\''+safeName+'\')" style="cursor:pointer;padding:.85rem;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;margin:0 auto .5rem;">'+initials+'</div><div style="font-size:13px;font-weight:500;">'+s.full_name+'</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">'+s.role+'</div><div style="font-size:11px;color:var(--teal);margin-top:4px;">📁 HR Folder</div></div>';
   }).join('');
 }
 async function openHRFolder(profileId,name){
@@ -1903,62 +1660,47 @@ async function openHRFolder(profileId,name){
   document.getElementById('hr-modal-title').textContent='HR Folder — '+name;
   document.getElementById('hr-modal').classList.add('active');
   const firstTab=document.querySelector('.hr-tab');
-  if(firstTab) switchHRTab('documents',firstTab);
+  if(firstTab)switchHRTab('documents',firstTab);
   await loadHRSlots(profileId);
 }
 function switchHRTab(tab,btn){
   document.querySelectorAll('.hr-tab').forEach(t=>t.classList.remove('active'));
-  if(btn) btn.classList.add('active');
+  if(btn)btn.classList.add('active');
   document.getElementById('hr-tab-documents').style.display=tab==='documents'?'block':'none';
   document.getElementById('hr-tab-payslips').style.display=tab==='payslips'?'block':'none';
-  if(tab==='payslips'&&hrCurrentProfile) loadPayslips(hrCurrentProfile);
+  if(tab==='payslips'&&hrCurrentProfile)loadPayslips(hrCurrentProfile);
 }
 async function loadHRSlots(profileId){
-  const{data,error}=await SB.storage.from('hr-documents').list(profileId+'/');
+  const {data,error}=await SB.storage.from('hr-documents').list(profileId+'/');
   const files=(!error&&data)?data.filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder'):[];
   const fileMap={};
   files.forEach(f=>{const key=f.name.split('_')[0];if(!fileMap[key])fileMap[key]=[];fileMap[key].push(f);});
   const required=HR_SLOTS.filter(s=>s.required);
   const filled=required.filter(s=>fileMap[s.key]&&fileMap[s.key].length>0).length;
   const compEl=document.getElementById('hr-completeness');
-  if(compEl) compEl.innerHTML=`<span style="color:${filled===required.length?'var(--success)':'var(--warn)'};">📋 ${filled}/${required.length} required documents</span>`;
+  if(compEl)compEl.innerHTML='<span style="color:'+(filled===required.length?'var(--success)':'var(--warn)')+';">📋 '+filled+'/'+required.length+' required documents</span>';
   const el=document.getElementById('hr-slots-list');if(!el)return;
   el.innerHTML=HR_SLOTS.map(slot=>{
     const slotFiles=fileMap[slot.key]||[];
     const hasFile=slotFiles.length>0;
     const statusIcon=hasFile?'✅':'⬜';
-    const fileInfo=hasFile?slotFiles.map(f=>`<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);margin-top:3px;">
-        <span>📄 ${f.name.replace(/^[^_]+_\d*_?/,'')}</span>
-        <button onclick="downloadHRSlotDoc('${profileId}','${f.name}')" style="font-size:10px;padding:1px 6px;border:1px solid var(--border);border-radius:4px;background:transparent;cursor:pointer;">↓</button>
-        <button onclick="deleteHRSlotDoc('${profileId}','${f.name}')" style="font-size:10px;padding:1px 6px;border:1px solid var(--danger);border-radius:4px;background:transparent;cursor:pointer;color:var(--danger);">✕</button>
-      </div>`).join(''):'';
-    return `<div class="hr-slot">
-      <div class="hr-slot-name">
-        <span style="font-size:20px;">${statusIcon}</span>
-        <div style="flex:1;"><div style="font-weight:500;">${slot.label}${slot.required?' <span class=\"hr-req\">Required</span>':''}</div>${fileInfo}</div>
-      </div>
-      <div class="hr-slot-actions">
-        <label class="btn-outline" style="padding:4px 10px;font-size:11px;cursor:pointer;display:inline-block;">
-          ${hasFile?'Replace':'Upload'}
-          <input type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" style="display:none;" onchange="uploadHRSlotDoc(event,'${slot.key}','${profileId}')"/>
-        </label>
-      </div>
-    </div>`;
+    const fileInfo=hasFile?slotFiles.map(f=>'<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);margin-top:3px;"><span>📄 '+f.name.replace(/^[^_]+_\d*_?/,'')+'</span><button onclick="downloadHRSlotDoc(\''+profileId+'\',\''+f.name+'\')" style="font-size:10px;padding:1px 6px;border:1px solid var(--border);border-radius:4px;background:transparent;cursor:pointer;">↓</button><button onclick="deleteHRSlotDoc(\''+profileId+'\',\''+f.name+'\')" style="font-size:10px;padding:1px 6px;border:1px solid var(--danger);border-radius:4px;background:transparent;cursor:pointer;color:var(--danger);">✕</button></div>').join(''):'';
+    return '<div class="hr-slot"><div class="hr-slot-name"><span style="font-size:20px;">'+statusIcon+'</span><div style="flex:1;"><div style="font-weight:500;">'+slot.label+(slot.required?' <span class="hr-req">Required</span>':'')+'</div>'+fileInfo+'</div></div><div class="hr-slot-actions"><label class="btn-outline" style="padding:4px 10px;font-size:11px;cursor:pointer;display:inline-block;">'+(hasFile?'Replace':'Upload')+'<input type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" style="display:none;" onchange="uploadHRSlotDoc(event,\''+slot.key+'\',\''+profileId+'\')"/></label></div></div>';
   }).join('');
 }
 async function uploadHRSlotDoc(e,slotKey,profileId){
   const file=e.target.files[0];if(!file)return;
   showLoad('Uploading…');
-  const{data:existing}=await SB.storage.from('hr-documents').list(profileId+'/');
+  const {data:existing}=await SB.storage.from('hr-documents').list(profileId+'/');
   if(existing){const old=existing.filter(f=>f.name.startsWith(slotKey+'_'));if(old.length)await SB.storage.from('hr-documents').remove(old.map(f=>profileId+'/'+f.name));}
-  const path=`${profileId}/${slotKey}_${Date.now()}_${file.name}`;
-  const{error}=await SB.storage.from('hr-documents').upload(path,file);
+  const path=profileId+'/'+slotKey+'_'+Date.now()+'_'+file.name;
+  const {error}=await SB.storage.from('hr-documents').upload(path,file);
   hideLoad();
   if(error){showErr('hr-err','Upload failed: '+error.message);return;}
   e.target.value='';
   await loadHRSlots(profileId);
 }
-function downloadHRSlotDoc(profileId,filename){const{data}=SB.storage.from('hr-documents').getPublicUrl(profileId+'/'+filename);window.open(data.publicUrl,'_blank');}
+function downloadHRSlotDoc(profileId,filename){const {data}=SB.storage.from('hr-documents').getPublicUrl(profileId+'/'+filename);window.open(data.publicUrl,'_blank');}
 async function deleteHRSlotDoc(profileId,filename){
   if(!confirm('Delete this document?'))return;
   showLoad('Deleting…');
@@ -1967,26 +1709,20 @@ async function deleteHRSlotDoc(profileId,filename){
   await loadHRSlots(profileId);
 }
 async function loadPayslips(profileId){
-  const{data,error}=await SB.storage.from('hr-documents').list(profileId+'/');
+  const {data,error}=await SB.storage.from('hr-documents').list(profileId+'/');
   const payslips=(!error&&data)?data.filter(f=>f.name&&f.name.startsWith('payslip_')):[];
   const el=document.getElementById('hr-payslips-list');if(!el)return;
   if(!payslips.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No payslips uploaded yet.</div>';return;}
   el.innerHTML=payslips.map(f=>{
     const dn=f.name.replace(/^payslip_\d+_/,'');
-    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);">
-      <div style="display:flex;align-items:center;gap:7px;"><span>💰</span><span style="font-size:13px;">${dn}</span></div>
-      <div style="display:flex;gap:5px;">
-        <button class="btn-outline" style="padding:4px 10px;font-size:11px;" onclick="downloadHRSlotDoc('${profileId}','${f.name}')">Download</button>
-        <button class="btn-danger" style="padding:4px 10px;font-size:11px;" onclick="deleteHRSlotDoc('${profileId}','${f.name}')">Delete</button>
-      </div>
-    </div>`;
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);"><div style="display:flex;align-items:center;gap:7px;"><span>💰</span><span style="font-size:13px;">'+dn+'</span></div><div style="display:flex;gap:5px;"><button class="btn-outline" style="padding:4px 10px;font-size:11px;" onclick="downloadHRSlotDoc(\''+profileId+'\',\''+f.name+'\')">Download</button><button class="btn-danger" style="padding:4px 10px;font-size:11px;" onclick="deleteHRSlotDoc(\''+profileId+'\',\''+f.name+'\')">Delete</button></div></div>';
   }).join('');
 }
 async function uploadPayslip(e){
   const file=e.target.files[0];if(!file||!hrCurrentProfile)return;
   showLoad('Uploading payslip…');
-  const path=`${hrCurrentProfile}/payslip_${Date.now()}_${file.name}`;
-  const{error}=await SB.storage.from('hr-documents').upload(path,file);
+  const path=hrCurrentProfile+'/payslip_'+Date.now()+'_'+file.name;
+  const {error}=await SB.storage.from('hr-documents').upload(path,file);
   hideLoad();
   if(error){showErr('hr-err','Upload failed: '+error.message);return;}
   e.target.value='';
@@ -1998,57 +1734,35 @@ async function openMyHRFolder(){
   document.getElementById('hr-modal-title').textContent='My HR Folder';
   document.getElementById('hr-modal').classList.add('active');
   const firstTab=document.querySelector('.hr-tab');
-  if(firstTab) switchHRTab('documents',firstTab);
+  if(firstTab)switchHRTab('documents',firstTab);
   await loadHRSlots(CP.id);
 }
 
-// ---- THERAPY PLAN & ASSESSMENTS ----
 async function renderTherapyPlan(){
   const el=document.getElementById('therapy-plan-list');if(!el||!CC)return;
   el.innerHTML='<div style="font-size:13px;color:var(--text2);">Loading…</div>';
-  const{data,error}=await SB.storage.from('therapy-plans').list(CC.id+'/');
-  if(error||!data||!data.length){
-    el.innerHTML='<div style="font-size:13px;color:var(--text2);">No documents uploaded yet. Click + Upload document to add a therapy plan or assessment.</div>';
-    return;
-  }
+  const {data,error}=await SB.storage.from('therapy-plans').list(CC.id+'/');
+  if(error||!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No documents uploaded yet.</div>';return;}
   const files=data.filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
   el.innerHTML=files.map(f=>{
     const ext=(f.name.split('.').pop()||'').toUpperCase();
     const icon=ext==='PDF'?'📄':(ext==='DOCX'||ext==='DOC')?'📝':'🖼';
     const displayName=f.name.replace(/^\d+_/,'');
-    const size=f.metadata?.size?`${Math.round(f.metadata.size/1024)}KB`:'';
-    return `<div class="card" style="padding:.85rem;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:22px;">${icon}</span>
-        <div>
-          <div style="font-size:13px;font-weight:500;">${displayName}</div>
-          ${size?`<div style="font-size:11px;color:var(--text2);">${size}</div>`:''}
-        </div>
-      </div>
-      <div style="display:flex;gap:6px;flex-shrink:0;">
-        <button class="btn-outline" style="padding:5px 10px;font-size:11px;" onclick="downloadTherapyPlan('${f.name}')">Download</button>
-        <button class="btn-danger" style="padding:5px 10px;font-size:11px;" onclick="deleteTherapyPlan('${f.name}')">Delete</button>
-      </div>
-    </div>`;
+    const size=f.metadata&&f.metadata.size?Math.round(f.metadata.size/1024)+'KB':'';
+    return '<div class="card" style="padding:.85rem;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px;">'+icon+'</span><div><div style="font-size:13px;font-weight:500;">'+displayName+'</div>'+(size?'<div style="font-size:11px;color:var(--text2);">'+size+'</div>':'')+'</div></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn-outline" style="padding:5px 10px;font-size:11px;" onclick="downloadTherapyPlan(\''+f.name+'\')">Download</button><button class="btn-danger" style="padding:5px 10px;font-size:11px;" onclick="deleteTherapyPlan(\''+f.name+'\')">Delete</button></div></div>';
   }).join('');
 }
-
 async function uploadTherapyPlan(e){
   const file=e.target.files[0];if(!file||!CC)return;
   showLoad('Uploading…');
-  const path=`${CC.id}/${Date.now()}_${file.name}`;
-  const{error}=await SB.storage.from('therapy-plans').upload(path,file);
+  const path=CC.id+'/'+Date.now()+'_'+file.name;
+  const {error}=await SB.storage.from('therapy-plans').upload(path,file);
   hideLoad();
   if(error){alert('Upload failed: '+error.message);return;}
   e.target.value='';
   await renderTherapyPlan();
 }
-
-function downloadTherapyPlan(filename){
-  const{data}=SB.storage.from('therapy-plans').getPublicUrl(CC.id+'/'+filename);
-  window.open(data.publicUrl,'_blank');
-}
-
+function downloadTherapyPlan(filename){const {data}=SB.storage.from('therapy-plans').getPublicUrl(CC.id+'/'+filename);window.open(data.publicUrl,'_blank');}
 async function deleteTherapyPlan(filename){
   if(!confirm('Delete '+filename.replace(/^\d+_/,'')+'?'))return;
   showLoad('Deleting…');
@@ -2057,304 +1771,146 @@ async function deleteTherapyPlan(filename){
   await renderTherapyPlan();
 }
 
-// ---- ASSIGN THERAPISTS TO CLIENT ----
 async function openAssignModal(){
   if(!CC)return;
   document.getElementById('assign-modal').classList.add('active');
   const therapists=allProfiles.filter(p=>p.role==='therapist');
-  // Get current assignments
-  const{data:current}=await SB.from('client_therapists').select('therapist_id').eq('client_id',CC.id);
+  const {data:current}=await SB.from('client_therapists').select('therapist_id').eq('client_id',CC.id);
   const assigned=new Set((current||[]).map(x=>x.therapist_id));
-  // Group by staff_group
   const groups={};
-  therapists.forEach(t=>{
-    const g=t.staff_group||'No group';
-    if(!groups[g])groups[g]=[];
-    groups[g].push(t);
-  });
+  therapists.forEach(t=>{const g=t.staff_group||'No group';if(!groups[g])groups[g]=[];groups[g].push(t);});
   let html='';
   Object.entries(groups).sort().forEach(([group,members])=>{
-    html+=`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin:.75rem 0 .3rem;">${group}</div>`;
-    html+=members.map(t=>`
-      <div class="att-row">
-        <input type="checkbox" class="assign-cb" data-uid="${t.id}" ${assigned.has(t.id)?'checked':''} style="width:16px;height:16px;accent-color:var(--brand);">
-        <span>${t.full_name}${t.initials?` (${t.initials})`:''}</span>
-      </div>`).join('');
+    html+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin:.75rem 0 .3rem;">'+group+'</div>';
+    html+=members.map(t=>'<div class="att-row"><input type="checkbox" class="assign-cb" data-uid="'+t.id+'" '+(assigned.has(t.id)?'checked':'')+' style="width:16px;height:16px;accent-color:var(--brand);"><span>'+t.full_name+(t.initials?' ('+t.initials+')':'')+'</span></div>').join('');
   });
-  if(!therapists.length) html='<div style="font-size:13px;color:var(--text2);">No therapists added yet.</div>';
+  if(!therapists.length)html='<div style="font-size:13px;color:var(--text2);">No therapists added yet.</div>';
   document.getElementById('assign-therapist-list').innerHTML=html;
 }
-
 async function saveTherapistAssignments(){
   if(!CC)return;
   showLoad('Saving…');
   const selected=[...document.querySelectorAll('.assign-cb:checked')].map(cb=>cb.dataset.uid);
-  // Delete all current assignments
   await SB.from('client_therapists').delete().eq('client_id',CC.id);
-  // Insert new ones
-  if(selected.length){
-    await SB.from('client_therapists').insert(selected.map(tid=>({client_id:CC.id,therapist_id:tid})));
-  }
-  hideLoad();
-  flash('assign-ok');
+  if(selected.length)await SB.from('client_therapists').insert(selected.map(tid=>({client_id:CC.id,therapist_id:tid})));
+  hideLoad();flash('assign-ok');
   setTimeout(()=>document.getElementById('assign-modal').classList.remove('active'),1000);
 }
 
-// ---- SUPERVISION SESSION VIEW (clickable dated documents) ----
-let currentSupSession=null;
-
 async function openSupervisionSession(id){
-  const{data}=await SB.from('supervision_logs').select('*').eq('id',id).single();
+  const {data}=await SB.from('supervision_logs').select('*').eq('id',id).single();
   if(!data)return;
-  currentSupSession=data;
   const therapist=allProfiles.find(p=>p.id===data.therapist_id);
   const client=allClients.find(c=>c.id===data.client_id);
-  const fmtTime=m=>m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
+  const fmtTime=m=>m>=60?Math.floor(m/60)+'h '+(m%60?m%60+'m':''):''+m+'m';
   const modal=document.createElement('div');
-  modal.className='mo active';
-  modal.id='sup-session-view';
-  modal.innerHTML=`<div class="md" style="max-width:560px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-      <h3 style="margin:0;">Supervision Record</h3>
-      <span style="font-size:11px;padding:3px 10px;border-radius:20px;background:${data.approved?'var(--teal-light)':'var(--warn-light)'};color:${data.approved?'var(--teal)':'var(--warn)'};font-weight:600;">${data.approved?'✓ Approved':'⏳ Pending'}</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;">
-      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">DATE</div><div style="font-size:14px;">${data.date}</div></div>
-      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">DURATION</div><div style="font-size:14px;">${fmtTime(data.duration_mins)}</div></div>
-      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">THERAPIST</div><div style="font-size:14px;">${therapist?therapist.full_name:'Unknown'}</div></div>
-      <div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">TYPE</div><div style="font-size:14px;">${data.supervision_type||'—'}</div></div>
-      ${client?`<div style="grid-column:1/-1;"><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">CLIENT</div><div style="font-size:14px;">${client.full_name}</div></div>`:''}
-    </div>
-    <div class="field"><label>Notes / Topics covered</label>
-      <textarea id="sup-view-notes" style="height:100px;">${data.notes||''}</textarea>
-    </div>
-    <div class="field"><label>Actions agreed</label>
-      <textarea id="sup-view-actions" style="height:70px;">${data.actions_agreed||''}</textarea>
-    </div>
-    <div class="field"><label>Next supervision date</label>
-      <input type="date" id="sup-view-next" value="${data.next_supervision_date||''}"/>
-    </div>
-    <div class="field" style="display:flex;align-items:center;gap:8px;">
-      <input type="checkbox" id="sup-view-complete" ${data.actions_completed?'checked':''} style="width:16px;height:16px;accent-color:var(--brand);">
-      <label for="sup-view-complete" style="font-size:13px;cursor:pointer;">Actions completed</label>
-    </div>
-    <div class="rbtns">
-      <button class="btn-primary" onclick="saveSupervisionSession('${id}')">Save changes</button>
-      <button class="btn-outline" onclick="document.getElementById('sup-session-view').remove()">Close</button>
-      <span class="ok-msg" id="sup-view-ok">Saved!</span>
-    </div>
-  </div>`;
+  modal.className='mo active';modal.id='sup-session-view';
+  modal.innerHTML='<div class="md" style="max-width:560px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;"><h3 style="margin:0;">Supervision Record</h3><span style="font-size:11px;padding:3px 10px;border-radius:20px;background:'+(data.approved?'var(--teal-light)':'var(--warn-light)')+';color:'+(data.approved?'var(--teal)':'var(--warn)')+';">'+(data.approved?'✓ Approved':'⏳ Pending')+'</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;"><div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">DATE</div><div style="font-size:14px;">'+data.date+'</div></div><div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">DURATION</div><div style="font-size:14px;">'+fmtTime(data.duration_mins)+'</div></div><div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">THERAPIST</div><div style="font-size:14px;">'+(therapist?therapist.full_name:'Unknown')+'</div></div><div><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">TYPE</div><div style="font-size:14px;">'+(data.supervision_type||'—')+'</div></div>'+(client?'<div style="grid-column:1/-1;"><div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;">CLIENT</div><div style="font-size:14px;">'+client.full_name+'</div></div>':'')+'</div><div class="field"><label>Notes / Topics covered</label><textarea id="sup-view-notes" style="height:100px;">'+( data.notes||'')+'</textarea></div><div class="field"><label>Actions agreed</label><textarea id="sup-view-actions" style="height:70px;">'+(data.actions_agreed||'')+'</textarea></div><div class="field"><label>Next supervision date</label><input type="date" id="sup-view-next" value="'+(data.next_supervision_date||'')+'"/></div><div class="field" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="sup-view-complete" '+(data.actions_completed?'checked':'')+' style="width:16px;height:16px;accent-color:var(--brand);"><label for="sup-view-complete" style="font-size:13px;cursor:pointer;">Actions completed</label></div><div class="rbtns"><button class="btn-primary" onclick="saveSupervisionSession(\''+id+'\')">Save changes</button><button class="btn-outline" onclick="document.getElementById(\'sup-session-view\').remove()">Close</button><span class="ok-msg" id="sup-view-ok">Saved!</span></div></div>';
   document.body.appendChild(modal);
 }
-
 async function saveSupervisionSession(id){
   showLoad('Saving…');
-  await SB.from('supervision_logs').update({
-    notes:document.getElementById('sup-view-notes').value,
-    actions_agreed:document.getElementById('sup-view-actions').value,
-    next_supervision_date:document.getElementById('sup-view-next').value||null,
-    actions_completed:document.getElementById('sup-view-complete').checked
-  }).eq('id',id);
-  hideLoad();
-  flash('sup-view-ok');
-  setTimeout(()=>{
-    document.getElementById('sup-session-view').remove();
-    loadRecentSupervision();
-    loadTherapistSupervision();
-  },900);
+  await SB.from('supervision_logs').update({notes:document.getElementById('sup-view-notes').value,actions_agreed:document.getElementById('sup-view-actions').value,next_supervision_date:document.getElementById('sup-view-next').value||null,actions_completed:document.getElementById('sup-view-complete').checked}).eq('id',id);
+  hideLoad();flash('sup-view-ok');
+  setTimeout(()=>{document.getElementById('sup-session-view').remove();loadRecentSupervision();loadTherapistSupervision();},900);
 }
 
-// ---- SUPERVISION & CPD ----
 function switchCPDTab(tab,btn){
   document.querySelectorAll('#cpd-tab-supervision,#cpd-tab-ceu,#cpd-tab-competency,#cpd-tab-goals').forEach(el=>el.style.display='none');
   document.querySelectorAll('.hr-tab').forEach(t=>t.classList.remove('active'));
-  if(btn) btn.classList.add('active');
+  if(btn)btn.classList.add('active');
   document.getElementById('cpd-tab-'+tab).style.display='block';
-  if(tab==='ceu') loadTherapistCEU();
-  if(tab==='supervision') loadTherapistSupervision();
-  if(tab==='competency') loadCompetencyAssessments();
-  if(tab==='goals') loadStaffGoals();
+  if(tab==='ceu')loadTherapistCEU();
+  if(tab==='supervision')loadTherapistSupervision();
+  if(tab==='competency')loadCompetencyAssessments();
+  if(tab==='goals')loadStaffGoals();
 }
 
-// ---- COMPETENCY ASSESSMENTS ----
 async function loadCompetencyAssessments(){
   const types=['IBAT','RBT','Inspire'];
-  const{data}=await SB.from('competency_assessments').select('*').eq('therapist_id',CP.id);
+  const {data}=await SB.from('competency_assessments').select('*').eq('therapist_id',CP.id);
   types.forEach(type=>{
     const el=document.getElementById('comp-'+type.toLowerCase()+'-status');
     if(!el)return;
     const found=data&&data.find(x=>x.assessment_type===type);
-    if(found){
-      el.innerHTML=`<span style="color:var(--success);font-weight:600;">✅ Uploaded</span>
-        <button class="btn-outline" style="padding:3px 8px;font-size:11px;margin-left:8px;" onclick="downloadCompetency('${found.file_path}')">Download</button>
-        <button class="btn-danger" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="deleteCompetency('${found.id}')">Replace</button>`;
-    } else {
-      el.textContent='Not uploaded';
-    }
+    if(found){el.innerHTML='<span style="color:var(--success);font-weight:600;">✅ Uploaded</span><button class="btn-outline" style="padding:3px 8px;font-size:11px;margin-left:8px;" onclick="downloadCompetency(\''+found.file_path+'\')">Download</button><button class="btn-danger" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="deleteCompetency(\''+found.id+'\')">Replace</button>';}
+    else el.textContent='Not uploaded';
   });
 }
-
-async function uploadCompetency(e, type){
+async function uploadCompetency(e,type){
   const file=e.target.files[0];if(!file)return;
   showLoad('Uploading…');
-  const path=`${CP.id}/competency_${type}_${Date.now()}_${file.name}`;
-  const{error}=await SB.storage.from('hr-documents').upload(path,file);
+  const path=CP.id+'/competency_'+type+'_'+Date.now()+'_'+file.name;
+  const {error}=await SB.storage.from('hr-documents').upload(path,file);
   if(error){hideLoad();alert('Upload failed: '+error.message);return;}
-  // Delete old record if exists
   await SB.from('competency_assessments').delete().eq('therapist_id',CP.id).eq('assessment_type',type);
   await SB.from('competency_assessments').insert({therapist_id:CP.id,assessment_type:type,file_path:path,uploaded_by:CU.id});
-  hideLoad();
-  e.target.value='';
-  loadCompetencyAssessments();
+  hideLoad();e.target.value='';loadCompetencyAssessments();
 }
+function downloadCompetency(path){const {data}=SB.storage.from('hr-documents').getPublicUrl(path);window.open(data.publicUrl,'_blank');}
+async function deleteCompetency(id){if(!confirm('Remove this assessment?'))return;await SB.from('competency_assessments').delete().eq('id',id);loadCompetencyAssessments();}
 
-function downloadCompetency(path){
-  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
-  window.open(data.publicUrl,'_blank');
-}
-
-async function deleteCompetency(id){
-  if(!confirm('Remove this assessment? You can upload a new one.'))return;
-  await SB.from('competency_assessments').delete().eq('id',id);
-  loadCompetencyAssessments();
-}
-
-// ---- STAFF GOALS ----
 async function loadStaffGoals(){
   const el=document.getElementById('t-goals-list');if(!el)return;
-  const{data}=await SB.from('staff_goals').select('*').eq('therapist_id',CP.id).order('goal_date',{ascending:false});
+  const {data}=await SB.from('staff_goals').select('*').eq('therapist_id',CP.id).order('goal_date',{ascending:false});
   if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No goal documents uploaded yet.</div>';return;}
-  el.innerHTML=data.map(g=>`
-    <div class="card" style="padding:.85rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-      <div>
-        <div style="font-size:13px;font-weight:500;">🎯 ${g.title}</div>
-        <div style="font-size:11px;color:var(--text2);">${g.goal_date}</div>
-      </div>
-      <div style="display:flex;gap:5px;flex-shrink:0;">
-        ${g.file_path?`<button class="btn-outline" style="padding:4px 8px;font-size:11px;" onclick="downloadGoal('${g.file_path}')">Download</button>`:''}
-        <button class="btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteGoal('${g.id}')">Delete</button>
-      </div>
-    </div>`).join('');
+  el.innerHTML=data.map(g=>'<div class="card" style="padding:.85rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div><div style="font-size:13px;font-weight:500;">🎯 '+g.title+'</div><div style="font-size:11px;color:var(--text2);">'+g.goal_date+'</div></div><div style="display:flex;gap:5px;flex-shrink:0;">'+(g.file_path?'<button class="btn-outline" style="padding:4px 8px;font-size:11px;" onclick="downloadGoal(\''+g.file_path+'\')">Download</button>':'')+'<button class="btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteGoal(\''+g.id+'\')">Delete</button></div></div>').join('');
 }
-
 async function uploadStaffGoal(e){
   const file=e.target.files[0];if(!file)return;
   const title=file.name.replace(/\.[^.]+$/,'');
   showLoad('Uploading goal…');
-  const path=`${CP.id}/goal_${Date.now()}_${file.name}`;
-  const{error}=await SB.storage.from('hr-documents').upload(path,file);
+  const path=CP.id+'/goal_'+Date.now()+'_'+file.name;
+  const {error}=await SB.storage.from('hr-documents').upload(path,file);
   if(error){hideLoad();alert('Upload failed: '+error.message);return;}
   await SB.from('staff_goals').insert({therapist_id:CP.id,title,file_path:path,goal_date:new Date().toISOString().split('T')[0],uploaded_by:CU.id});
-  hideLoad();
-  e.target.value='';
-  loadStaffGoals();
+  hideLoad();e.target.value='';loadStaffGoals();
 }
+function downloadGoal(path){const {data}=SB.storage.from('hr-documents').getPublicUrl(path);window.open(data.publicUrl,'_blank');}
+async function deleteGoal(id){if(!confirm('Delete this goal document?'))return;await SB.from('staff_goals').delete().eq('id',id);loadStaffGoals();}
 
-function downloadGoal(path){
-  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
-  window.open(data.publicUrl,'_blank');
-}
-
-async function deleteGoal(id){
-  if(!confirm('Delete this goal document?'))return;
-  await SB.from('staff_goals').delete().eq('id',id);
-  loadStaffGoals();
-}
-
-// ---- MANAGER COMPETENCY VIEW ----
 async function renderMgrCompetency(){
   const el=document.getElementById('mgr-competency-list');if(!el)return;
   const filterVal=document.getElementById('mgr-comp-filter').value;
   const therapists=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
   const staff=filterVal==='all'?therapists:therapists.filter(t=>t.id===filterVal);
   if(!staff.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No staff accounts yet.</div>';return;}
-  const{data:allComps}=await SB.from('competency_assessments').select('*');
+  const {data:allComps}=await SB.from('competency_assessments').select('*');
   const types=['IBAT','RBT','Inspire'];
   el.innerHTML=staff.map(s=>{
     const comps=allComps?allComps.filter(c=>c.therapist_id===s.id):[];
-    const slots=types.map(type=>{
-      const found=comps.find(c=>c.assessment_type===type);
-      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
-        <div style="font-size:12px;">${type} Competency Assessment</div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          ${found
-            ?`<span style="color:var(--success);font-size:12px;font-weight:600;">✅ Uploaded</span>
-               <button class="btn-outline" style="padding:3px 8px;font-size:11px;" onclick="downloadCompetencyMgr('${found.file_path}')">Download</button>`
-            :`<span style="color:var(--text3);font-size:12px;">⬜ Not uploaded</span>`
-          }
-        </div>
-      </div>`;
-    }).join('');
+    const slots=types.map(type=>{const found=comps.find(c=>c.assessment_type===type);return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><div style="font-size:12px;">'+type+' Competency Assessment</div><div style="display:flex;align-items:center;gap:6px;">'+(found?'<span style="color:var(--success);font-size:12px;font-weight:600;">✅ Uploaded</span><button class="btn-outline" style="padding:3px 8px;font-size:11px;" onclick="downloadCompetencyMgr(\''+found.file_path+'\')">Download</button>':'<span style="color:var(--text3);font-size:12px;">⬜ Not uploaded</span>')+'</div></div>';}).join('');
     const uploaded=comps.length;
-    return `<div class="card" style="padding:1rem;margin-bottom:8px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
-        <div style="font-size:13px;font-weight:600;">${s.full_name}</div>
-        <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${uploaded===3?'var(--teal-light)':'var(--warn-light)'};color:${uploaded===3?'var(--teal)':'var(--warn)'};">${uploaded}/3 uploaded</span>
-      </div>
-      ${slots}
-    </div>`;
+    return '<div class="card" style="padding:1rem;margin-bottom:8px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;"><div style="font-size:13px;font-weight:600;">'+s.full_name+'</div><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:'+(uploaded===3?'var(--teal-light)':'var(--warn-light)')+';color:'+(uploaded===3?'var(--teal)':'var(--warn)')+';">'+uploaded+'/3 uploaded</span></div>'+slots+'</div>';
   }).join('');
 }
+function downloadCompetencyMgr(path){const {data}=SB.storage.from('hr-documents').getPublicUrl(path);window.open(data.publicUrl,'_blank');}
 
-function downloadCompetencyMgr(path){
-  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
-  window.open(data.publicUrl,'_blank');
-}
-
-// ---- MANAGER GOALS VIEW ----
 async function renderMgrGoals(){
   const el=document.getElementById('mgr-goals-list');if(!el)return;
   const filterVal=document.getElementById('mgr-goals-filter').value;
   const therapists=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
   const staff=filterVal==='all'?therapists:therapists.filter(t=>t.id===filterVal);
   if(!staff.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No staff accounts yet.</div>';return;}
-  const{data:allGoals}=await SB.from('staff_goals').select('*').order('goal_date',{ascending:false});
+  const {data:allGoals}=await SB.from('staff_goals').select('*').order('goal_date',{ascending:false});
   el.innerHTML=staff.map(s=>{
     const goals=allGoals?allGoals.filter(g=>g.therapist_id===s.id):[];
-    if(!goals.length){
-      return `<div class="card" style="padding:.85rem;margin-bottom:8px;">
-        <div style="font-size:13px;font-weight:600;margin-bottom:.4rem;">${s.full_name}</div>
-        <div style="font-size:12px;color:var(--text2);">No goals uploaded yet.</div>
-      </div>`;
-    }
-    return `<div class="card" style="padding:.85rem;margin-bottom:8px;">
-      <div style="font-size:13px;font-weight:600;margin-bottom:.6rem;">${s.full_name} <span style="font-size:11px;font-weight:400;color:var(--text2);">(${goals.length} goal${goals.length!==1?'s':''})</span></div>
-      ${goals.map(g=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);">
-        <div>
-          <div style="font-size:12px;font-weight:500;">🎯 ${g.title}</div>
-          <div style="font-size:11px;color:var(--text2);">${g.goal_date}</div>
-        </div>
-        ${g.file_path?`<button class="btn-outline" style="padding:3px 8px;font-size:11px;" onclick="downloadGoalMgr('${g.file_path}')">Download</button>`:''}
-      </div>`).join('')}
-    </div>`;
+    if(!goals.length)return '<div class="card" style="padding:.85rem;margin-bottom:8px;"><div style="font-size:13px;font-weight:600;margin-bottom:.4rem;">'+s.full_name+'</div><div style="font-size:12px;color:var(--text2);">No goals uploaded yet.</div></div>';
+    return '<div class="card" style="padding:.85rem;margin-bottom:8px;"><div style="font-size:13px;font-weight:600;margin-bottom:.6rem;">'+s.full_name+' <span style="font-size:11px;font-weight:400;color:var(--text2);">('+goals.length+' goal'+(goals.length!==1?'s':'')+')</span></div>'+goals.map(g=>'<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:12px;font-weight:500;">🎯 '+g.title+'</div><div style="font-size:11px;color:var(--text2);">'+g.goal_date+'</div></div>'+(g.file_path?'<button class="btn-outline" style="padding:3px 8px;font-size:11px;" onclick="downloadGoalMgr(\''+g.file_path+'\')">Download</button>':'')+'</div>').join('')+'</div>';
   }).join('');
 }
-
-function downloadGoalMgr(path){
-  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
-  window.open(data.publicUrl,'_blank');
-}
+function downloadGoalMgr(path){const {data}=SB.storage.from('hr-documents').getPublicUrl(path);window.open(data.publicUrl,'_blank');}
 
 function openSupervisionModal(){
-  // Populate therapist dropdown
   const sel=document.getElementById('sup-therapist');
   const therapists=allProfiles.filter(p=>p.role==='therapist');
-  sel.innerHTML='<option value="">Select therapist…</option>'+
-    therapists.map(t=>`<option value="${t.id}">${t.full_name}</option>`).join('');
-  // Populate client dropdown
+  sel.innerHTML='<option value="">Select therapist…</option>'+therapists.map(t=>'<option value="'+t.id+'">'+t.full_name+'</option>').join('');
   const csel=document.getElementById('sup-client');
-  csel.innerHTML='<option value="">Not client-specific</option>'+
-    allClients.map(c=>`<option value="${c.id}">${c.full_name}</option>`).join('');
-  // Default date to today
+  csel.innerHTML='<option value="">Not client-specific</option>'+allClients.map(c=>'<option value="'+c.id+'">'+c.full_name+'</option>').join('');
   document.getElementById('sup-date').value=new Date().toISOString().split('T')[0];
   document.getElementById('sup-modal').classList.add('active');
 }
-
-function openTherapistSupModal(){
-  document.getElementById('sup-t-date').value=new Date().toISOString().split('T')[0];
-  document.getElementById('sup-t-modal').classList.add('active');
-}
-
+function openTherapistSupModal(){document.getElementById('sup-t-date').value=new Date().toISOString().split('T')[0];document.getElementById('sup-t-modal').classList.add('active');}
 function closeSupModal(){document.getElementById('sup-modal').classList.remove('active');}
 
 async function saveSupervision(isPending){
@@ -2365,203 +1921,102 @@ async function saveSupervision(isPending){
   const notesEl=isTherapist?'sup-t-notes':'sup-notes';
   const errEl=isTherapist?'sup-t-err':'sup-err';
   const okEl=isTherapist?'sup-t-ok':'sup-ok';
-
   const date=document.getElementById(dateEl).value;
   if(!date){showErr(errEl,'Please select a date.');return;}
-
   const therapistId=isTherapist?CP.id:document.getElementById('sup-therapist').value;
   if(!therapistId){showErr(errEl,'Please select a therapist.');return;}
-
   const clientId=isTherapist?null:(document.getElementById('sup-client').value||null);
-  const duration=parseInt(isTherapist?document.getElementById(durEl).value:document.getElementById(durEl).value);
+  const duration=parseInt(document.getElementById(durEl).value);
   const type=document.getElementById(typeEl).value;
   const notes=document.getElementById(notesEl).value.trim();
   const actions_agreed=isTherapist?'':(document.getElementById('sup-actions').value.trim());
   const next_supervision_date=isTherapist?null:(document.getElementById('sup-next-date').value||null);
-
   showLoad('Saving…');
-  const{error}=await SB.from('supervision_logs').insert({
-    date,
-    therapist_id:therapistId,
-    client_id:clientId,
-    duration_mins:duration,
-    supervision_type:type,
-    notes,
-    actions_agreed,
-    next_supervision_date,
-    logged_by:CU.id,
-    approved:!isPending,
-    pending:isPending
-  });
+  const {error}=await SB.from('supervision_logs').insert({date,therapist_id:therapistId,client_id:clientId,duration_mins:duration,supervision_type:type,notes,actions_agreed,next_supervision_date,logged_by:CU.id,approved:!isPending,pending:isPending});
   hideLoad();
   if(error){showErr(errEl,'Failed to save: '+error.message);return;}
   flash(okEl);
   setTimeout(()=>{
-    if(isTherapist){
-      document.getElementById('sup-t-modal').classList.remove('active');
-      loadTherapistSupervision();
-    } else {
-      closeSupModal();
-      renderSupervisionReport();
-      loadRecentSupervision();
-      loadPendingSupervision();
-    }
+    if(isTherapist){document.getElementById('sup-t-modal').classList.remove('active');loadTherapistSupervision();}
+    else{closeSupModal();renderSupervisionReport();loadRecentSupervision();loadPendingSupervision();}
   },900);
 }
 
 async function renderSupervisionReport(){
   const from=document.getElementById('sup-from').value;
   const to=document.getElementById('sup-to').value;
-  const el=document.getElementById('sup-report');
-  if(!el) return;
-
+  const el=document.getElementById('sup-report');if(!el)return;
   let query=SB.from('supervision_logs').select('*').eq('approved',true);
-  if(from) query=query.gte('date',from);
-  if(to) query=query.lte('date',to);
-  const{data,error}=await query;
-
-  if(error||!data||!data.length){
-    el.innerHTML='<div style="color:var(--text2);font-size:13px;">No approved supervision sessions found for this period.</div>';
-    return;
-  }
-
-  // Group by therapist
+  if(from)query=query.gte('date',from);
+  if(to)query=query.lte('date',to);
+  const {data,error}=await query;
+  if(error||!data||!data.length){el.innerHTML='<div style="color:var(--text2);font-size:13px;">No approved supervision sessions found for this period.</div>';return;}
   const byTherapist={};
-  data.forEach(s=>{
-    if(!byTherapist[s.therapist_id]) byTherapist[s.therapist_id]={mins:0,sessions:0};
-    byTherapist[s.therapist_id].mins+=s.duration_mins||0;
-    byTherapist[s.therapist_id].sessions++;
-  });
-
-  // Group by client
+  data.forEach(s=>{if(!byTherapist[s.therapist_id])byTherapist[s.therapist_id]={mins:0,sessions:0};byTherapist[s.therapist_id].mins+=s.duration_mins||0;byTherapist[s.therapist_id].sessions++;});
   const byClient={};
-  data.filter(s=>s.client_id).forEach(s=>{
-    if(!byClient[s.client_id]) byClient[s.client_id]={mins:0,sessions:0};
-    byClient[s.client_id].mins+=s.duration_mins||0;
-    byClient[s.client_id].sessions++;
-  });
-
+  data.filter(s=>s.client_id).forEach(s=>{if(!byClient[s.client_id])byClient[s.client_id]={mins:0,sessions:0};byClient[s.client_id].mins+=s.duration_mins||0;byClient[s.client_id].sessions++;});
   const totalMins=data.reduce((a,s)=>a+(s.duration_mins||0),0);
-  const fmtTime=m=>m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
-
-  let html=`<div style="font-weight:600;margin-bottom:.5rem;">Total: ${fmtTime(totalMins)} across ${data.length} session${data.length!==1?'s':''}</div>`;
-
+  const fmtTime=m=>m>=60?Math.floor(m/60)+'h '+(m%60?m%60+'m':''):''+m+'m';
+  let html='<div style="font-weight:600;margin-bottom:.5rem;">Total: '+fmtTime(totalMins)+' across '+data.length+' session'+(data.length!==1?'s':'')+'</div>';
   html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem;">';
-
-  // By therapist
   html+='<div><div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:.4rem;">BY THERAPIST</div>';
-  Object.entries(byTherapist).forEach(([tid,d])=>{
-    const t=allProfiles.find(p=>p.id===tid);
-    html+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;">
-      <span>${t?t.full_name:'Unknown'}</span>
-      <span style="font-weight:600;color:var(--brand);">${fmtTime(d.mins)} (${d.sessions} sessions)</span>
-    </div>`;
-  });
+  Object.entries(byTherapist).forEach(([tid,d])=>{const t=allProfiles.find(p=>p.id===tid);html+='<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;"><span>'+(t?t.full_name:'Unknown')+'</span><span style="font-weight:600;color:var(--brand);">'+fmtTime(d.mins)+' ('+d.sessions+' sessions)</span></div>';});
   html+='</div>';
-
-  // By client
   html+='<div><div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:.4rem;">BY CLIENT</div>';
-  if(Object.keys(byClient).length){
-    Object.entries(byClient).forEach(([cid,d])=>{
-      const c=allClients.find(x=>x.id===cid);
-      html+=`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;">
-        <span>${c?c.full_name:'Unknown'}</span>
-        <span style="font-weight:600;color:var(--brand);">${fmtTime(d.mins)}</span>
-      </div>`;
-    });
-  } else {
-    html+='<div style="font-size:12px;color:var(--text2);">No client-specific sessions</div>';
-  }
+  if(Object.keys(byClient).length){Object.entries(byClient).forEach(([cid,d])=>{const c=allClients.find(x=>x.id===cid);html+='<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;"><span>'+(c?c.full_name:'Unknown')+'</span><span style="font-weight:600;color:var(--brand);">'+fmtTime(d.mins)+'</span></div>';});}
+  else html+='<div style="font-size:12px;color:var(--text2);">No client-specific sessions</div>';
   html+='</div></div>';
-
   el.innerHTML=html;
 }
 
 async function loadRecentSupervision(){
   const el=document.getElementById('sup-recent-list');if(!el)return;
-  const{data}=await SB.from('supervision_logs').select('*').eq('approved',true).order('date',{ascending:false}).limit(20);
+  const {data}=await SB.from('supervision_logs').select('*').eq('approved',true).order('date',{ascending:false}).limit(20);
   if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No approved supervision sessions yet.</div>';return;}
-  const fmtTime=m=>m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
+  const fmtTime=m=>m>=60?Math.floor(m/60)+'h '+(m%60?m%60+'m':''):''+m+'m';
   el.innerHTML=data.map(s=>{
     const t=allProfiles.find(p=>p.id===s.therapist_id);
     const c=allClients.find(x=>x.id===s.client_id);
     const hasActions=s.actions_agreed&&s.actions_agreed.trim();
-    return `<div class="card" style="padding:.85rem;margin-bottom:6px;cursor:pointer;transition:border-color .15s;" onclick="openSupervisionSession('${s.id}')" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='var(--border3)'">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;">${s.date} — ${t?t.full_name:'Unknown'}</div>
-          <div style="font-size:11px;color:var(--text2);margin-top:2px;">${fmtTime(s.duration_mins)} ${s.supervision_type?'· '+s.supervision_type:''}${c?' · '+c.full_name:''}</div>
-          ${s.notes?`<div style="font-size:12px;color:var(--text2);margin-top:4px;">${s.notes.substring(0,80)}${s.notes.length>80?'…':''}</div>`:''}
-          ${hasActions?`<div style="font-size:11px;margin-top:4px;color:${s.actions_completed?'var(--success)':'var(--warn)'};">${s.actions_completed?'✓ Actions completed':'⏳ Actions pending'}</div>`:''}
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
-          <span style="font-size:11px;color:var(--brand);font-weight:600;">View →</span>
-          <button class="btn-danger" style="padding:3px 8px;font-size:11px;" onclick="event.stopPropagation();deleteSupervision('${s.id}')">Delete</button>
-        </div>
-      </div>
-    </div>`;
+    return '<div class="card" style="padding:.85rem;margin-bottom:6px;cursor:pointer;" onclick="openSupervisionSession(\''+s.id+'\')" onmouseover="this.style.borderColor=\'var(--brand)\'" onmouseout="this.style.borderColor=\'var(--border3)\'"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;"><div style="flex:1;"><div style="font-size:13px;font-weight:600;">'+s.date+' — '+(t?t.full_name:'Unknown')+'</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">'+fmtTime(s.duration_mins)+(s.supervision_type?' · '+s.supervision_type:'')+(c?' · '+c.full_name:'')+'</div>'+(s.notes?'<div style="font-size:12px;color:var(--text2);margin-top:4px;">'+s.notes.substring(0,80)+(s.notes.length>80?'…':'')+'</div>':'')+(hasActions?'<div style="font-size:11px;margin-top:4px;color:'+(s.actions_completed?'var(--success)':'var(--warn)')+';">'+(s.actions_completed?'✓ Actions completed':'⏳ Actions pending')+'</div>':'')+'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;"><span style="font-size:11px;color:var(--brand);font-weight:600;">View →</span><button class="btn-danger" style="padding:3px 8px;font-size:11px;" onclick="event.stopPropagation();deleteSupervision(\''+s.id+'\')">Delete</button></div></div></div>';
   }).join('');
 }
 
 async function loadPendingSupervision(){
   const el=document.getElementById('sup-pending-list');
   const sec=document.getElementById('sup-pending-section');
-  if(!el||!sec) return;
-  const{data}=await SB.from('supervision_logs').select('*').eq('pending',true).order('date',{ascending:false});
+  if(!el||!sec)return;
+  const {data}=await SB.from('supervision_logs').select('*').eq('pending',true).order('date',{ascending:false});
   if(!data||!data.length){sec.style.display='none';return;}
   sec.style.display='block';
-  const fmtTime=m=>m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
+  const fmtTime=m=>m>=60?Math.floor(m/60)+'h '+(m%60?m%60+'m':''):''+m+'m';
   el.innerHTML=data.map(s=>{
     const t=allProfiles.find(p=>p.id===s.therapist_id);
-    return `<div class="card" style="padding:.75rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border-left:3px solid var(--warn);">
-      <div>
-        <div style="font-size:13px;font-weight:500;">${t?t.full_name:'Unknown'} — ${fmtTime(s.duration_mins)} on ${s.date}</div>
-        ${s.notes?`<div style="font-size:11px;color:var(--text2);">${s.notes}</div>`:''}
-      </div>
-      <div style="display:flex;gap:6px;flex-shrink:0;">
-        <button class="btn-primary" style="padding:4px 10px;font-size:11px;" onclick="approveSupervision('${s.id}')">✓ Approve</button>
-        <button class="btn-danger" style="padding:4px 10px;font-size:11px;" onclick="deleteSupervision('${s.id}')">Reject</button>
-      </div>
-    </div>`;
+    return '<div class="card" style="padding:.75rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border-left:3px solid var(--warn);"><div><div style="font-size:13px;font-weight:500;">'+(t?t.full_name:'Unknown')+' — '+fmtTime(s.duration_mins)+' on '+s.date+'</div>'+(s.notes?'<div style="font-size:11px;color:var(--text2);">'+s.notes+'</div>':'')+'</div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn-primary" style="padding:4px 10px;font-size:11px;" onclick="approveSupervision(\''+s.id+'\')">✓ Approve</button><button class="btn-danger" style="padding:4px 10px;font-size:11px;" onclick="deleteSupervision(\''+s.id+'\')">Reject</button></div></div>';
   }).join('');
 }
 
 async function approveSupervision(id){
   showLoad('Approving…');
   await SB.from('supervision_logs').update({approved:true,pending:false}).eq('id',id);
-  hideLoad();
-  loadPendingSupervision();
-  loadRecentSupervision();
-  renderSupervisionReport();
+  hideLoad();loadPendingSupervision();loadRecentSupervision();renderSupervisionReport();
 }
-
 async function deleteSupervision(id){
   if(!confirm('Delete this supervision record?'))return;
   await SB.from('supervision_logs').delete().eq('id',id);
-  loadPendingSupervision();
-  loadRecentSupervision();
-  renderSupervisionReport();
+  loadPendingSupervision();loadRecentSupervision();renderSupervisionReport();
 }
 
 async function loadTherapistSupervision(){
   const el=document.getElementById('t-sup-list');if(!el)return;
-  const{data}=await SB.from('supervision_logs').select('*').eq('therapist_id',CP.id).order('date',{ascending:false});
+  const {data}=await SB.from('supervision_logs').select('*').eq('therapist_id',CP.id).order('date',{ascending:false});
   if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No supervision sessions recorded yet.</div>';return;}
-  const fmtTime=m=>m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
+  const fmtTime=m=>m>=60?Math.floor(m/60)+'h '+(m%60?m%60+'m':''):''+m+'m';
   const total=data.filter(s=>s.approved).reduce((a,s)=>a+(s.duration_mins||0),0);
-  el.innerHTML=`<div style="font-size:12px;color:var(--teal);font-weight:600;margin-bottom:.5rem;">Total approved: ${fmtTime(total)}</div>`+
-  data.map(s=>`<div class="card" style="padding:.75rem;margin-bottom:6px;border-left:3px solid ${s.approved?'var(--success)':'var(--warn)'};">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-      <div>
-        <div style="font-size:13px;font-weight:500;">${fmtTime(s.duration_mins)} — ${s.supervision_type||'supervision'}</div>
-        <div style="font-size:11px;color:var(--text2);">${s.date}${s.notes?' · '+s.notes:''}</div>
-      </div>
-      <span style="font-size:11px;font-weight:600;color:${s.approved?'var(--success)':'var(--warn)'};">${s.approved?'✓ Approved':'⏳ Pending'}</span>
-    </div>
-  </div>`).join('');
+  el.innerHTML='<div style="font-size:12px;color:var(--teal);font-weight:600;margin-bottom:.5rem;">Total approved: '+fmtTime(total)+'</div>'+
+  data.map(s=>'<div class="card" style="padding:.75rem;margin-bottom:6px;border-left:3px solid '+(s.approved?'var(--success)':'var(--warn)')+'"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><div><div style="font-size:13px;font-weight:500;">'+fmtTime(s.duration_mins)+' — '+(s.supervision_type||'supervision')+'</div><div style="font-size:11px;color:var(--text2);">'+s.date+(s.notes?' · '+s.notes:'')+'</div></div><span style="font-size:11px;font-weight:600;color:'+(s.approved?'var(--success)':'var(--warn)')+';">'+(s.approved?'✓ Approved':'⏳ Pending')+'</span></div></div>').join('');
 }
 
-// ---- CEU COURSES ----
 function openCEUModal(){
   document.getElementById('ceu-name').value='';
   document.getElementById('ceu-date').value=new Date().toISOString().split('T')[0];
@@ -2571,126 +2026,64 @@ function openCEUModal(){
   document.getElementById('ceu-modal').classList.add('active');
 }
 function closeCEUModal(){document.getElementById('ceu-modal').classList.remove('active');}
-
 async function saveCEU(){
   const name=document.getElementById('ceu-name').value.trim();
   const date=document.getElementById('ceu-date').value;
   const hours=parseFloat(document.getElementById('ceu-hours').value);
   if(!name||!date||isNaN(hours)){showErr('ceu-err','Please fill in all fields.');return;}
-
   showLoad('Saving course…');
   let certPath=null;
   const certFile=document.getElementById('ceu-cert-file').files[0];
-  if(certFile){
-    const path=`${CP.id}/ceu_${Date.now()}_${certFile.name}`;
-    const{error:upErr}=await SB.storage.from('hr-documents').upload(path,certFile);
-    if(!upErr) certPath=path;
-  }
-
-  const{error}=await SB.from('ceu_courses').insert({
-    therapist_id:CP.id,
-    course_name:name,
-    date_completed:date,
-    hours,
-    cert_path:certPath
-  });
+  if(certFile){const path=CP.id+'/ceu_'+Date.now()+'_'+certFile.name;const {error:upErr}=await SB.storage.from('hr-documents').upload(path,certFile);if(!upErr)certPath=path;}
+  const {error}=await SB.from('ceu_courses').insert({therapist_id:CP.id,course_name:name,date_completed:date,hours,cert_path:certPath});
   hideLoad();
   if(error){showErr('ceu-err','Failed: '+error.message);return;}
-  flash('ceu-ok');
-  setTimeout(()=>{closeCEUModal();loadTherapistCEU();},900);
+  flash('ceu-ok');setTimeout(()=>{closeCEUModal();loadTherapistCEU();},900);
 }
-
 async function loadTherapistCEU(){
   const el=document.getElementById('t-ceu-list');if(!el)return;
-  const{data}=await SB.from('ceu_courses').select('*').eq('therapist_id',CP.id).order('date_completed',{ascending:false});
-  if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No courses recorded yet. Click + Add course to get started.</div>';return;}
+  const {data}=await SB.from('ceu_courses').select('*').eq('therapist_id',CP.id).order('date_completed',{ascending:false});
+  if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No courses recorded yet.</div>';return;}
   const totalHrs=data.reduce((a,c)=>a+(c.hours||0),0);
-  el.innerHTML=`<div style="font-size:12px;color:var(--teal);font-weight:600;margin-bottom:.5rem;">Total CPD hours: ${totalHrs}</div>`+
-  data.map(c=>`<div class="card" style="padding:.75rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-    <div>
-      <div style="font-size:13px;font-weight:500;">📚 ${c.course_name}</div>
-      <div style="font-size:11px;color:var(--text2);">${c.date_completed} · ${c.hours} hours</div>
-    </div>
-    <div style="display:flex;gap:5px;flex-shrink:0;">
-      ${c.cert_path?`<button class="btn-outline" style="padding:4px 8px;font-size:11px;" onclick="downloadCEUCert('${c.cert_path}')">📄 Certificate</button>`:''}
-      <button class="btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteCEU('${c.id}')">Delete</button>
-    </div>
-  </div>`).join('');
+  el.innerHTML='<div style="font-size:12px;color:var(--teal);font-weight:600;margin-bottom:.5rem;">Total CPD hours: '+totalHrs+'</div>'+
+  data.map(c=>'<div class="card" style="padding:.75rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div><div style="font-size:13px;font-weight:500;">📚 '+c.course_name+'</div><div style="font-size:11px;color:var(--text2);">'+c.date_completed+' · '+c.hours+' hours</div></div><div style="display:flex;gap:5px;flex-shrink:0;">'+(c.cert_path?'<button class="btn-outline" style="padding:4px 8px;font-size:11px;" onclick="downloadCEUCert(\''+c.cert_path+'\')">📄 Certificate</button>':'')+'<button class="btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteCEU(\''+c.id+'\')">Delete</button></div></div>').join('');
 }
+async function downloadCEUCert(path){const {data}=SB.storage.from('hr-documents').getPublicUrl(path);window.open(data.publicUrl,'_blank');}
+async function deleteCEU(id){if(!confirm('Delete this course record?'))return;await SB.from('ceu_courses').delete().eq('id',id);loadTherapistCEU();}
 
-async function downloadCEUCert(path){
-  const{data}=SB.storage.from('hr-documents').getPublicUrl(path);
-  window.open(data.publicUrl,'_blank');
-}
-
-async function deleteCEU(id){
-  if(!confirm('Delete this course record?'))return;
-  await SB.from('ceu_courses').delete().eq('id',id);
-  loadTherapistCEU();
-}
-
-// ---- TRAINING VIDEOS ----
 async function renderTrainingVideos(){
-  let {data} = await SB.from('training_videos').select('*').order('created_at',{ascending:false}).then(r=>r);
+  const {data}=await SB.from('training_videos').select('*').order('created_at',{ascending:false});
   const el=document.getElementById('training-list');if(!el)return;
-  if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No training videos yet. Click + Add video to get started.</div>';return;}
+  if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No training videos yet.</div>';return;}
   const staff=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
   el.innerHTML=data.map(v=>{
     const assignedNames=(v.assigned_to||[]).map(id=>{const s=staff.find(x=>x.id===id);return s?s.full_name:null;}).filter(Boolean);
     const unwatched=(v.assigned_to||[]).filter(id=>!(v.watched_by||[]).includes(id));
     const unwatchedNames=unwatched.map(id=>{const s=staff.find(x=>x.id===id);return s?s.full_name:null;}).filter(Boolean);
-    return `<div class="card" style="padding:1rem;margin-bottom:8px;">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-        <div style="flex:1;">
-          <div style="font-size:14px;font-weight:600;">${v.title}</div>
-          ${v.description?`<div style="font-size:12px;color:var(--text2);margin-top:2px;">${v.description}</div>`:''}
-          <div style="font-size:11px;margin-top:6px;color:var(--teal);">👥 ${assignedNames.length?assignedNames.join(', '):'No one assigned'}</div>
-          <div style="font-size:11px;margin-top:2px;color:${unwatchedNames.length?'var(--warn)':'var(--success)'};">${unwatchedNames.length?'⏳ Not yet watched: '+unwatchedNames.join(', '):'✓ All assigned staff have watched'}</div>
-        </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
-          <a href="${v.url}" target="_blank" class="btn-outline" style="padding:5px 10px;font-size:11px;text-decoration:none;">▶ Watch</a>
-          <button class="btn-danger" style="padding:5px 10px;font-size:11px;" onclick="deleteTrainingVideo('${v.id}')">Delete</button>
-        </div>
-      </div>
-    </div>`;
+    return '<div class="card" style="padding:1rem;margin-bottom:8px;"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div style="flex:1;"><div style="font-size:14px;font-weight:600;">'+v.title+'</div>'+(v.description?'<div style="font-size:12px;color:var(--text2);margin-top:2px;">'+v.description+'</div>':'')+'<div style="font-size:11px;margin-top:6px;color:var(--teal);">👥 '+(assignedNames.length?assignedNames.join(', '):'No one assigned')+'</div><div style="font-size:11px;margin-top:2px;color:'+(unwatchedNames.length?'var(--warn)':'var(--success)');+';">'+(unwatchedNames.length?'⏳ Not yet watched: '+unwatchedNames.join(', '):'✓ All assigned staff have watched')+'</div></div><div style="display:flex;gap:6px;flex-shrink:0;"><a href="'+v.url+'" target="_blank" class="btn-outline" style="padding:5px 10px;font-size:11px;text-decoration:none;">▶ Watch</a><button class="btn-danger" style="padding:5px 10px;font-size:11px;" onclick="deleteTrainingVideo(\''+v.id+'\')">Delete</button></div></div></div>';
   }).join('');
 }
 async function renderTherapistTraining(){
   const el=document.getElementById('t-training-list');if(!el)return;
-  let {data} = await SB.from('training_videos').select('*').order('created_at',{ascending:false}).then(r=>r);
+  const {data}=await SB.from('training_videos').select('*').order('created_at',{ascending:false});
   if(!data){el.innerHTML='';return;}
   const myVideos=data.filter(v=>(v.assigned_to||[]).includes(CP.id));
   if(!myVideos.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No training videos assigned to you yet.</div>';return;}
   el.innerHTML=myVideos.map(v=>{
     const watched=(v.watched_by||[]).includes(CP.id);
-    return `<div class="card" style="padding:.85rem;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-      <div>
-        <div style="font-size:13px;font-weight:500;">${v.title}</div>
-        ${v.description?`<div style="font-size:11px;color:var(--text2);">${v.description}</div>`:''}
-        ${watched?'<div style="font-size:11px;color:var(--success);margin-top:3px;">✓ Watched</div>':'<div style="font-size:11px;color:var(--warn);margin-top:3px;">⏳ Not yet watched</div>'}
-      </div>
-      <a href="${v.url}" target="_blank" class="btn-primary" style="padding:6px 14px;font-size:12px;text-decoration:none;flex-shrink:0;" onclick="markVideoWatched('${v.id}')">▶ Watch</a>
-    </div>`;
+    return '<div class="card" style="padding:.85rem;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div><div style="font-size:13px;font-weight:500;">'+v.title+'</div>'+(v.description?'<div style="font-size:11px;color:var(--text2);">'+v.description+'</div>':'')+(watched?'<div style="font-size:11px;color:var(--success);margin-top:3px;">✓ Watched</div>':'<div style="font-size:11px;color:var(--warn);margin-top:3px;">⏳ Not yet watched</div>')+'</div><a href="'+v.url+'" target="_blank" class="btn-primary" style="padding:6px 14px;font-size:12px;text-decoration:none;flex-shrink:0;" onclick="markVideoWatched(\''+v.id+'\')">▶ Watch</a></div>';
   }).join('');
 }
 async function markVideoWatched(videoId){
-  const{data}=await SB.from('training_videos').select('watched_by').eq('id',videoId).single();
+  const {data}=await SB.from('training_videos').select('watched_by').eq('id',videoId).single();
   if(!data)return;
   const watched=[...(data.watched_by||[])];
-  if(!watched.includes(CP.id)){
-    watched.push(CP.id);
-    await SB.from('training_videos').update({watched_by:watched}).eq('id',videoId);
-    setTimeout(()=>renderTherapistTraining(),800);
-  }
+  if(!watched.includes(CP.id)){watched.push(CP.id);await SB.from('training_videos').update({watched_by:watched}).eq('id',videoId);setTimeout(()=>renderTherapistTraining(),800);}
 }
 function openAddVideoModal(){
-  document.getElementById('tv-title').value='';
-  document.getElementById('tv-url').value='';
-  document.getElementById('tv-desc').value='';
+  document.getElementById('tv-title').value='';document.getElementById('tv-url').value='';document.getElementById('tv-desc').value='';
   const staff=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
-  document.getElementById('tv-assign-list').innerHTML=staff.map(s=>
-    `<div class="att-row"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" class="tv-assign-cb" data-uid="${s.id}" checked style="width:16px;height:16px;accent-color:var(--brand);cursor:pointer;"><span>${s.full_name}</span></label></div>`
-  ).join('');
+  document.getElementById('tv-assign-list').innerHTML=staff.map(s=>'<div class="att-row"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" class="tv-assign-cb" data-uid="'+s.id+'" checked style="width:16px;height:16px;accent-color:var(--brand);cursor:pointer;"><span>'+s.full_name+'</span></label></div>').join('');
   document.getElementById('tv-modal').classList.add('active');
 }
 async function saveTrainingVideo(){
@@ -2700,37 +2093,21 @@ async function saveTrainingVideo(){
   const assigned=[...document.querySelectorAll('.tv-assign-cb:checked')].map(cb=>cb.dataset.uid);
   showLoad('Saving…');
   await SB.from('training_videos').insert({title,url,description:document.getElementById('tv-desc').value.trim(),assigned_to:assigned,watched_by:[],created_by:CU.id});
-  hideLoad();flash('tv-ok');
-  setTimeout(()=>{closeTVModal();renderTrainingVideos();},1000);
+  hideLoad();flash('tv-ok');setTimeout(()=>{closeTVModal();renderTrainingVideos();},1000);
 }
-async function deleteTrainingVideo(id){
-  if(!confirm('Delete this training video?'))return;
-  await SB.from('training_videos').delete().eq('id',id);
-  renderTrainingVideos();
-}
+async function deleteTrainingVideo(id){if(!confirm('Delete this training video?'))return;await SB.from('training_videos').delete().eq('id',id);renderTrainingVideos();}
 function closeTVModal(){document.getElementById('tv-modal').classList.remove('active');}
 
 (async()=>{
-  // Show login immediately - always
-  document.querySelectorAll('.screen').forEach(s=>{
-    s.classList.remove('active');
-    s.style.display='none';
-  });
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
   const ls=document.getElementById('login-screen');
-  ls.style.display='flex';
-  ls.style.alignItems='center';
-  ls.style.justifyContent='center';
-  ls.style.minHeight='100vh';
-  ls.style.padding='1.5rem';
-  ls.style.background='linear-gradient(135deg,#F7EDE3,#FDF5EE)';
-
-  // Check session in background
-  const {data:{session}} = await SB.auth.getSession();
+  ls.style.display='flex';ls.style.alignItems='center';ls.style.justifyContent='center';ls.style.minHeight='100vh';ls.style.padding='1.5rem';ls.style.background='linear-gradient(135deg,#F7EDE3,#FDF5EE)';
+  const {data:{session}}=await SB.auth.getSession();
   if(session){
     CU=session.user;
     await loadGlobalData();
     CP=allProfiles.find(p=>p.id===CU.id)||null;
-    if(CP) { await showMgr(); return; }
+    if(CP){await showMgr();return;}
   }
 })();
 </script>
