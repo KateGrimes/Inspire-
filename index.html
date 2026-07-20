@@ -1091,17 +1091,46 @@ function renderUserList(){
   const el=document.getElementById('user-list');if(!el)return;
   const managed=allProfiles.filter(p=>p.id!==CP.id);
   if(!managed.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);">No other users yet.</div>';return;}
-  const groups={};
-  managed.forEach(p=>{const g=p.staff_group||'No group';if(!groups[g])groups[g]=[];groups[g].push(p);});
-  let html='';
-  Object.entries(groups).sort().forEach(([group,members])=>{
-    html+=`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin:1rem 0 .4rem;">${group}</div>`;
-    html+=members.map(p=>`<div class="user-item"><div class="user-info">
-      <div class="uname">${p.full_name}${p.initials?' <span style="font-size:11px;color:var(--text3);">('+p.initials+')</span>':''}</div>
-      <div class="uemail">${p.email}</div>
-      <span class="urole role-${p.role}">${p.role.replace('_',' ')}</span>
-    </div><button class="btn-danger" onclick="deleteUser('${p.id}')">Remove</button></div>`).join('');
+
+  // Separate into ABA Therapists, LSAs, and other groups
+  const abaTherapists=managed.filter(p=>p.staff_group==='ABA Therapist');
+  const lsas=managed.filter(p=>p.staff_group==='LSA');
+  const others=managed.filter(p=>p.staff_group!=='ABA Therapist'&&p.staff_group!=='LSA');
+
+  function staffCard(p){
+    const initials=(p.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2);
+    return `<div style="background:var(--bg);border:1px solid var(--border3);border-radius:var(--rl);padding:.85rem;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${initials}</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;">${p.full_name}${p.initials?' <span style="font-size:11px;color:var(--text3);">('+p.initials+')</span>':''}</div>
+          <div style="font-size:11px;color:var(--text2);">${p.email}</div>
+        </div>
+      </div>
+      <button class="btn-danger" onclick="deleteUser('${p.id}')" style="padding:4px 8px;font-size:11px;flex-shrink:0;">Remove</button>
+    </div>`;
+  }
+
+  function staffSection(title,members,color){
+    if(!members.length)return'';
+    return`<div style="margin-bottom:1.5rem;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${color};margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:2px solid ${color}20;">${title} (${members.length})</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;">
+        ${members.map(staffCard).join('')}
+      </div>
+    </div>`;
+  }
+
+  let html=staffSection('ABA Therapists',abaTherapists,'var(--brand)');
+  html+=staffSection('LSAs',lsas,'var(--teal)');
+
+  // Other groups (managers, parents, teachers etc)
+  const otherGroups={};
+  others.forEach(p=>{const g=p.staff_group||p.role||'Other';if(!otherGroups[g])otherGroups[g]=[];otherGroups[g].push(p);});
+  Object.entries(otherGroups).sort().forEach(([group,members])=>{
+    html+=staffSection(group,members,'var(--text2)');
   });
+
   el.innerHTML=html;
 }
 function openUserModal(){
