@@ -1253,19 +1253,22 @@ function renderUserList(){
   const managed=allProfiles.filter(p=>p.id!==CP.id);
   if(!managed.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);">No other users yet.</div>';return;}
 
-  // Separate into ABA Therapists, LSAs, and other groups
-  const abaTherapists=managed.filter(p=>p.staff_group==='ABA Therapist');
+  const bcbas=managed.filter(p=>p.role==='bcba');
+  const clinicManagers=managed.filter(p=>p.role==='clinic_manager'||p.role==='manager');
+  const abaTherapists=managed.filter(p=>p.staff_group==='ABA Therapist'&&p.role!=='bcba');
   const lsas=managed.filter(p=>p.staff_group==='LSA');
-  const others=managed.filter(p=>p.staff_group!=='ABA Therapist'&&p.staff_group!=='LSA');
+  const others=managed.filter(p=>p.role!=='bcba'&&p.role!=='clinic_manager'&&p.role!=='manager'&&p.staff_group!=='ABA Therapist'&&p.staff_group!=='LSA');
 
   function staffCard(p){
     const initials=(p.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2);
+    const roleLabel=p.role==='bcba'?'BCBA Supervisor':p.role==='clinic_manager'?'Clinic Manager':p.role==='manager'?'Manager':p.staff_group||p.role||'';
     return `<div style="background:var(--bg);border:1px solid var(--border3);border-radius:var(--rl);padding:.85rem;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;">
       <div style="display:flex;align-items:center;gap:10px;">
         <div style="width:36px;height:36px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${initials}</div>
         <div style="min-width:0;">
           <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.full_name}${p.initials?' <span style="font-size:11px;color:var(--text3);">('+p.initials+')</span>':''}</div>
           <div style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.email}</div>
+          <div style="font-size:10px;color:var(--text3);">${roleLabel}</div>
         </div>
       </div>
       <button class="btn-danger" onclick="deleteUser('${p.id}')" style="padding:4px 8px;font-size:11px;width:100%;border-radius:6px;">Remove</button>
@@ -1282,16 +1285,15 @@ function renderUserList(){
     </div>`;
   }
 
-  let html=staffSection('ABA Therapists',abaTherapists,'var(--brand)');
+  let html=staffSection('BCBAs (Supervisors)',bcbas,'#7B3FA0');
+  html+=staffSection('Clinic Managers',clinicManagers,'var(--brand-dark)');
+  html+=staffSection('ABA Therapists',abaTherapists,'var(--brand)');
   html+=staffSection('LSAs',lsas,'var(--teal)');
-
-  // Other groups (managers, parents, teachers etc)
-  const otherGroups={};
-  others.forEach(p=>{const g=p.staff_group||p.role||'Other';if(!otherGroups[g])otherGroups[g]=[];otherGroups[g].push(p);});
-  Object.entries(otherGroups).sort().forEach(([group,members])=>{
-    html+=staffSection(group,members,'var(--text2)');
-  });
-
+  if(others.length){
+    const otherGroups={};
+    others.forEach(p=>{const g=p.staff_group||p.role||'Other';if(!otherGroups[g])otherGroups[g]=[];otherGroups[g].push(p);});
+    Object.entries(otherGroups).sort().forEach(([group,members])=>{html+=staffSection(group,members,'var(--text2)');});
+  }
   el.innerHTML=html;
 }
 function openUserModal(){
