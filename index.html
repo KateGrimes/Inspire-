@@ -158,7 +158,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
   </div>
 </div>
 
-<!-- MANAGER / CLINIC MANAGER DASHBOARD -->
+<!-- MANAGER / CLINIC MANAGER / BCBA DASHBOARD -->
 <div id="mgr-screen" class="screen">
   <div class="topbar">
     <div class="topbar-l">
@@ -171,29 +171,28 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     </div>
   </div>
   <div class="body">
+    <!-- METRICS ROW -->
     <div class="mrow" id="mgr-metrics"></div>
+
+    <!-- NOTIFICATIONS PANEL -->
+    <div id="notif-panel" style="margin-bottom:1.5rem;display:none;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text2);margin-bottom:.75rem;">🔔 Notifications</div>
+      <div id="notif-items" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+    <!-- CLIENT FOLDERS BY BCBA -->
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
-      <div class="stitle" style="margin-bottom:0;" id="mgr-clients-title">My clients</div>
+      <div class="stitle" style="margin-bottom:0;" id="mgr-clients-title">Clients</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <select id="mgr-filter" onchange="renderMgrTable()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
-          <option value="all">All clients</option>
-          <option value="updated">Updated this week</option>
-          <option value="stale">Needs attention</option>
-          <option value="none">No data</option>
+        <select id="mgr-bcba-filter" onchange="renderClientFolders()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
+          <option value="all">All BCBAs</option>
         </select>
-        <select id="mgr-tf" onchange="renderMgrTable()" style="display:none;font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
-          <option value="all">All managers</option>
-        </select>
+        <button class="btn-primary" style="padding:7px 14px;font-size:12px;" onclick="openAddClientModal()">+ Add client</button>
       </div>
     </div>
-    <div id="notif-banner" style="display:none;background:var(--teal-light);border:1px solid var(--teal);border-radius:var(--r);padding:.85rem 1.1rem;margin-bottom:1.25rem;font-size:13px;color:#0a4a4d;">
-      <div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-weight:600;">📊 Recent graph updates</div><span style="font-size:11px;cursor:pointer;color:var(--teal);" onclick="document.getElementById('notif-banner').style.display='none'">Dismiss</span></div>
-      <div id="notif-list" style="font-size:12px;line-height:1.8;margin-top:4px;"></div>
-    </div>
-    <div style="overflow-x:auto;">
-      <table class="tbl"><thead><tr><th>Client</th><th>Therapist</th><th>Last session</th><th>Status</th><th>Entries</th><th></th></tr></thead>
-      <tbody id="mgr-tbody"></tbody></table>
-    </div>
+    <div id="client-folders-wrap"></div>
+
+    <!-- MEETINGS -->
     <div style="margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Meetings</div>
@@ -201,6 +200,8 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="mgr-meetings-list"></div>
     </div>
+
+    <!-- STAFF ATTENDANCE (clinic manager only) -->
     <div id="att-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Staff attendance</div>
@@ -211,6 +212,8 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="att-table-wrap" style="overflow-x:auto;"></div>
     </div>
+
+    <!-- USER MANAGEMENT (clinic manager only) -->
     <div id="admin-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">User management</div>
@@ -221,13 +224,17 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="user-list"></div>
     </div>
+
+    <!-- HR & SUPERVISION FOLDERS -->
     <div id="hr-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
-        <div class="stitle" style="margin-bottom:0;">HR Folders</div>
-        <div style="font-size:12px;color:var(--text2);">Click a therapist to view or upload documents</div>
+        <div class="stitle" style="margin-bottom:0;">Staff Folders</div>
+        <div style="font-size:12px;color:var(--text2);">HR documents &amp; Supervision records per staff member</div>
       </div>
-      <div id="hr-staff-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;"></div>
+      <div id="hr-staff-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;"></div>
     </div>
+
+    <!-- TRAINING VIDEOS -->
     <div id="training-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Training Videos</div>
@@ -235,10 +242,15 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       </div>
       <div id="training-list"></div>
     </div>
+
+    <!-- SUPERVISION & CPD -->
     <div id="supervision-section" style="display:none;margin-top:2rem;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
         <div class="stitle" style="margin-bottom:0;">Supervision &amp; Professional Development</div>
-        <button class="btn-primary" style="padding:7px 14px;font-size:12px;" onclick="openSupervisionModal()">+ Log supervision</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <select id="sup-bcba-filter" onchange="renderSupervisionReport()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);"><option value="all">All BCBAs</option></select>
+          <button class="btn-primary" style="padding:7px 14px;font-size:12px;" onclick="openSupervisionModal()">+ Log supervision</button>
+        </div>
       </div>
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1rem;">
         <div style="font-size:13px;font-weight:600;margin-bottom:.75rem;">Supervision hours report</div>
@@ -247,30 +259,16 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
           <input type="date" id="sup-from" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);" onchange="renderSupervisionReport()"/>
           <label style="font-size:12px;color:var(--text2);">To</label>
           <input type="date" id="sup-to" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);" onchange="renderSupervisionReport()"/>
-          <button class="btn-outline" style="padding:5px 10px;font-size:12px;" onclick="renderSupervisionReport()">Generate report</button>
+          <button class="btn-outline" style="padding:5px 10px;font-size:12px;" onclick="renderSupervisionReport()">Generate</button>
         </div>
         <div id="sup-report" style="font-size:13px;"></div>
       </div>
       <div id="sup-pending-section" style="display:none;margin-bottom:1rem;">
-        <div style="font-size:13px;font-weight:600;color:var(--warn);margin-bottom:.5rem;">⏳ Pending therapist entries — awaiting approval</div>
+        <div style="font-size:13px;font-weight:600;color:var(--warn);margin-bottom:.5rem;">⏳ Pending entries — awaiting approval</div>
         <div id="sup-pending-list"></div>
       </div>
       <div style="font-size:13px;font-weight:600;margin-bottom:.5rem;">Recent supervision sessions</div>
       <div id="sup-recent-list"></div>
-      <div style="margin-top:2rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
-          <div class="stitle" style="margin-bottom:0;">Staff Competency Assessments</div>
-          <select id="mgr-comp-filter" onchange="renderMgrCompetency()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);"><option value="all">All staff</option></select>
-        </div>
-        <div id="mgr-competency-list"></div>
-      </div>
-      <div style="margin-top:2rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
-          <div class="stitle" style="margin-bottom:0;">Staff Goals</div>
-          <select id="mgr-goals-filter" onchange="renderMgrGoals()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);"><option value="all">All staff</option></select>
-        </div>
-        <div id="mgr-goals-list"></div>
-      </div>
     </div>
   </div>
 </div>
@@ -764,9 +762,17 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div class="field"><label>Password</label><input type="password" id="u-pass" placeholder="Minimum 6 characters"/></div>
     <div class="field"><label>Role</label>
       <select id="u-role">
-        <option value="therapist">Therapist</option><option value="manager">Manager</option>
-        <option value="clinic_manager">Clinic Manager</option><option value="parent">Parent</option><option value="teacher">Teacher</option>
+        <option value="therapist">Therapist / LSA</option>
+        <option value="bcba">BCBA (Supervisor)</option>
+        <option value="manager">Manager</option>
+        <option value="clinic_manager">Clinic Manager</option>
+        <option value="parent">Parent</option>
+        <option value="teacher">Teacher</option>
       </select>
+    </div>
+    <div class="field" id="u-supervisor-field">
+      <label>Assigned BCBA Supervisor</label>
+      <select id="u-supervisor"><option value="">No supervisor assigned</option></select>
     </div>
     <div class="field"><label>Staff Group</label>
       <select id="u-group">
@@ -789,8 +795,9 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
 <div id="cm-modal" class="mo">
   <div class="md">
     <h3 id="cm-title">Add client</h3>
-    <div class="field"><label>Full name</label><input id="cm-name" placeholder="Child's full name"/></div>
+    <div class="field"><label>Client initials / code</label><input id="cm-name" placeholder="e.g. A.H or AH-001"/></div>
     <div class="field"><label>Date of birth</label><input type="date" id="cm-dob"/></div>
+    <div class="field"><label>Assigned BCBA supervisor</label><select id="cm-supervisor"></select></div>
     <div class="field"><label>Assigned therapist</label><select id="cm-therapist"></select></div>
     <div class="field"><label>Assigned manager</label><select id="cm-manager"></select></div>
     <div class="rbtns">
@@ -951,7 +958,7 @@ async function loadUserAndRoute(){
     await loadGlobalData();
     if(CP.role==='therapist') await showDash();
     else if(CP.role==='parent'||CP.role==='teacher') await showExternal();
-    else await showMgr();
+    else await showMgr(); // clinic_manager, manager, bcba all use mgr screen
   } catch(err) {
     showErr('l-err','Error: '+err.message);
     const btn=document.querySelector('.btn-brand');
@@ -970,54 +977,156 @@ async function loadGlobalData(){
 async function showMgr(){
   showScr('mgr-screen');
   const isCM=CP.role==='clinic_manager';
+  const isBCBA=CP.role==='bcba';
+  const isManager=CP.role==='manager';
+  const roleLabel=isCM?'Clinic Manager':isBCBA?'BCBA Supervisor':isManager?'Manager':'Staff';
   document.getElementById('mgr-name-badge').textContent=CP.full_name;
-  document.getElementById('mgr-role-badge').textContent=isCM?'Clinic Manager':'Manager';
+  document.getElementById('mgr-role-badge').textContent=roleLabel;
+
+  // BCBA filter — visible to clinic managers
+  const bcbas=allProfiles.filter(p=>p.role==='bcba');
+  const bcbaFilter=document.getElementById('mgr-bcba-filter');
+  if(bcbaFilter){
+    bcbaFilter.innerHTML='<option value="all">All BCBAs</option>'+bcbas.map(b=>'<option value="'+b.id+'">'+b.full_name+'</option>').join('');
+    bcbaFilter.style.display=(isCM||isBCBA)?'':'none';
+  }
+
+  // Supervision BCBA filter
+  const supBcbaFilter=document.getElementById('sup-bcba-filter');
+  if(supBcbaFilter){
+    supBcbaFilter.innerHTML='<option value="all">All BCBAs</option>'+bcbas.map(b=>'<option value="'+b.id+'">'+b.full_name+'</option>').join('');
+    supBcbaFilter.style.display=(isCM||isBCBA)?'':'none';
+  }
+
+  // Clinic manager extras
   if(isCM){
-    document.getElementById('mgr-clients-title').textContent='All clients';
-    document.getElementById('mgr-tf').style.display='';
     document.getElementById('att-section').style.display='block';
     document.getElementById('admin-section').style.display='block';
-    const managers=allProfiles.filter(p=>p.role==='manager'||p.role==='clinic_manager');
-    document.getElementById('mgr-tf').innerHTML='<option value="all">All managers</option>'+managers.map(m=>'<option value="'+m.id+'">'+m.full_name+'</option>').join('');
-    const staff=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
+    const staff=allProfiles.filter(p=>p.role==='therapist'||p.role==='bcba'||p.role==='manager');
     document.getElementById('att-staff-filter').innerHTML='<option value="all">All staff</option>'+staff.map(s=>'<option value="'+s.id+'">'+s.full_name+'</option>').join('');
     const now=new Date();let mopts='';
     for(let i=0;i<12;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1);mopts+='<option value="'+d.getFullYear()+'-'+(d.getMonth()+1)+'">'+d.toLocaleDateString('en-GB',{month:'long',year:'numeric'})+'</option>';}
     document.getElementById('att-month-filter').innerHTML=mopts;
     renderAttendance();
     renderUserList();
-    document.getElementById('hr-section').style.display='block';
-    document.getElementById('training-section').style.display='block';
-    renderHRStaffList();
-    renderTrainingVideos();
-    document.getElementById('supervision-section').style.display='block';
-    const today=new Date();
-    const threeMonthsAgo=new Date(today);threeMonthsAgo.setMonth(today.getMonth()-3);
-    document.getElementById('sup-to').value=today.toISOString().split('T')[0];
-    document.getElementById('sup-from').value=threeMonthsAgo.toISOString().split('T')[0];
-    loadRecentSupervision();
-    loadPendingSupervision();
-    renderSupervisionReport();
-    const therapists=allProfiles.filter(p=>p.role==='therapist'||p.role==='manager');
-    const staffOpts='<option value="all">All staff</option>'+therapists.map(t=>'<option value="'+t.id+'">'+t.full_name+'</option>').join('');
-    document.getElementById('mgr-comp-filter').innerHTML=staffOpts;
-    document.getElementById('mgr-goals-filter').innerHTML=staffOpts;
-    renderMgrCompetency();
-    renderMgrGoals();
   }
+
+  // HR, training, supervision — all elevated roles
+  document.getElementById('hr-section').style.display='block';
+  document.getElementById('training-section').style.display='block';
+  document.getElementById('supervision-section').style.display='block';
+  renderHRStaffList();
+  renderTrainingVideos();
+  const today=new Date();
+  const threeMonthsAgo=new Date(today);threeMonthsAgo.setMonth(today.getMonth()-3);
+  document.getElementById('sup-to').value=today.toISOString().split('T')[0];
+  document.getElementById('sup-from').value=threeMonthsAgo.toISOString().split('T')[0];
+  loadRecentSupervision();
+  loadPendingSupervision();
+  renderSupervisionReport();
+
   renderMgrMetrics();
-  renderMgrTable();
+  renderClientFolders();
   await loadMeetings();
-  loadNotifications();
+  await loadNotifications();
 }
 
 function getVisibleClients(){
-  if(CP.role==='clinic_manager'){
-    const tf=document.getElementById('mgr-tf').value;
-    if(tf==='all')return allClients;
-    return allClients.filter(c=>c.manager_id===tf);
+  // All elevated roles see all clients; filter applied separately by BCBA
+  return allClients;
+}
+
+function renderMgrMetrics(){
+  const bcbas=allProfiles.filter(p=>p.role==='bcba');
+  const staff=allProfiles.filter(p=>p.role==='therapist');
+  document.getElementById('mgr-metrics').innerHTML=
+    '<div class="mc"><div class="mcl">Total clients</div><div class="mcv">'+allClients.length+'</div></div>'+
+    '<div class="mc"><div class="mcl">BCBAs</div><div class="mcv" style="color:var(--teal);">'+bcbas.length+'</div></div>'+
+    '<div class="mc"><div class="mcl">Therapists / LSAs</div><div class="mcv">'+staff.length+'</div></div>'+
+    '<div class="mc"><div class="mcl">Meetings</div><div class="mcv">'+allMeetings.length+'</div></div>';
+}
+
+async function renderClientFolders(){
+  const wrap=document.getElementById('client-folders-wrap');if(!wrap)return;
+  const bcbaFilterVal=(document.getElementById('mgr-bcba-filter')||{}).value||'all';
+  const bcbas=allProfiles.filter(p=>p.role==='bcba');
+  const bcbasToShow=bcbaFilterVal==='all'?bcbas:bcbas.filter(b=>b.id===bcbaFilterVal);
+
+  // Get last session dates for all clients
+  const {data:recentSessions}=await SB.from('sessions').select('client_id,session_date').order('session_date',{ascending:false});
+  const lastSessionMap={};
+  (recentSessions||[]).forEach(s=>{if(!lastSessionMap[s.client_id])lastSessionMap[s.client_id]=s.session_date;});
+
+  let html='';
+
+  // Clients with no BCBA assigned
+  const unassigned=allClients.filter(c=>!c.supervisor_id&&!bcbas.find(b=>b.id===c.supervisor_id));
+
+  bcbasToShow.forEach(bcba=>{
+    const bcbaClients=allClients.filter(c=>c.supervisor_id===bcba.id);
+    if(!bcbaClients.length&&bcbaFilterVal!=='all')return;
+    html+=`<div style="margin-bottom:2rem;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:.75rem;padding:.6rem 1rem;background:var(--brand-light);border-radius:var(--r);border-left:4px solid var(--brand);">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${(bcba.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2)}</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--brand);">${bcba.full_name} <span style="font-size:11px;font-weight:400;color:var(--text2);">BCBA Supervisor</span></div>
+          <div style="font-size:11px;color:var(--text2);">${bcbaClients.length} client${bcbaClients.length!==1?'s':''}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+        ${bcbaClients.map(c=>{
+          const last=lastSessionMap[c.id];
+          const days=last?Math.floor((Date.now()-new Date(last))/864e5):null;
+          const stat=!last?'none':days<=7?'updated':'stale';
+          const dot=stat==='updated'?'#2A8A5E':stat==='stale'?'#C47A0E':'#C0392B';
+          const statText=stat==='updated'?'Updated '+(days===0?'today':days+'d ago'):stat==='stale'?days+'d ago':'No data';
+          const therapist=allProfiles.find(p=>p.id===c.therapist_id);
+          return `<div class="cc" onclick="mgrOC('${c.id}')">
+            <div class="cini">${(c.full_name||'?').substring(0,3)}</div>
+            <div class="cna">${c.full_name}</div>
+            <div class="cme">${therapist?therapist.full_name:'No therapist'}</div>
+            <div class="cst"><span class="sdot" style="background:${dot};"></span>${statText}</div>
+          </div>`;
+        }).join('')}
+        <div class="cc" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;" onclick="openAddClientModalForBCBA('${bcba.id}')">
+          <div style="font-size:22px;color:var(--brand);margin-bottom:4px;">+</div>
+          <div style="font-size:12px;color:var(--text2);">Add client</div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // Unassigned clients
+  const unassignedClients=allClients.filter(c=>!c.supervisor_id);
+  if(unassignedClients.length){
+    html+=`<div style="margin-bottom:2rem;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.75rem;padding:.5rem 1rem;background:var(--bg2);border-radius:var(--r);">⚠ No BCBA assigned (${unassignedClients.length})</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+        ${unassignedClients.map(c=>{
+          const last=lastSessionMap[c.id];
+          const days=last?Math.floor((Date.now()-new Date(last))/864e5):null;
+          const stat=!last?'none':days<=7?'updated':'stale';
+          const dot=stat==='updated'?'#2A8A5E':stat==='stale'?'#C47A0E':'#C0392B';
+          const statText=stat==='updated'?'Updated '+(days===0?'today':days+'d ago'):stat==='stale'?days+'d ago':'No data';
+          const therapist=allProfiles.find(p=>p.id===c.therapist_id);
+          return `<div class="cc" onclick="mgrOC('${c.id}')">
+            <div class="cini">${(c.full_name||'?').substring(0,3)}</div>
+            <div class="cna">${c.full_name}</div>
+            <div class="cme">${therapist?therapist.full_name:'No therapist'}</div>
+            <div class="cst"><span class="sdot" style="background:${dot};"></span>${statText}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
   }
-  return allClients.filter(c=>c.manager_id===CP.id);
+
+  if(!html)html='<div style="font-size:13px;color:var(--text3);padding:1rem 0;">No clients yet. Add a client using the button above.</div>';
+  wrap.innerHTML=html;
+}
+
+function openAddClientModalForBCBA(bcbaId){
+  openAddClientModal();
+  setTimeout(()=>{const sel=document.getElementById('cm-supervisor');if(sel)sel.value=bcbaId;},100);
 }
 
 async function getLastSessionDate(clientId){
@@ -1188,6 +1297,9 @@ function renderUserList(){
 function openUserModal(){
   ['u-name','u-email','u-pass','u-initials'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('u-role').value='therapist';
+  const bcbas=allProfiles.filter(p=>p.role==='bcba');
+  const supSel=document.getElementById('u-supervisor');
+  if(supSel)supSel.innerHTML='<option value="">No supervisor assigned</option>'+bcbas.map(b=>'<option value="'+b.id+'">'+b.full_name+'</option>').join('');
   document.getElementById('um').classList.add('active');
 }
 function closeUM(){document.getElementById('um').classList.remove('active');}
@@ -1198,13 +1310,14 @@ async function saveUser(){
   const role=document.getElementById('u-role').value;
   const initials=document.getElementById('u-initials').value.trim().toUpperCase();
   const staff_group=document.getElementById('u-group').value;
+  const supervisor_id=document.getElementById('u-supervisor').value||null;
   if(!name||!email||!pass){showErr('user-err','Please fill in name, email and password.');return;}
   showLoad('Creating account…');
   const {data,error}=await SB.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
   if(error){hideLoad();showErr('user-err',error.message);return;}
   const uid=data&&data.user&&data.user.id;
   if(uid){
-    await SB.from('profiles').upsert({id:uid,email,full_name:name,role,initials,staff_group});
+    await SB.from('profiles').upsert({id:uid,email,full_name:name,role,initials,staff_group,supervisor_id});
     await loadGlobalData();
     renderUserList();
     flash('user-ok');
@@ -1219,18 +1332,21 @@ async function deleteUser(id){
 
 function openAddClientModal(){
   document.getElementById('cm-name').value='';document.getElementById('cm-dob').value='';
+  const bcbas=allProfiles.filter(p=>p.role==='bcba');
   const therapists=allProfiles.filter(p=>p.role==='therapist');
   const managers=allProfiles.filter(p=>p.role==='manager'||p.role==='clinic_manager');
-  document.getElementById('cm-therapist').innerHTML=therapists.map(t=>'<option value="'+t.id+'">'+t.full_name+'</option>').join('');
-  document.getElementById('cm-manager').innerHTML=managers.map(m=>'<option value="'+m.id+'">'+m.full_name+'</option>').join('');
+  document.getElementById('cm-supervisor').innerHTML='<option value="">No BCBA assigned</option>'+bcbas.map(b=>'<option value="'+b.id+'">'+b.full_name+'</option>').join('');
+  document.getElementById('cm-therapist').innerHTML='<option value="">No therapist</option>'+therapists.map(t=>'<option value="'+t.id+'">'+t.full_name+'</option>').join('');
+  document.getElementById('cm-manager').innerHTML='<option value="">No manager</option>'+managers.map(m=>'<option value="'+m.id+'">'+m.full_name+'</option>').join('');
   document.getElementById('cm-modal').classList.add('active');
 }
 function closeCM(){document.getElementById('cm-modal').classList.remove('active');}
 async function saveClient(){
   const name=document.getElementById('cm-name').value.trim();
-  if(!name){showErr('cm-err','Please enter the client name.');return;}
+  if(!name){showErr('cm-err','Please enter the client code.');return;}
   showLoad('Saving…');
-  const {data,error}=await SB.from('clients').insert({full_name:name,dob:document.getElementById('cm-dob').value||null,therapist_id:document.getElementById('cm-therapist').value||null,manager_id:document.getElementById('cm-manager').value||null}).select().single();
+  const supervisor_id=document.getElementById('cm-supervisor').value||null;
+  const {data,error}=await SB.from('clients').insert({full_name:name,dob:document.getElementById('cm-dob').value||null,supervisor_id,therapist_id:document.getElementById('cm-therapist').value||null,manager_id:document.getElementById('cm-manager').value||null}).select().single();
   if(error){hideLoad();showErr('cm-err',error.message);return;}
   await loadGlobalData();closeCM();hideLoad();
   if(CP.role==='therapist')showDash();else showMgr();
@@ -1702,18 +1818,81 @@ async function importSessions(rows){
 }
 
 async function loadNotifications(){
-  const since=new Date();since.setDate(since.getDate()-7);
-  const {data}=await SB.from('sessions').select('client_id,session_date,created_at').gte('created_at',since.toISOString()).order('created_at',{ascending:false});
-  if(!data||!data.length)return;
-  const byClient={};
-  data.forEach(s=>{if(!byClient[s.client_id])byClient[s.client_id]=[];byClient[s.client_id].push(s.session_date);});
-  const lines=Object.entries(byClient).map(([cid,dates])=>{
-    const client=allClients.find(c=>c.id===cid);
-    const name=client?client.full_name:cid;
-    const latest=[...dates].sort().reverse()[0];
-    return '<b>'+name+'</b> — '+dates.length+' new session'+(dates.length!==1?'s':'')+' (latest: '+latest+')';
+  const panel=document.getElementById('notif-panel');
+  const items=document.getElementById('notif-items');
+  if(!panel||!items)return;
+  const notifications=[];
+  const today=new Date();
+  const todayStr=today.toISOString().split('T')[0];
+
+  // 1. Clients with stale or no data (>7 days)
+  const {data:recentSess}=await SB.from('sessions').select('client_id,session_date').order('session_date',{ascending:false});
+  const lastSessMap={};
+  (recentSess||[]).forEach(s=>{if(!lastSessMap[s.client_id])lastSessMap[s.client_id]=s.session_date;});
+  allClients.forEach(c=>{
+    const last=lastSessMap[c.id];
+    const days=last?Math.floor((Date.now()-new Date(last))/864e5):null;
+    if(!last){
+      notifications.push({type:'warn',icon:'📋',text:'<b>'+c.full_name+'</b> — no session data entered yet'});
+    } else if(days>14){
+      notifications.push({type:'warn',icon:'⏰',text:'<b>'+c.full_name+'</b> — data not updated for '+days+' days (last: '+last+')'});
+    }
   });
-  if(lines.length){document.getElementById('notif-banner').style.display='block';document.getElementById('notif-list').innerHTML=lines.join('<br>');}
+
+  // 2. Upcoming meetings in next 7 days
+  const upcoming=allMeetings.filter(m=>{
+    if(!m.meeting_date)return false;
+    const d=new Date(m.meeting_date);
+    const diff=Math.floor((d-today)/864e5);
+    return diff>=0&&diff<=7;
+  });
+  upcoming.forEach(m=>{
+    notifications.push({type:'info',icon:'📅',text:'Upcoming meeting: <b>'+m.title+'</b> on '+m.meeting_date});
+  });
+
+  // 3. Staff with poor meeting attendance (< 50% in last 3 months)
+  const threeMonthsAgo=new Date(today);threeMonthsAgo.setMonth(today.getMonth()-3);
+  const recentMeetings=allMeetings.filter(m=>m.meeting_date&&new Date(m.meeting_date)>=threeMonthsAgo&&new Date(m.meeting_date)<=today);
+  if(recentMeetings.length>=2){
+    const staff=allProfiles.filter(p=>p.role==='therapist');
+    staff.forEach(s=>{
+      const attended=recentMeetings.filter(m=>m.meeting_attendance&&m.meeting_attendance.find(a=>a.user_id===s.id&&a.present)).length;
+      const pct=Math.round(attended/recentMeetings.length*100);
+      if(pct<50){
+        notifications.push({type:'warn',icon:'👤',text:'<b>'+s.full_name+'</b> — meeting attendance '+pct+'% in last 3 months ('+attended+'/'+recentMeetings.length+')'});
+      }
+    });
+  }
+
+  // 4. Pending supervision approvals
+  const {data:pendingSup}=await SB.from('supervision_logs').select('therapist_id').eq('pending',true);
+  if(pendingSup&&pendingSup.length){
+    notifications.push({type:'action',icon:'⏳',text:pendingSup.length+' supervision session'+(pendingSup.length!==1?'s':'')+' pending approval'});
+  }
+
+  // 5. Staff with no supervision logged in last 4 weeks
+  const fourWeeksAgo=new Date(today);fourWeeksAgo.setDate(today.getDate()-28);
+  const {data:recentSupLogs}=await SB.from('supervision_logs').select('therapist_id').eq('approved',true).gte('date',fourWeeksAgo.toISOString().split('T')[0]);
+  const supervisedIds=new Set((recentSupLogs||[]).map(s=>s.therapist_id));
+  const therapists=allProfiles.filter(p=>p.role==='therapist');
+  therapists.forEach(t=>{
+    if(!supervisedIds.has(t.id)){
+      notifications.push({type:'warn',icon:'🎓',text:'<b>'+t.full_name+'</b> — no supervision logged in last 4 weeks'});
+    }
+  });
+
+  // Render
+  if(!notifications.length){
+    panel.style.display='none';
+    return;
+  }
+  panel.style.display='block';
+  const colorMap={warn:'var(--warn-light)',info:'var(--teal-light)',action:'var(--brand-light)'};
+  const borderMap={warn:'var(--warn)',info:'var(--teal)',action:'var(--brand)'};
+  items.innerHTML=notifications.map(n=>`<div style="background:${colorMap[n.type]||'var(--bg2)'};border:1px solid ${borderMap[n.type]||'var(--border)'};border-radius:var(--r);padding:.6rem 1rem;font-size:13px;display:flex;align-items:flex-start;gap:8px;">
+    <span style="flex-shrink:0;">${n.icon}</span>
+    <span>${n.text}</span>
+  </div>`).join('');
 }
 
 let hrCurrentProfile=null;
