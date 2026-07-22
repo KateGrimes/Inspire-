@@ -579,7 +579,6 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1rem;overflow-x:auto;gap:0;">
       <button class="hr-tab active" onclick="switchHRTab('documents',this)">📋 Documents</button>
       <button class="hr-tab" onclick="switchHRTab('payslips',this)">💰 Payslips</button>
-      <button class="hr-tab" onclick="switchHRTab('competency',this)">🎯 Competency</button>
     </div>
     <div id="hr-tab-documents">
       <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Required documents — upload each one below. ✅ = uploaded, ⬜ = missing.</div>
@@ -597,31 +596,62 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         </label>
       </div>
     </div>
-    <div id="hr-tab-competency" style="display:none;">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Competency assessment documents for this staff member.</div>
-      <div id="hr-competency-list"></div>
-      <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-top:.5rem;">
-        <div class="card" style="padding:.85rem;">
-          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 IBAT Competency Assessment</div>
-          <div id="hr-comp-ibat-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
-          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadHRCompetency(event,'IBAT')"/></label>
-        </div>
-        <div class="card" style="padding:.85rem;">
-          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 RBT Competency Assessment</div>
-          <div id="hr-comp-rbt-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
-          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadHRCompetency(event,'RBT')"/></label>
-        </div>
-        <div class="card" style="padding:.85rem;">
-          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 Inspire Therapy Competency Assessment</div>
-          <div id="hr-comp-inspire-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
-          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadHRCompetency(event,'Inspire')"/></label>
-        </div>
-      </div>
-    </div>
     <div class="rbtns" style="margin-top:1rem;">
       <button class="btn-outline" onclick="closeHRModal()">Close</button>
     </div>
     <div class="err" id="hr-err"></div>
+  </div>
+</div>
+
+<!-- SUPERVISION FOLDER MODAL -->
+<div id="sup-folder-modal" class="mo">
+  <div class="md" style="max-width:640px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
+      <h3 id="sup-folder-title">Supervision Folder</h3>
+      <button class="btn-outline" onclick="closeSupFolder()" style="padding:5px 12px;font-size:12px;">Close</button>
+    </div>
+    <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1rem;overflow-x:auto;gap:0;">
+      <button class="hr-tab active" onclick="switchSupFolderTab('supervision',this)">📋 Supervision Log</button>
+      <button class="hr-tab" onclick="switchSupFolderTab('competency',this)">🎯 Competency</button>
+      <button class="hr-tab" onclick="switchSupFolderTab('goals',this)">🎯 Staff Goals</button>
+    </div>
+    <!-- Supervision Log Tab -->
+    <div id="sup-folder-tab-supervision">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+        <div style="font-size:12px;color:var(--text2);">Individual supervision history for this staff member.</div>
+        <button class="btn-primary" style="padding:6px 12px;font-size:12px;" onclick="openSupFromFolder()">+ Log session</button>
+      </div>
+      <div id="sup-folder-log-list"></div>
+    </div>
+    <!-- Competency Tab -->
+    <div id="sup-folder-tab-competency" style="display:none;">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Competency assessment documents for this staff member.</div>
+      <div style="display:grid;grid-template-columns:1fr;gap:10px;">
+        <div class="card" style="padding:.85rem;">
+          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 IBAT Competency Assessment</div>
+          <div id="sf-comp-ibat-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadSFCompetency(event,'IBAT')"/></label>
+        </div>
+        <div class="card" style="padding:.85rem;">
+          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 RBT Competency Assessment</div>
+          <div id="sf-comp-rbt-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadSFCompetency(event,'RBT')"/></label>
+        </div>
+        <div class="card" style="padding:.85rem;">
+          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 Inspire Therapy Competency Assessment</div>
+          <div id="sf-comp-inspire-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadSFCompetency(event,'Inspire')"/></label>
+        </div>
+      </div>
+    </div>
+    <!-- Staff Goals Tab -->
+    <div id="sup-folder-tab-goals" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:8px;">
+        <div style="font-size:12px;color:var(--text2);">Staff goal documents for this staff member.</div>
+        <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">+ Add goal <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadSFGoal(event)"/></label>
+      </div>
+      <div id="sup-folder-goals-list"></div>
+    </div>
   </div>
 </div>
 
@@ -1703,7 +1733,18 @@ function renderHRStaffList(){
   el.innerHTML=staff.map(s=>{
     const safeName=(s.full_name||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     const initials=(s.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2);
-    return '<div class="card" onclick="openHRFolder(\''+s.id+'\',\''+safeName+'\')" style="cursor:pointer;padding:.85rem;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;margin:0 auto .5rem;">'+initials+'</div><div style="font-size:13px;font-weight:500;">'+s.full_name+'</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">'+s.role+'</div><div style="font-size:11px;color:var(--teal);margin-top:4px;">📁 HR Folder</div></div>';
+    const group=s.staff_group||s.role||'';
+    return `<div style="background:var(--bg);border:1px solid var(--border3);border-radius:var(--rl);padding:.85rem;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;">
+      <div style="width:42px;height:42px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">${initials}</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;">${s.full_name}</div>
+        <div style="font-size:11px;color:var(--text2);">${group}</div>
+      </div>
+      <div style="display:flex;gap:6px;width:100%;">
+        <button class="btn-outline" style="flex:1;padding:5px 8px;font-size:11px;border-color:var(--brand);color:var(--brand);" onclick="openHRFolder('${s.id}','${safeName}')">📁 HR</button>
+        <button class="btn-outline" style="flex:1;padding:5px 8px;font-size:11px;border-color:var(--teal);color:var(--teal);" onclick="openSupFolder('${s.id}','${safeName}')">📋 Supervision</button>
+      </div>
+    </div>`;
   }).join('');
 }
 async function openHRFolder(profileId,name){
@@ -1715,39 +1756,95 @@ async function openHRFolder(profileId,name){
   await loadHRSlots(profileId);
 }
 function switchHRTab(tab,btn){
-  document.querySelectorAll('.hr-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#hr-modal .hr-tab').forEach(t=>t.classList.remove('active'));
   if(btn)btn.classList.add('active');
   document.getElementById('hr-tab-documents').style.display=tab==='documents'?'block':'none';
   document.getElementById('hr-tab-payslips').style.display=tab==='payslips'?'block':'none';
-  document.getElementById('hr-tab-competency').style.display=tab==='competency'?'block':'none';
   if(tab==='payslips'&&hrCurrentProfile)loadPayslips(hrCurrentProfile);
-  if(tab==='competency'&&hrCurrentProfile)loadHRCompetency(hrCurrentProfile);
 }
-async function loadHRCompetency(profileId){
+
+// ── SUPERVISION FOLDER ──
+let supFolderProfile=null;
+async function openSupFolder(profileId,name){
+  supFolderProfile=profileId;
+  document.getElementById('sup-folder-title').textContent='Supervision Folder — '+name;
+  document.getElementById('sup-folder-modal').classList.add('active');
+  switchSupFolderTab('supervision',document.querySelector('#sup-folder-modal .hr-tab'));
+}
+function closeSupFolder(){document.getElementById('sup-folder-modal').classList.remove('active');supFolderProfile=null;}
+function switchSupFolderTab(tab,btn){
+  document.querySelectorAll('#sup-folder-modal .hr-tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('sup-folder-tab-supervision').style.display=tab==='supervision'?'block':'none';
+  document.getElementById('sup-folder-tab-competency').style.display=tab==='competency'?'block':'none';
+  document.getElementById('sup-folder-tab-goals').style.display=tab==='goals'?'block':'none';
+  if(tab==='supervision'&&supFolderProfile)loadSupFolderLog(supFolderProfile);
+  if(tab==='competency'&&supFolderProfile)loadSFCompetency(supFolderProfile);
+  if(tab==='goals'&&supFolderProfile)loadSFGoals(supFolderProfile);
+}
+async function loadSupFolderLog(profileId){
+  const el=document.getElementById('sup-folder-log-list');if(!el)return;
+  const {data}=await SB.from('supervision_logs').select('*').eq('therapist_id',profileId).order('date',{ascending:false});
+  if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No supervision sessions recorded yet.</div>';return;}
+  const fmtTime=m=>m>=60?Math.floor(m/60)+'h '+(m%60?m%60+'m':''):''+m+'m';
+  const total=data.filter(s=>s.approved).reduce((a,s)=>a+(s.duration_mins||0),0);
+  el.innerHTML='<div style="font-size:12px;color:var(--teal);font-weight:600;margin-bottom:.75rem;">Total approved: '+fmtTime(total)+'</div>'+
+  data.map(s=>'<div class="card" style="padding:.75rem;margin-bottom:6px;border-left:3px solid '+(s.approved?'var(--success)':'var(--warn)')+'"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><div><div style="font-size:13px;font-weight:500;">'+fmtTime(s.duration_mins)+' — '+(s.supervision_type||'supervision')+'</div><div style="font-size:11px;color:var(--text2);">'+s.date+(s.notes?' · '+s.notes.substring(0,60):'')+'</div></div><span style="font-size:11px;font-weight:600;color:'+(s.approved?'var(--success)':'var(--warn)')+';">'+(s.approved?'✓ Approved':'⏳ Pending')+'</span></div></div>').join('');
+}
+function openSupFromFolder(){
+  closeSupFolder();
+  openSupervisionModal();
+  if(supFolderProfile){
+    const sel=document.getElementById('sup-therapist');
+    if(sel)sel.value=supFolderProfile;
+  }
+}
+async function loadSFCompetency(profileId){
   const types=['IBAT','RBT','Inspire'];
   const {data}=await SB.from('competency_assessments').select('*').eq('therapist_id',profileId);
   types.forEach(type=>{
-    const el=document.getElementById('hr-comp-'+type.toLowerCase()+'-status');
+    const el=document.getElementById('sf-comp-'+type.toLowerCase()+'-status');
     if(!el)return;
     const found=data&&data.find(x=>x.assessment_type===type);
-    if(found){el.innerHTML='<span style="color:var(--success);font-weight:600;">✅ Uploaded</span><button class="btn-outline" style="padding:3px 8px;font-size:11px;margin-left:8px;" onclick="downloadCompetency(\''+found.file_path+'\')">Download</button><button class="btn-danger" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="deleteHRCompetency(\''+found.id+'\',\''+profileId+'\')">Delete</button>';}
+    if(found){el.innerHTML='<span style="color:var(--success);font-weight:600;">✅ Uploaded</span><button class="btn-outline" style="padding:3px 8px;font-size:11px;margin-left:8px;" onclick="downloadCompetency(\''+found.file_path+'\')">Download</button><button class="btn-danger" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="deleteSFCompetency(\''+found.id+'\',\''+profileId+'\')">Delete</button>';}
     else el.textContent='Not uploaded';
   });
 }
-async function uploadHRCompetency(e,type){
-  const file=e.target.files[0];if(!file||!hrCurrentProfile)return;
+async function uploadSFCompetency(e,type){
+  const file=e.target.files[0];if(!file||!supFolderProfile)return;
   showLoad('Uploading…');
-  const path=hrCurrentProfile+'/competency_'+type+'_'+Date.now()+'_'+file.name;
+  const path=supFolderProfile+'/competency_'+type+'_'+Date.now()+'_'+file.name;
   const {error}=await SB.storage.from('hr-documents').upload(path,file);
   if(error){hideLoad();alert('Upload failed: '+error.message);return;}
-  await SB.from('competency_assessments').delete().eq('therapist_id',hrCurrentProfile).eq('assessment_type',type);
-  await SB.from('competency_assessments').insert({therapist_id:hrCurrentProfile,assessment_type:type,file_path:path,uploaded_by:CU.id});
-  hideLoad();e.target.value='';loadHRCompetency(hrCurrentProfile);
+  await SB.from('competency_assessments').delete().eq('therapist_id',supFolderProfile).eq('assessment_type',type);
+  await SB.from('competency_assessments').insert({therapist_id:supFolderProfile,assessment_type:type,file_path:path,uploaded_by:CU.id});
+  hideLoad();e.target.value='';loadSFCompetency(supFolderProfile);
 }
-async function deleteHRCompetency(id,profileId){
+async function deleteSFCompetency(id,profileId){
   if(!confirm('Delete this assessment?'))return;
   await SB.from('competency_assessments').delete().eq('id',id);
-  loadHRCompetency(profileId);
+  loadSFCompetency(profileId);
+}
+async function loadSFGoals(profileId){
+  const el=document.getElementById('sup-folder-goals-list');if(!el)return;
+  const {data}=await SB.from('staff_goals').select('*').eq('therapist_id',profileId).order('goal_date',{ascending:false});
+  if(!data||!data.length){el.innerHTML='<div style="font-size:13px;color:var(--text2);">No goal documents uploaded yet.</div>';return;}
+  el.innerHTML=data.map(g=>'<div class="card" style="padding:.85rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div><div style="font-size:13px;font-weight:500;">🎯 '+g.title+'</div><div style="font-size:11px;color:var(--text2);">'+g.goal_date+'</div></div><div style="display:flex;gap:5px;flex-shrink:0;">'+(g.file_path?'<button class="btn-outline" style="padding:4px 8px;font-size:11px;" onclick="downloadGoalMgr(\''+g.file_path+'\')">Download</button>':'')+'<button class="btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteSFGoal(\''+g.id+'\')">Delete</button></div></div>').join('');
+}
+async function uploadSFGoal(e){
+  const file=e.target.files[0];if(!file||!supFolderProfile)return;
+  const title=file.name.replace(/\.[^.]+$/,'');
+  showLoad('Uploading goal…');
+  const path=supFolderProfile+'/goal_'+Date.now()+'_'+file.name;
+  const {error}=await SB.storage.from('hr-documents').upload(path,file);
+  if(error){hideLoad();alert('Upload failed: '+error.message);return;}
+  await SB.from('staff_goals').insert({therapist_id:supFolderProfile,title,file_path:path,goal_date:new Date().toISOString().split('T')[0],uploaded_by:CU.id});
+  hideLoad();e.target.value='';loadSFGoals(supFolderProfile);
+}
+async function deleteSFGoal(id){
+  if(!confirm('Delete this goal document?'))return;
+  await SB.from('staff_goals').delete().eq('id',id);
+  loadSFGoals(supFolderProfile);
 }
 async function loadHRSlots(profileId){
   const {data,error}=await SB.storage.from('hr-documents').list(profileId+'/');
