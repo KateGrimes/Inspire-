@@ -579,6 +579,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1rem;overflow-x:auto;gap:0;">
       <button class="hr-tab active" onclick="switchHRTab('documents',this)">📋 Documents</button>
       <button class="hr-tab" onclick="switchHRTab('payslips',this)">💰 Payslips</button>
+      <button class="hr-tab" onclick="switchHRTab('competency',this)">🎯 Competency</button>
     </div>
     <div id="hr-tab-documents">
       <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Required documents — upload each one below. ✅ = uploaded, ⬜ = missing.</div>
@@ -594,6 +595,27 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
           Choose file
           <input type="file" id="hr-payslip-input" accept=".pdf,.png,.jpg,.jpeg" style="display:none;" onchange="uploadPayslip(event)"/>
         </label>
+      </div>
+    </div>
+    <div id="hr-tab-competency" style="display:none;">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:.75rem;">Competency assessment documents for this staff member.</div>
+      <div id="hr-competency-list"></div>
+      <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-top:.5rem;">
+        <div class="card" style="padding:.85rem;">
+          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 IBAT Competency Assessment</div>
+          <div id="hr-comp-ibat-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadHRCompetency(event,'IBAT')"/></label>
+        </div>
+        <div class="card" style="padding:.85rem;">
+          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 RBT Competency Assessment</div>
+          <div id="hr-comp-rbt-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadHRCompetency(event,'RBT')"/></label>
+        </div>
+        <div class="card" style="padding:.85rem;">
+          <div style="font-weight:600;font-size:13px;margin-bottom:.5rem;">📝 Inspire Therapy Competency Assessment</div>
+          <div id="hr-comp-inspire-status" style="font-size:12px;color:var(--text2);margin-bottom:.5rem;">Not uploaded</div>
+          <label class="btn-outline" style="padding:5px 12px;font-size:12px;cursor:pointer;display:inline-block;">Upload form <input type="file" accept=".pdf,.doc,.docx" style="display:none;" onchange="uploadHRCompetency(event,'Inspire')"/></label>
+        </div>
       </div>
     </div>
     <div class="rbtns" style="margin-top:1rem;">
@@ -1099,15 +1121,15 @@ function renderUserList(){
 
   function staffCard(p){
     const initials=(p.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2);
-    return `<div style="background:var(--bg);border:1px solid var(--border3);border-radius:var(--rl);padding:.85rem;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:var(--shadow);">
+    return `<div style="background:var(--bg);border:1px solid var(--border3);border-radius:var(--rl);padding:.85rem;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;">
       <div style="display:flex;align-items:center;gap:10px;">
         <div style="width:36px;height:36px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${initials}</div>
-        <div>
-          <div style="font-size:13px;font-weight:600;">${p.full_name}${p.initials?' <span style="font-size:11px;color:var(--text3);">('+p.initials+')</span>':''}</div>
-          <div style="font-size:11px;color:var(--text2);">${p.email}</div>
+        <div style="min-width:0;">
+          <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.full_name}${p.initials?' <span style="font-size:11px;color:var(--text3);">('+p.initials+')</span>':''}</div>
+          <div style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.email}</div>
         </div>
       </div>
-      <button class="btn-danger" onclick="deleteUser('${p.id}')" style="padding:4px 8px;font-size:11px;flex-shrink:0;">Remove</button>
+      <button class="btn-danger" onclick="deleteUser('${p.id}')" style="padding:4px 8px;font-size:11px;width:100%;border-radius:6px;">Remove</button>
     </div>`;
   }
 
@@ -1697,7 +1719,35 @@ function switchHRTab(tab,btn){
   if(btn)btn.classList.add('active');
   document.getElementById('hr-tab-documents').style.display=tab==='documents'?'block':'none';
   document.getElementById('hr-tab-payslips').style.display=tab==='payslips'?'block':'none';
+  document.getElementById('hr-tab-competency').style.display=tab==='competency'?'block':'none';
   if(tab==='payslips'&&hrCurrentProfile)loadPayslips(hrCurrentProfile);
+  if(tab==='competency'&&hrCurrentProfile)loadHRCompetency(hrCurrentProfile);
+}
+async function loadHRCompetency(profileId){
+  const types=['IBAT','RBT','Inspire'];
+  const {data}=await SB.from('competency_assessments').select('*').eq('therapist_id',profileId);
+  types.forEach(type=>{
+    const el=document.getElementById('hr-comp-'+type.toLowerCase()+'-status');
+    if(!el)return;
+    const found=data&&data.find(x=>x.assessment_type===type);
+    if(found){el.innerHTML='<span style="color:var(--success);font-weight:600;">✅ Uploaded</span><button class="btn-outline" style="padding:3px 8px;font-size:11px;margin-left:8px;" onclick="downloadCompetency(\''+found.file_path+'\')">Download</button><button class="btn-danger" style="padding:3px 8px;font-size:11px;margin-left:4px;" onclick="deleteHRCompetency(\''+found.id+'\',\''+profileId+'\')">Delete</button>';}
+    else el.textContent='Not uploaded';
+  });
+}
+async function uploadHRCompetency(e,type){
+  const file=e.target.files[0];if(!file||!hrCurrentProfile)return;
+  showLoad('Uploading…');
+  const path=hrCurrentProfile+'/competency_'+type+'_'+Date.now()+'_'+file.name;
+  const {error}=await SB.storage.from('hr-documents').upload(path,file);
+  if(error){hideLoad();alert('Upload failed: '+error.message);return;}
+  await SB.from('competency_assessments').delete().eq('therapist_id',hrCurrentProfile).eq('assessment_type',type);
+  await SB.from('competency_assessments').insert({therapist_id:hrCurrentProfile,assessment_type:type,file_path:path,uploaded_by:CU.id});
+  hideLoad();e.target.value='';loadHRCompetency(hrCurrentProfile);
+}
+async function deleteHRCompetency(id,profileId){
+  if(!confirm('Delete this assessment?'))return;
+  await SB.from('competency_assessments').delete().eq('id',id);
+  loadHRCompetency(profileId);
 }
 async function loadHRSlots(profileId){
   const {data,error}=await SB.storage.from('hr-documents').list(profileId+'/');
