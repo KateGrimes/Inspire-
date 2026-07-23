@@ -10,6 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
   --bg:#FFFCF9;--bg2:#FDF5EE;--bg3:#F7EDE3;--text:#1E1410;--text2:#7A5C4A;--text3:#B8997E;
@@ -187,6 +188,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
         <select id="mgr-bcba-filter" onchange="renderClientFolders()" style="font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
           <option value="all">All BCBAs</option>
         </select>
+        <button class="btn-primary" style="padding:7px 14px;font-size:12px;background:var(--teal);" onclick="openUserModal()">+ Add staff</button>
         <button class="btn-primary" style="padding:7px 14px;font-size:12px;" onclick="openAddClientModal()">+ Add client</button>
       </div>
     </div>
@@ -448,7 +450,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
             <div class="ff"><label>Target (SD)</label><input id="f-target" placeholder="e.g. STOP"/></div>
           </div>
           <div class="fr"><div class="ff" style="grid-column:span 4;"><label>SD description</label><input id="f-sd" placeholder="e.g. fold arms when instructed STOP"/></div></div>
-          <div class="rbtns"><button class="btn-primary" onclick="saveSession()">Save entry</button><span class="ok-msg" id="sess-ok">Saved!</span><button class="btn-outline" onclick="exportCSV()" style="margin-left:auto;">Export CSV</button></div>
+          <div class="rbtns"><button class="btn-primary" onclick="saveSession()">Save entry</button><span class="ok-msg" id="sess-ok">Saved!</span><button class="btn-outline" onclick="document.getElementById('excel-file-input').click()" style="margin-left:auto;">📊 Upload Excel</button><input type="file" id="excel-file-input" accept=".xlsx,.xls" style="display:none;" onchange="handleExcelUpload(event)"/><button class="btn-outline" onclick="exportCSV()">Export CSV</button></div>
         </div>
       </div>
       <div style="overflow-x:auto;">
@@ -756,7 +758,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
 <!-- ADD USER MODAL -->
 <div id="um" class="mo">
   <div class="md">
-    <h3>Add user account</h3>
+    <h3 id="um-title">Add user account</h3>
     <div class="field"><label>Full name</label><input id="u-name" placeholder="e.g. Sarah Ahmed"/></div>
     <div class="field"><label>Email</label><input type="email" id="u-email" placeholder="sarah@inspiretherapy.ae"/></div>
     <div class="field"><label>Password</label><input type="password" id="u-pass" placeholder="Minimum 6 characters"/></div>
@@ -805,6 +807,21 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <button class="btn-outline" onclick="closeCM()">Cancel</button>
     </div>
     <div class="err" id="cm-err" style="margin-top:.5rem;"></div>
+  </div>
+</div>
+
+<!-- EXCEL SESSION IMPORT MODAL -->
+<div id="excel-imp-modal" class="mo">
+  <div class="md">
+    <h3>Import session data from Excel</h3>
+    <div id="excel-imp-body" style="font-size:13px;color:var(--text);max-height:320px;overflow-y:auto;"></div>
+    <div style="font-size:11px;color:var(--text3);margin-top:.5rem;">Rows are matched to a programme using a "Programme" column if present, otherwise added to the programme currently selected above. Any programme name not already on file will be created automatically along with its graph.</div>
+    <div class="rbtns" style="margin-top:.75rem;">
+      <button class="btn-primary" id="excel-imp-confirm-btn" onclick="confirmExcelImport()">Import</button>
+      <button class="btn-outline" onclick="closeExcelImpModal()">Cancel</button>
+      <span class="ok-msg" id="excel-imp-ok">Imported!</span>
+    </div>
+    <div class="err" id="excel-imp-err" style="margin-top:.5rem;"></div>
   </div>
 </div>
 
@@ -1064,13 +1081,14 @@ async function renderClientFolders(){
 
   bcbasToShow.forEach(bcba=>{
     const bcbaClients=allClients.filter(c=>c.supervisor_id===bcba.id);
-    if(!bcbaClients.length&&bcbaFilterVal!=='all')return;
+    const bcbaStaff=allProfiles.filter(p=>p.supervisor_id===bcba.id&&p.role==='therapist');
+    if(!bcbaClients.length&&!bcbaStaff.length&&bcbaFilterVal!=='all')return;
     html+=`<div style="margin-bottom:2rem;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:.75rem;padding:.6rem 1rem;background:var(--brand-light);border-radius:var(--r);border-left:4px solid var(--brand);">
         <div style="width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${(bcba.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2)}</div>
         <div>
           <div style="font-size:13px;font-weight:700;color:var(--brand);">${bcba.full_name} <span style="font-size:11px;font-weight:400;color:var(--text2);">BCBA Supervisor</span></div>
-          <div style="font-size:11px;color:var(--text2);">${bcbaClients.length} client${bcbaClients.length!==1?'s':''}</div>
+          <div style="font-size:11px;color:var(--text2);">${bcbaClients.length} client${bcbaClients.length!==1?'s':''} · ${bcbaStaff.length} staff</div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
@@ -1091,6 +1109,20 @@ async function renderClientFolders(){
         <div class="cc" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;" onclick="openAddClientModalForBCBA('${bcba.id}')">
           <div style="font-size:22px;color:var(--brand);margin-bottom:4px;">+</div>
           <div style="font-size:12px;color:var(--text2);">Add client</div>
+        </div>
+      </div>
+      <div style="margin-top:.85rem;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:.5rem;">Team (${bcbaStaff.length})</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+          ${bcbaStaff.map(s=>`<div class="cc" style="cursor:default;">
+            <div class="cini" style="background:var(--teal-light,#e3f3f0);color:var(--teal);">${(s.full_name||'?').split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2)}</div>
+            <div class="cna">${s.full_name}</div>
+            <div class="cme">${s.staff_group||'Therapist / LSA'}</div>
+          </div>`).join('')}
+          <div class="cc" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;" onclick="openUserModal('${bcba.id}')">
+            <div style="font-size:22px;color:var(--teal);margin-bottom:4px;">+</div>
+            <div style="font-size:12px;color:var(--text2);">Add staff</div>
+          </div>
         </div>
       </div>
     </div>`;
@@ -1296,12 +1328,30 @@ function renderUserList(){
   }
   el.innerHTML=html;
 }
-function openUserModal(){
+function openUserModal(presetSupervisorId){
   ['u-name','u-email','u-pass','u-initials'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('u-role').value='therapist';
   const bcbas=allProfiles.filter(p=>p.role==='bcba');
   const supSel=document.getElementById('u-supervisor');
   if(supSel)supSel.innerHTML='<option value="">No supervisor assigned</option>'+bcbas.map(b=>'<option value="'+b.id+'">'+b.full_name+'</option>').join('');
+  const roleSel=document.getElementById('u-role');
+  const roleField=roleSel.closest('.field');
+  const supField=document.getElementById('u-supervisor-field');
+  const title=document.getElementById('um-title');
+  // BCBA supervisors adding their own staff, or a specific BCBA folder's "+ Add staff" tile, lock role+supervisor
+  const lockSupervisor=presetSupervisorId||(CP.role==='bcba'?CP.id:null);
+  if(lockSupervisor){
+    roleSel.innerHTML='<option value="therapist">Therapist / LSA</option>';
+    roleField.style.display='none';
+    supField.style.display='none';
+    if(supSel)supSel.value=lockSupervisor;
+    if(title)title.textContent='Add LSA / Therapist';
+  }else{
+    roleSel.innerHTML='<option value="therapist">Therapist / LSA</option><option value="bcba">BCBA (Supervisor)</option><option value="manager">Manager</option><option value="clinic_manager">Clinic Manager</option><option value="parent">Parent</option><option value="teacher">Teacher</option>';
+    roleField.style.display='';
+    supField.style.display='';
+    if(title)title.textContent='Add user account';
+  }
+  roleSel.value='therapist';
   document.getElementById('um').classList.add('active');
 }
 function closeUM(){document.getElementById('um').classList.remove('active');}
@@ -1322,6 +1372,7 @@ async function saveUser(){
     await SB.from('profiles').upsert({id:uid,email,full_name:name,role,initials,staff_group,supervisor_id});
     await loadGlobalData();
     renderUserList();
+    if(document.getElementById('client-folders-wrap'))await renderClientFolders();
     flash('user-ok');
   }
   hideLoad();
@@ -1663,9 +1714,9 @@ async function delReport(id){
   await renderSavedReports();
 }
 
-['pm','rm','mm','um','cm-modal'].forEach(id=>{
+['pm','rm','mm','um','cm-modal','excel-imp-modal'].forEach(id=>{
   const el=document.getElementById(id);
-  if(el)el.addEventListener('click',function(e){if(e.target===this){if(id==='pm')closePM();else if(id==='rm')closeRM();else if(id==='mm')closeMM();else if(id==='um')closeUM();else if(id==='cm-modal')closeCM();}});
+  if(el)el.addEventListener('click',function(e){if(e.target===this){if(id==='pm')closePM();else if(id==='rm')closeRM();else if(id==='mm')closeMM();else if(id==='um')closeUM();else if(id==='cm-modal')closeCM();else if(id==='excel-imp-modal')closeExcelImpModal();}});
 });
 
 let impData={type:null,parsed:[],clientMap:{},progMap:{}};
@@ -1819,6 +1870,142 @@ async function importSessions(rows){
   document.getElementById('imp-sess-status').style.color='var(--success)';
 }
 
+// ---- Excel (per-client) session data upload ----
+let excelImpData={groups:{}};
+const EXCEL_FIELD_ALIASES={
+  date:['date','sessiondate','session'],
+  sto:['sto','objective','stodescription'],
+  pct:['pctcorrect','percentcorrect','percent','pct','correct','score'],
+  phase:['phase','stage','stagephase'],
+  mastered:['mastered','masteredyn','mastery'],
+  therapist:['therapistinitials','therapist','initials','by','staff'],
+  target:['targetsd','target','sd'],
+  sddesc:['sddescription','sddesc','description','sddetail'],
+  programme:['programme','programmename','program','programname','prog']
+};
+function normHeader(h){return(h||'').toString().trim().toLowerCase().replace(/[^a-z0-9]/g,'');}
+function detectExcelHeaderMap(headers){
+  const norm=headers.map(normHeader);
+  const map={};
+  Object.entries(EXCEL_FIELD_ALIASES).forEach(([field,aliases])=>{
+    const idx=norm.findIndex(h=>aliases.includes(h));
+    if(idx>-1)map[field]=headers[idx];
+  });
+  return map;
+}
+function excelDateToISO(v){
+  if(v===null||v===undefined||v==='')return'';
+  if(typeof v==='number'&&window.XLSX&&XLSX.SSF){
+    const d=XLSX.SSF.parse_date_code(v);
+    if(d)return d.y+'-'+String(d.m).padStart(2,'0')+'-'+String(d.d).padStart(2,'0');
+  }
+  const s=String(v).trim();
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
+  m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if(m){let d=m[1],mo=m[2],y=m[3];if(y.length===2)y='20'+y;return y+'-'+mo.padStart(2,'0')+'-'+d.padStart(2,'0');}
+  const dt=new Date(s);if(!isNaN(dt))return dt.toISOString().split('T')[0];
+  return'';
+}
+function handleExcelUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  document.getElementById('excel-imp-err').style.display='none';
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=new Uint8Array(ev.target.result);
+      const wb=XLSX.read(data,{type:'array'});
+      const sheet=wb.Sheets[wb.SheetNames[0]];
+      const json=XLSX.utils.sheet_to_json(sheet,{defval:''});
+      if(!json.length){showErr('excel-imp-err','No rows found in that sheet.');return;}
+      const headers=Object.keys(json[0]);
+      const hMap=detectExcelHeaderMap(headers);
+      if(!hMap.date||!hMap.pct){showErr('excel-imp-err','Could not find a Date column and a % Correct column. Expected headers like "Date" and "% Correct".');return;}
+      const rows=json.map(r=>({
+        date:excelDateToISO(r[hMap.date]),
+        sto:hMap.sto?String(r[hMap.sto]||'').trim():'',
+        pct:hMap.pct?parseInt(r[hMap.pct]):NaN,
+        phase:hMap.phase?String(r[hMap.phase]||'').trim():'',
+        mastered:hMap.mastered?/^(y|yes|true|1)$/i.test(String(r[hMap.mastered]||'').trim()):false,
+        therapist:hMap.therapist?String(r[hMap.therapist]||'').trim():'',
+        target:hMap.target?String(r[hMap.target]||'').trim():'',
+        sddesc:hMap.sddesc?String(r[hMap.sddesc]||'').trim():'',
+        programme:hMap.programme?String(r[hMap.programme]||'').trim():''
+      })).filter(r=>r.date&&!isNaN(r.pct));
+      if(!rows.length){showErr('excel-imp-err','No valid rows found — each row needs a date and a % correct value.');return;}
+      showExcelImportPreview(rows);
+    }catch(err){
+      showErr('excel-imp-err','Could not read that file: '+err.message);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value='';
+}
+function showExcelImportPreview(rows){
+  const currentPid=(document.getElementById('sps')||{}).value;
+  const currentProg=(window._progs||[]).find(p=>p.id===currentPid);
+  const groups={};
+  rows.forEach(r=>{
+    const key=r.programme||(currentProg?currentProg.name:'');
+    if(!key)return;
+    if(!groups[key])groups[key]=[];
+    groups[key].push(r);
+  });
+  excelImpData={groups};
+  const groupNames=Object.keys(groups);
+  if(!groupNames.length){showErr('excel-imp-err','Could not determine which programme this data belongs to. Select a programme above first, or add a "Programme" column to the sheet.');return;}
+  let html='<div style="margin-bottom:.6rem;">Found '+rows.length+' row'+(rows.length!==1?'s':'')+' across '+groupNames.length+' programme'+(groupNames.length!==1?'s':'')+':</div>';
+  html+='<ul style="margin:0 0 .5rem 1.1rem;padding:0;">';
+  groupNames.forEach(name=>{
+    const existing=(window._progs||[]).find(p=>(p.name||'').toLowerCase().trim()===name.toLowerCase().trim());
+    html+='<li style="margin-bottom:4px;"><b>'+name+'</b> — '+groups[name].length+' session'+(groups[name].length!==1?'s':'')+(existing?'':' <span style="color:var(--brand);font-weight:600;">(new programme + graph will be created)</span>')+'</li>';
+  });
+  html+='</ul>';
+  document.getElementById('excel-imp-body').innerHTML=html;
+  document.getElementById('excel-imp-err').style.display='none';
+  document.getElementById('excel-imp-modal').classList.add('active');
+}
+function closeExcelImpModal(){document.getElementById('excel-imp-modal').classList.remove('active');}
+async function confirmExcelImport(){
+  const btn=document.getElementById('excel-imp-confirm-btn');
+  btn.disabled=true;
+  showLoad('Importing session data…');
+  try{
+    let lastProg=null;
+    for(const [name,rows] of Object.entries(excelImpData.groups)){
+      let prog=(window._progs||[]).find(p=>(p.name||'').toLowerCase().trim()===name.toLowerCase().trim());
+      if(!prog){
+        const {data,error}=await SB.from('programmes').insert({client_id:CC.id,name,description:'',mastery_criteria:'80% for two consecutive sessions',target_sd:'',stos:[],therapists:[]}).select().single();
+        if(error)throw error;
+        prog=data;
+        window._progs=window._progs||[];window._progs.push(prog);
+      }
+      const toInsert=rows.map(r=>({
+        programme_id:prog.id,client_id:CC.id,session_date:r.date,sto:r.sto,
+        pct_correct:Math.min(100,Math.max(0,r.pct||0)),phase:r.phase,mastered:r.mastered,
+        therapist_initials:r.therapist?r.therapist.split(/[+,]/).map(s=>s.trim().toUpperCase()).filter(Boolean):[],
+        target_sd:r.target,sd_description:r.sddesc,created_by:CU.id
+      }));
+      if(toInsert.length){const {error}=await SB.from('sessions').insert(toInsert);if(error)throw error;}
+      lastProg=prog;
+    }
+    hideLoad();btn.disabled=false;
+    closeExcelImpModal();
+    await rPS();
+    if(lastProg){
+      const cps=document.getElementById('cps'),sps=document.getElementById('sps');
+      if(cps)cps.value=lastProg.id;
+      if(sps)sps.value=lastProg.id;
+    }
+    onCPC();
+    await ST('sessions');
+    flash('sess-ok');
+  }catch(err){
+    hideLoad();btn.disabled=false;
+    showErr('excel-imp-err','Import failed: '+err.message);
+  }
+}
+
 async function loadNotifications(){
   const panel=document.getElementById('notif-panel');
   const items=document.getElementById('notif-items');
@@ -1883,18 +2070,37 @@ async function loadNotifications(){
     }
   });
 
+  // Filter out notifications already dismissed by any manager/supervisor.
+  // A notification's key includes its text, so once the underlying situation changes
+  // (different day count, resolved item, etc.) it naturally reappears as a new item.
+  let dismissedSet=new Set();
+  try{
+    const {data:dismissedRows}=await SB.from('dismissed_notifications').select('notif_key');
+    dismissedSet=new Set((dismissedRows||[]).map(d=>d.notif_key));
+  }catch(err){/* table may not exist yet — fail open, show all notifications */}
+  const visible=notifications.filter(n=>!dismissedSet.has(notifKey(n)));
+
   // Render
-  if(!notifications.length){
+  if(!visible.length){
     panel.style.display='none';
     return;
   }
   panel.style.display='block';
   const colorMap={warn:'var(--warn-light)',info:'var(--teal-light)',action:'var(--brand-light)'};
   const borderMap={warn:'var(--warn)',info:'var(--teal)',action:'var(--brand)'};
-  items.innerHTML=notifications.map(n=>`<div style="background:${colorMap[n.type]||'var(--bg2)'};border:1px solid ${borderMap[n.type]||'var(--border)'};border-radius:var(--r);padding:.6rem 1rem;font-size:13px;display:flex;align-items:flex-start;gap:8px;">
+  items.innerHTML=visible.map(n=>`<div style="background:${colorMap[n.type]||'var(--bg2)'};border:1px solid ${borderMap[n.type]||'var(--border)'};border-radius:var(--r);padding:.6rem 1rem;font-size:13px;display:flex;align-items:flex-start;gap:8px;">
+    <input type="checkbox" title="Dismiss this notification" onclick="dismissNotification('${encodeURIComponent(notifKey(n))}')" style="flex-shrink:0;width:16px;height:16px;margin-top:1px;cursor:pointer;"/>
     <span style="flex-shrink:0;">${n.icon}</span>
-    <span>${n.text}</span>
+    <span style="flex:1;">${n.text}</span>
   </div>`).join('');
+}
+function notifKey(n){return n.type+'::'+n.text;}
+async function dismissNotification(keyEnc){
+  const key=decodeURIComponent(keyEnc);
+  try{
+    await SB.from('dismissed_notifications').insert({notif_key:key,dismissed_by:CU.id});
+  }catch(err){/* already dismissed by someone else, or table missing — ignore */}
+  await loadNotifications();
 }
 
 let hrCurrentProfile=null;
