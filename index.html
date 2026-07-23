@@ -189,6 +189,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
           <option value="all">All BCBAs</option>
         </select>
         <button class="btn-primary" style="padding:7px 14px;font-size:12px;background:var(--teal);" onclick="openUserModal()">+ Add staff</button>
+        <button class="btn-outline" style="padding:7px 14px;font-size:12px;" onclick="openAssignStaffModal()">🔗 Assign existing</button>
         <button class="btn-primary" style="padding:7px 14px;font-size:12px;" onclick="openAddClientModal()">+ Add client</button>
       </div>
     </div>
@@ -441,7 +442,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
           <div class="fr">
             <div class="ff"><label>STO</label><select id="f-sto"></select></div>
             <div class="ff"><label>Date</label><input type="date" id="f-date"/></div>
-            <div class="ff"><label>% Correct</label><div class="pw"><input type="number" id="f-pct" min="0" max="100" step="1" placeholder="0"/><span class="ps">%</span></div></div>
+            <div class="ff"><label id="f-pct-label">% Correct</label><div class="pw"><input type="number" id="f-pct" min="0" max="100" step="1" placeholder="0"/><span class="ps" id="f-pct-suffix">%</span></div></div>
             <div class="ff"><label>Stage / Phase</label><input id="f-phase" placeholder="Stage 1…"/></div>
           </div>
           <div class="fr">
@@ -539,6 +540,7 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
     <h3 id="pm-title">Add programme</h3>
     <div class="field"><label>Programme name</label><input id="np-name" placeholder="e.g. Stop Program"/></div>
     <div class="field"><label>Description <span style="font-weight:400;color:var(--text3);">(shown on chart)</span></label><textarea id="np-desc" placeholder="Goals and context…" style="height:70px;"></textarea></div>
+    <div class="field"><label>Programme type</label><select id="np-type"><option value="percentage">Percentage (% correct per session)</option><option value="chaining">Chaining (rising step-count graph)</option></select></div>
     <div class="field"><label>Mastery criteria</label><input id="np-mastery" placeholder="e.g. 80% for two consecutive sessions"/></div>
     <div class="field"><label>Target / SD</label><input id="np-target" placeholder="e.g. fold arms when instructed STOP"/></div>
     <div class="field"><label>STOs — up to 5</label><div id="sto-editor" style="margin-top:8px;"></div><span style="font-size:12px;color:var(--brand);cursor:pointer;" id="asb" onclick="addStoRow()">+ Add STO</span></div>
@@ -822,6 +824,27 @@ h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
       <span class="ok-msg" id="excel-imp-ok">Imported!</span>
     </div>
     <div class="err" id="excel-imp-err" style="margin-top:.5rem;"></div>
+  </div>
+</div>
+
+<!-- ASSIGN EXISTING STAFF MODAL -->
+<div id="asm" class="mo">
+  <div class="md">
+    <h3>Assign existing staff</h3>
+    <div class="field" id="asm-bcba-field">
+      <label>Assign to BCBA supervisor</label>
+      <select id="asm-bcba"></select>
+    </div>
+    <div class="field">
+      <label>Staff member</label>
+      <select id="asm-staff"></select>
+    </div>
+    <div class="rbtns">
+      <button class="btn-primary" onclick="saveAssignStaff()">Assign</button>
+      <button class="btn-outline" onclick="closeASM()">Cancel</button>
+      <span class="ok-msg" id="asm-ok">Assigned!</span>
+    </div>
+    <div class="err" id="asm-err" style="margin-top:.5rem;"></div>
   </div>
 </div>
 
@@ -1122,6 +1145,10 @@ async function renderClientFolders(){
           <div class="cc" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;" onclick="openUserModal('${bcba.id}')">
             <div style="font-size:22px;color:var(--teal);margin-bottom:4px;">+</div>
             <div style="font-size:12px;color:var(--text2);">Add staff</div>
+          </div>
+          <div class="cc" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;" onclick="openAssignStaffModal('${bcba.id}')">
+            <div style="font-size:18px;color:var(--teal);margin-bottom:4px;">🔗</div>
+            <div style="font-size:12px;color:var(--text2);">Assign existing</div>
           </div>
         </div>
       </div>
@@ -1492,6 +1519,11 @@ function pSS(){
   const prog=(window._progs||[]).find(p=>p.id===pid);
   const stos=prog&&prog.stos&&prog.stos.length?prog.stos:['STO 1'];
   document.getElementById('f-sto').innerHTML=stos.map(s=>'<option value="'+s+'">'+s+'</option>').join('');
+  const isChaining=prog&&prog.type==='chaining';
+  const pctInput=document.getElementById('f-pct'),pctLabel=document.getElementById('f-pct-label'),pctSuffix=document.getElementById('f-pct-suffix');
+  if(pctLabel)pctLabel.textContent=isChaining?'Steps mastered':'% Correct';
+  if(pctSuffix)pctSuffix.style.display=isChaining?'none':'';
+  if(pctInput){if(isChaining){pctInput.removeAttribute('max');}else{pctInput.setAttribute('max','100');}}
 }
 
 function toggleStoPanel(){
@@ -1520,7 +1552,8 @@ async function iSaveStos(){
 }
 
 function bAnno(sessions,mv){
-  const a={mastery:{type:'line',yMin:mv,yMax:mv,borderColor:'#3B6D11',borderWidth:1.5,borderDash:[6,4]}};
+  const a={};
+  if(mv!==null&&mv!==undefined)a.mastery={type:'line',yMin:mv,yMax:mv,borderColor:'#3B6D11',borderWidth:1.5,borderDash:[6,4]};
   sessions.forEach((s,i)=>{if(i>0&&s.sto!==sessions[i-1].sto)a['s'+i]={type:'line',xMin:i-0.5,xMax:i-0.5,borderColor:'#BA7517',borderWidth:1.5,borderDash:[4,3],label:{content:(s.sto||'').split('—')[0].trim(),display:true,position:'start',font:{size:9},color:'#BA7517',backgroundColor:'rgba(255,255,255,0.85)',padding:{x:3,y:2}}};});
   return a;
 }
@@ -1529,6 +1562,7 @@ async function renderChart(){
   const stoF=document.getElementById('css2').value;
   uSO(pid);try{document.getElementById('css2').value=stoF;}catch(e){}
   const prog=(window._progs||[]).find(p=>p.id===pid);
+  const isChaining=prog&&prog.type==='chaining';
   const db=document.getElementById('prog-desc-box'),dt=document.getElementById('prog-desc-text');
   if(prog&&prog.description){db.style.display='block';dt.textContent=prog.description;}else db.style.display='none';
   document.getElementById('cpt').textContent=prog?(prog.name+(stoF!=='all'?' — '+stoF:' — all STOs')):'';
@@ -1539,6 +1573,13 @@ async function renderChart(){
   sessions=sessions||[];
   if(stoF!=='all')sessions=sessions.filter(s=>s.sto===stoF);
   if(!sessions.length)return;
+  if(isChaining){
+    const mv=prog.mastery_criteria?(parseInt(prog.mastery_criteria.match(/\d+/)?.[0])||null):null;
+    const maxVal=Math.max(...sessions.map(s=>s.pct_correct||0),mv||0);
+    const yMax=Math.ceil((maxVal+1)*1.15);
+    CI=new Chart(document.getElementById('prog-chart'),{type:'line',data:{labels:sessions.map(s=>s.session_date),datasets:[{label:'Steps mastered',data:sessions.map(s=>s.pct_correct),borderColor:'#E8562A',backgroundColor:'rgba(232,86,42,0.06)',pointBackgroundColor:sessions.map(s=>s.mastered?'#b7f5b7':'#FDF0EB'),pointBorderColor:sessions.map(s=>s.mastered?'#1a6e1a':'#E8562A'),pointBorderWidth:2,pointRadius:6,borderWidth:2,tension:0,fill:false,stepped:'before'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:yMax,ticks:{stepSize:1,font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'},title:{display:true,text:'Steps mastered',font:{size:11}}},x:{ticks:{font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:14}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const s=sessions[c.dataIndex];return'Steps mastered: '+Math.round(c.parsed.y)+(s.mastered?' (✓ pass)':s.phase?' ('+s.phase+')':'')+(s.sto?' — '+s.sto:'');}}},annotation:{annotations:bAnno(sessions,mv)}}}});
+    return;
+  }
   const mv=prog&&prog.mastery_criteria?parseInt(prog.mastery_criteria.match(/\d+/)?.[0])||80:80;
   CI=new Chart(document.getElementById('prog-chart'),{type:'line',data:{labels:sessions.map(s=>s.session_date),datasets:[{label:'% correct',data:sessions.map(s=>s.pct_correct),borderColor:'#E8562A',backgroundColor:'rgba(232,86,42,0.06)',pointBackgroundColor:sessions.map(s=>s.mastered?'#b7f5b7':'#FDF0EB'),pointBorderColor:sessions.map(s=>s.mastered?'#1a6e1a':'#E8562A'),pointBorderWidth:2,pointRadius:6,borderWidth:2,tension:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:14}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const s=sessions[c.dataIndex];return'% correct: '+Math.round(c.parsed.y)+'%'+(s.mastered?' ✓':'')+(s.therapist_initials&&s.therapist_initials.length?' ('+s.therapist_initials.join(',')+')':"");}}},annotation:{annotations:bAnno(sessions,mv)}}}});
 }
@@ -1557,9 +1598,12 @@ async function ST(name){
 
 async function saveSession(){
   const pid=document.getElementById('sps').value;if(!pid)return;
+  const prog=(window._progs||[]).find(p=>p.id===pid);
+  const isChaining=prog&&prog.type==='chaining';
+  const rawPct=parseInt(document.getElementById('f-pct').value)||0;
   const ti=document.getElementById('tti');
   if(ti.value.trim()){const t=ti.value.trim().toUpperCase();if(!stags.includes(t))stags.push(t);ti.value='';rTB('ttb','tti',stags,'rST');}
-  const entry={programme_id:pid,client_id:CC.id,sto:document.getElementById('f-sto').value,session_date:document.getElementById('f-date').value,pct_correct:Math.min(100,Math.max(0,parseInt(document.getElementById('f-pct').value)||0)),phase:document.getElementById('f-phase').value.trim(),mastered:document.getElementById('f-mastered').value==='yes',therapist_initials:[...stags],target_sd:document.getElementById('f-target').value.trim(),sd_description:document.getElementById('f-sd').value.trim(),created_by:CU.id};
+  const entry={programme_id:pid,client_id:CC.id,sto:document.getElementById('f-sto').value,session_date:document.getElementById('f-date').value,pct_correct:isChaining?Math.max(0,rawPct):Math.min(100,Math.max(0,rawPct)),phase:document.getElementById('f-phase').value.trim(),mastered:document.getElementById('f-mastered').value==='yes',therapist_initials:[...stags],target_sd:document.getElementById('f-target').value.trim(),sd_description:document.getElementById('f-sd').value.trim(),created_by:CU.id};
   if(!entry.session_date)return;
   showLoad('Saving…');
   await SB.from('sessions').insert(entry);
@@ -1607,13 +1651,13 @@ function rSR(el){el.closest('.sr').remove();renum();uASB();}
 function renum(){document.querySelectorAll('#sto-editor .sr').forEach((r,i)=>r.querySelector('.sn').textContent='STO '+(i+1));}
 function uASB(){document.getElementById('asb').style.display=document.querySelectorAll('#sto-editor .sr').length>=5?'none':'inline';}
 function gSV(){return Array.from(document.querySelectorAll('#sto-editor .sr input')).map(i=>i.value.trim()).filter(Boolean);}
-function oPM(){epid=null;document.getElementById('pm-title').textContent='Add programme';document.getElementById('np-name').value='';document.getElementById('np-desc').value='';document.getElementById('np-mastery').value='80% for two consecutive sessions';document.getElementById('np-target').value='';bSE(['']);ptags=CP.initials?[CP.initials]:[];rTB('ptb','pti',ptags,'rPT');document.getElementById('pm').classList.add('active');}
-function oPE(pid){const prog=(window._progs||[]).find(p=>p.id===pid);if(!prog)return;epid=pid;document.getElementById('pm-title').textContent='Edit programme';document.getElementById('np-name').value=prog.name;document.getElementById('np-desc').value=prog.description||'';document.getElementById('np-mastery').value=prog.mastery_criteria||'';document.getElementById('np-target').value=prog.target_sd||'';bSE(prog.stos&&prog.stos.length?prog.stos:['']);ptags=prog.therapists?[...prog.therapists]:[];rTB('ptb','pti',ptags,'rPT');document.getElementById('pm').classList.add('active');}
+function oPM(){epid=null;document.getElementById('pm-title').textContent='Add programme';document.getElementById('np-name').value='';document.getElementById('np-desc').value='';document.getElementById('np-type').value='percentage';document.getElementById('np-mastery').value='80% for two consecutive sessions';document.getElementById('np-target').value='';bSE(['']);ptags=CP.initials?[CP.initials]:[];rTB('ptb','pti',ptags,'rPT');document.getElementById('pm').classList.add('active');}
+function oPE(pid){const prog=(window._progs||[]).find(p=>p.id===pid);if(!prog)return;epid=pid;document.getElementById('pm-title').textContent='Edit programme';document.getElementById('np-name').value=prog.name;document.getElementById('np-desc').value=prog.description||'';document.getElementById('np-type').value=prog.type||'percentage';document.getElementById('np-mastery').value=prog.mastery_criteria||'';document.getElementById('np-target').value=prog.target_sd||'';bSE(prog.stos&&prog.stos.length?prog.stos:['']);ptags=prog.therapists?[...prog.therapists]:[];rTB('ptb','pti',ptags,'rPT');document.getElementById('pm').classList.add('active');}
 function closePM(){document.getElementById('pm').classList.remove('active');epid=null;}
 async function saveProg(){
   const name=document.getElementById('np-name').value.trim();if(!name)return;
   const pi=document.getElementById('pti');if(pi.value.trim()){ptags.push(pi.value.trim().toUpperCase());pi.value='';}
-  const data={client_id:CC.id,name,description:document.getElementById('np-desc').value.trim(),mastery_criteria:document.getElementById('np-mastery').value.trim(),target_sd:document.getElementById('np-target').value.trim(),stos:gSV(),therapists:[...ptags]};
+  const data={client_id:CC.id,name,description:document.getElementById('np-desc').value.trim(),type:document.getElementById('np-type').value||'percentage',mastery_criteria:document.getElementById('np-mastery').value.trim(),target_sd:document.getElementById('np-target').value.trim(),stos:gSV(),therapists:[...ptags]};
   showLoad('Saving…');
   if(epid)await SB.from('programmes').update(data).eq('id',epid);
   else await SB.from('programmes').insert(data);
@@ -1714,9 +1758,9 @@ async function delReport(id){
   await renderSavedReports();
 }
 
-['pm','rm','mm','um','cm-modal','excel-imp-modal'].forEach(id=>{
+['pm','rm','mm','um','cm-modal','excel-imp-modal','asm'].forEach(id=>{
   const el=document.getElementById(id);
-  if(el)el.addEventListener('click',function(e){if(e.target===this){if(id==='pm')closePM();else if(id==='rm')closeRM();else if(id==='mm')closeMM();else if(id==='um')closeUM();else if(id==='cm-modal')closeCM();else if(id==='excel-imp-modal')closeExcelImpModal();}});
+  if(el)el.addEventListener('click',function(e){if(e.target===this){if(id==='pm')closePM();else if(id==='rm')closeRM();else if(id==='mm')closeMM();else if(id==='um')closeUM();else if(id==='cm-modal')closeCM();else if(id==='excel-imp-modal')closeExcelImpModal();else if(id==='asm')closeASM();}});
 });
 
 let impData={type:null,parsed:[],clientMap:{},progMap:{}};
@@ -1893,6 +1937,18 @@ function detectExcelHeaderMap(headers){
   });
   return map;
 }
+// Chaining data sheets (backward/forward chaining): Step | (+)or(-) | Date | Number of steps mastered | Mastered Phase Line
+function detectChainingHeaderMap(headers){
+  const norm=headers.map(normHeader);
+  const map={};
+  let idx=norm.findIndex(h=>EXCEL_FIELD_ALIASES.date.includes(h));if(idx>-1)map.date=headers[idx];
+  idx=norm.findIndex(h=>h==='step');if(idx>-1)map.step=headers[idx];
+  idx=headers.findIndex(h=>String(h).includes('+')&&String(h).includes('-'));if(idx>-1)map.outcome=headers[idx];
+  idx=norm.findIndex(h=>h.includes('stepsmastered'));if(idx>-1)map.stepsMastered=headers[idx];
+  idx=norm.findIndex(h=>h.includes('masteredphaseline')||h.includes('phaseline'));if(idx>-1)map.masteredLine=headers[idx];
+  idx=norm.findIndex(h=>EXCEL_FIELD_ALIASES.programme.includes(h));if(idx>-1)map.programme=headers[idx];
+  return map;
+}
 function excelDateToISO(v){
   if(v===null||v===undefined||v==='')return'';
   if(typeof v==='number'&&window.XLSX&&XLSX.SSF){
@@ -1904,65 +1960,117 @@ function excelDateToISO(v){
   if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
   m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
   if(m){let d=m[1],mo=m[2],y=m[3];if(y.length===2)y='20'+y;return y+'-'+mo.padStart(2,'0')+'-'+d.padStart(2,'0');}
+  m=s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$/);
+  if(m){let d=m[1],mo=m[2],y=m[3];if(y.length===2)y='20'+y;return y+'-'+mo.padStart(2,'0')+'-'+d.padStart(2,'0');}
   const dt=new Date(s);if(!isNaN(dt))return dt.toISOString().split('T')[0];
   return'';
 }
 function handleExcelUpload(e){
   const file=e.target.files[0];if(!file)return;
   document.getElementById('excel-imp-err').style.display='none';
+  document.getElementById('excel-imp-confirm-btn').style.display='none';
+  document.getElementById('excel-imp-body').innerHTML='<div style="color:var(--text2);">Reading file…</div>';
+  document.getElementById('excel-imp-modal').classList.add('active');
   const reader=new FileReader();
   reader.onload=ev=>{
     try{
+      if(typeof XLSX==='undefined')throw new Error('The Excel reading library did not load — check your internet connection and try again.');
       const data=new Uint8Array(ev.target.result);
       const wb=XLSX.read(data,{type:'array'});
-      const sheet=wb.Sheets[wb.SheetNames[0]];
-      const json=XLSX.utils.sheet_to_json(sheet,{defval:''});
-      if(!json.length){showErr('excel-imp-err','No rows found in that sheet.');return;}
-      const headers=Object.keys(json[0]);
-      const hMap=detectExcelHeaderMap(headers);
-      if(!hMap.date||!hMap.pct){showErr('excel-imp-err','Could not find a Date column and a % Correct column. Expected headers like "Date" and "% Correct".');return;}
-      const rows=json.map(r=>({
-        date:excelDateToISO(r[hMap.date]),
-        sto:hMap.sto?String(r[hMap.sto]||'').trim():'',
-        pct:hMap.pct?parseInt(r[hMap.pct]):NaN,
-        phase:hMap.phase?String(r[hMap.phase]||'').trim():'',
-        mastered:hMap.mastered?/^(y|yes|true|1)$/i.test(String(r[hMap.mastered]||'').trim()):false,
-        therapist:hMap.therapist?String(r[hMap.therapist]||'').trim():'',
-        target:hMap.target?String(r[hMap.target]||'').trim():'',
-        sddesc:hMap.sddesc?String(r[hMap.sddesc]||'').trim():'',
-        programme:hMap.programme?String(r[hMap.programme]||'').trim():''
-      })).filter(r=>r.date&&!isNaN(r.pct));
-      if(!rows.length){showErr('excel-imp-err','No valid rows found — each row needs a date and a % correct value.');return;}
-      showExcelImportPreview(rows);
+      const currentPid=(document.getElementById('sps')||{}).value;
+      const currentProg=(window._progs||[]).find(p=>p.id===currentPid);
+      const groups={};
+      const skippedSheets=[];
+      wb.SheetNames.forEach(sheetName=>{
+        const sheet=wb.Sheets[sheetName];
+        const json=XLSX.utils.sheet_to_json(sheet,{defval:''});
+        if(!json.length)return;
+        const headers=Object.keys(json[0]);
+        // Try percentage (% correct) format first
+        const pMap=detectExcelHeaderMap(headers);
+        if(pMap.date&&pMap.pct){
+          const rows=json.map(r=>({
+            date:excelDateToISO(r[pMap.date]),
+            sto:pMap.sto?String(r[pMap.sto]||'').trim():'',
+            pct:pMap.pct?parseInt(r[pMap.pct]):NaN,
+            phase:pMap.phase?String(r[pMap.phase]||'').trim():'',
+            mastered:pMap.mastered?/^(y|yes|true|1)$/i.test(String(r[pMap.mastered]||'').trim()):false,
+            therapist:pMap.therapist?String(r[pMap.therapist]||'').trim():'',
+            target:pMap.target?String(r[pMap.target]||'').trim():'',
+            sddesc:pMap.sddesc?String(r[pMap.sddesc]||'').trim():'',
+            programme:pMap.programme?String(r[pMap.programme]||'').trim():''
+          })).filter(r=>r.date&&!isNaN(r.pct));
+          rows.forEach(r=>{
+            const key=r.programme||(wb.SheetNames.length>1?sheetName:(currentProg?currentProg.name:''));
+            if(!key)return;
+            if(!groups[key])groups[key]={type:'percentage',rows:[]};
+            groups[key].rows.push(r);
+          });
+          if(rows.length)return;
+        }
+        // Try chaining format: Step | (+)or(-) | Date | Number of steps mastered | Mastered Phase Line
+        const cMap=detectChainingHeaderMap(headers);
+        if(cMap.date&&cMap.step&&cMap.outcome&&cMap.stepsMastered){
+          let lastStep='';
+          const rows=[];
+          json.forEach(r=>{
+            const stepVal=String(r[cMap.step]||'').trim();
+            if(stepVal)lastStep=stepVal;
+            const dateISO=excelDateToISO(r[cMap.date]);
+            if(!dateISO)return;
+            const outcomeRaw=String(r[cMap.outcome]||'').trim();
+            const pass=outcomeRaw.includes('+');
+            const stepsMastered=parseFloat(r[cMap.stepsMastered]);
+            if(isNaN(stepsMastered))return;
+            rows.push({
+              date:dateISO,sto:lastStep,pct:stepsMastered,phase:pass?'Correct':'Incorrect',mastered:pass,
+              therapist:'',target:cMap.masteredLine?String(r[cMap.masteredLine]||'').trim():'',sddesc:'',
+              programme:cMap.programme?String(r[cMap.programme]||'').trim():''
+            });
+          });
+          if(rows.length){
+            const key=rows[0].programme||sheetName;
+            groups[key]=groups[key]||{type:'chaining',rows:[]};
+            groups[key].rows.push(...rows);
+            return;
+          }
+        }
+        skippedSheets.push(sheetName);
+      });
+      const groupNames=Object.keys(groups);
+      if(!groupNames.length){
+        showErr('excel-imp-err','Could not recognise the data in this file. Expected either a Date + % Correct format, or a chaining format with Step / (+) or (-) / Date / Number of steps mastered columns.'+(skippedSheets.length?' Sheet(s) checked: '+skippedSheets.join(', ')+'.':''));
+        return;
+      }
+      showExcelImportPreview(groups);
     }catch(err){
       showErr('excel-imp-err','Could not read that file: '+err.message);
     }
   };
+  reader.onerror=()=>{showErr('excel-imp-err','Could not read that file from disk. Please try again.');};
   reader.readAsArrayBuffer(file);
   e.target.value='';
 }
-function showExcelImportPreview(rows){
-  const currentPid=(document.getElementById('sps')||{}).value;
-  const currentProg=(window._progs||[]).find(p=>p.id===currentPid);
-  const groups={};
-  rows.forEach(r=>{
-    const key=r.programme||(currentProg?currentProg.name:'');
-    if(!key)return;
-    if(!groups[key])groups[key]=[];
-    groups[key].push(r);
-  });
+function showExcelImportPreview(groups){
   excelImpData={groups};
   const groupNames=Object.keys(groups);
-  if(!groupNames.length){showErr('excel-imp-err','Could not determine which programme this data belongs to. Select a programme above first, or add a "Programme" column to the sheet.');return;}
-  let html='<div style="margin-bottom:.6rem;">Found '+rows.length+' row'+(rows.length!==1?'s':'')+' across '+groupNames.length+' programme'+(groupNames.length!==1?'s':'')+':</div>';
+  const totalRows=groupNames.reduce((sum,n)=>sum+groups[n].rows.length,0);
+  let html='<div style="margin-bottom:.6rem;">Found '+totalRows+' row'+(totalRows!==1?'s':'')+' across '+groupNames.length+' programme'+(groupNames.length!==1?'s':'')+':</div>';
   html+='<ul style="margin:0 0 .5rem 1.1rem;padding:0;">';
   groupNames.forEach(name=>{
+    const g=groups[name];
     const existing=(window._progs||[]).find(p=>(p.name||'').toLowerCase().trim()===name.toLowerCase().trim());
-    html+='<li style="margin-bottom:4px;"><b>'+name+'</b> — '+groups[name].length+' session'+(groups[name].length!==1?'s':'')+(existing?'':' <span style="color:var(--brand);font-weight:600;">(new programme + graph will be created)</span>')+'</li>';
+    const typeLabel=g.type==='chaining'?'Chaining (steps mastered graph)':'% correct';
+    let note;
+    if(!existing)note=' <span style="color:var(--brand);font-weight:600;">(new '+(g.type==='chaining'?'chaining ':'')+'programme + graph will be created)</span>';
+    else if(existing.type!==g.type)note=' <span style="color:var(--warn,#C47A0E);font-weight:600;">(existing programme is set up as a different type — data will still import, but check the graph after)</span>';
+    else note='';
+    html+='<li style="margin-bottom:4px;"><b>'+name+'</b> — '+g.rows.length+' session'+(g.rows.length!==1?'s':'')+' · <span style="color:var(--text2);">'+typeLabel+'</span>'+note+'</li>';
   });
   html+='</ul>';
   document.getElementById('excel-imp-body').innerHTML=html;
   document.getElementById('excel-imp-err').style.display='none';
+  document.getElementById('excel-imp-confirm-btn').style.display='';
   document.getElementById('excel-imp-modal').classList.add('active');
 }
 function closeExcelImpModal(){document.getElementById('excel-imp-modal').classList.remove('active');}
@@ -1972,17 +2080,19 @@ async function confirmExcelImport(){
   showLoad('Importing session data…');
   try{
     let lastProg=null;
-    for(const [name,rows] of Object.entries(excelImpData.groups)){
+    for(const [name,group] of Object.entries(excelImpData.groups)){
       let prog=(window._progs||[]).find(p=>(p.name||'').toLowerCase().trim()===name.toLowerCase().trim());
       if(!prog){
-        const {data,error}=await SB.from('programmes').insert({client_id:CC.id,name,description:'',mastery_criteria:'80% for two consecutive sessions',target_sd:'',stos:[],therapists:[]}).select().single();
+        const insertData={client_id:CC.id,name,description:'',type:group.type,mastery_criteria:group.type==='chaining'?'':'80% for two consecutive sessions',target_sd:'',stos:[],therapists:[]};
+        const {data,error}=await SB.from('programmes').insert(insertData).select().single();
         if(error)throw error;
         prog=data;
         window._progs=window._progs||[];window._progs.push(prog);
       }
-      const toInsert=rows.map(r=>({
+      const toInsert=group.rows.map(r=>({
         programme_id:prog.id,client_id:CC.id,session_date:r.date,sto:r.sto,
-        pct_correct:Math.min(100,Math.max(0,r.pct||0)),phase:r.phase,mastered:r.mastered,
+        pct_correct:group.type==='chaining'?Math.max(0,Math.round(r.pct||0)):Math.min(100,Math.max(0,r.pct||0)),
+        phase:r.phase,mastered:r.mastered,
         therapist_initials:r.therapist?r.therapist.split(/[+,]/).map(s=>s.trim().toUpperCase()).filter(Boolean):[],
         target_sd:r.target,sd_description:r.sddesc,created_by:CU.id
       }));
@@ -2004,6 +2114,42 @@ async function confirmExcelImport(){
     hideLoad();btn.disabled=false;
     showErr('excel-imp-err','Import failed: '+err.message);
   }
+}
+
+function openAssignStaffModal(presetBcbaId){
+  const bcbas=allProfiles.filter(p=>p.role==='bcba');
+  const bcbaSel=document.getElementById('asm-bcba');
+  const bcbaField=document.getElementById('asm-bcba-field');
+  if(bcbaSel)bcbaSel.innerHTML=bcbas.map(b=>'<option value="'+b.id+'">'+b.full_name+'</option>').join('');
+  const lockBcba=presetBcbaId||(CP.role==='bcba'?CP.id:null);
+  if(lockBcba){bcbaSel.value=lockBcba;bcbaField.style.display='none';}
+  else bcbaField.style.display='';
+  const staffSel=document.getElementById('asm-staff');
+  const eligible=allProfiles.filter(p=>p.role==='therapist');
+  if(!eligible.length){staffSel.innerHTML='<option value="">No existing LSAs/therapists found</option>';}
+  else{
+    staffSel.innerHTML=eligible.map(s=>{
+      const currentSup=allProfiles.find(b=>b.id===s.supervisor_id);
+      return '<option value="'+s.id+'">'+s.full_name+(currentSup?' — currently under '+currentSup.full_name:' — unassigned')+'</option>';
+    }).join('');
+  }
+  document.getElementById('asm-err').style.display='none';
+  document.getElementById('asm').classList.add('active');
+}
+function closeASM(){document.getElementById('asm').classList.remove('active');}
+async function saveAssignStaff(){
+  const bcbaId=document.getElementById('asm-bcba').value;
+  const staffId=document.getElementById('asm-staff').value;
+  if(!bcbaId||!staffId){showErr('asm-err','Please select both a BCBA and a staff member.');return;}
+  showLoad('Assigning…');
+  const {error}=await SB.from('profiles').update({supervisor_id:bcbaId}).eq('id',staffId);
+  hideLoad();
+  if(error){showErr('asm-err',error.message);return;}
+  await loadGlobalData();
+  if(document.getElementById('client-folders-wrap'))await renderClientFolders();
+  renderUserList();
+  flash('asm-ok');
+  setTimeout(()=>closeASM(),900);
 }
 
 async function loadNotifications(){
